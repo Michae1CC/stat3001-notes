@@ -1,0 +1,230 @@
+% pdiag.sty		Style for drawing permutation diagrams
+%
+% coded by Jason B. Hill (Jason.B.Hill@Colorado.edu)
+%
+%	This package attempts to provide an environment for drawing permutation diagrams,
+%	with no claim that it works well, or works at all. Usage is designed to be as
+%	the following example indicates:
+%
+%	\begin{pdiag}[scale(defauult=1)]{#vertices}{#maps}
+%		\pdiagmap{domain vertex}{image vertex}
+%		\pdiagendmap
+%	\end{pdiag}
+%
+%	Concrete example:
+% 	\begin{pdiag}[1.5]{5}{2}				% Diagram is 5 vertices wide and 2 rows/maps tall
+								% - Scale is 1.5 (1.5 times usual scale)
+%		\pdiagname{$\alpha$}				% Optional command to name a row (label at left)
+								% - \pdiagname[0]{$\alpha$} same as above, but on right
+%		\pdiagmap{2}{3}					% First map sends 2 to 3
+%		\pdiagmap[0]{3}{2}				% First map sends 3 to 2 (optional [0] draws a line instead of bezier)
+%		\pdiagendmap					% End first row/map
+%		\pdiagbump{-0.8}{-0.5}\pdiagmap{1}{4}		% Second map sends 1 to 4
+								% The optional \pdiagbump command is called before a map to modify the bezier
+								% - curves for that map. The first argument controls the bezier as it enters the
+								% - domain, while the second argument controls the bezier as it enters the image.
+								% - The range of values -1 to 1 correspond to forcing the bezier closer to the
+								% - domain and image, repsectively. In this case, -0.8 value will keep the bezier
+								% - high as it leaves the domain, the -0.5 value will keep the bezier high again
+								% - before it finally drops to the image. 
+%		\pdiagmap{2}{3}					% Second map sends 2 to 3 
+%		\pdiagmap{3}{1}					% Second map sends 3 to 1
+%		\pdiagmap{4}{2}					% Second map sends 4 to 2
+%		\pdiagendmap
+%	\end{pdiag}
+%	
+%
+\RequirePackage{ifthen,calc,fp} %
+\ProvidesPackage{pdiag} %
+%
+%
+%
+%
+%
+\newcommand{\pdiagmap}[3][1] % Draw permutation line between points, create dots at points
+{	% A LaTeX Picture bezier is defined on three points, we'll use two beziers here
+	%
+	% (opional) #1=1 (default) then draw a bezier curve, #1\neq 1 then draw a straight line
+	%	The options on how to form the bezier curve are given by the - command
+	% #2 is the x-coordinate of the domain for a permutation map
+	% #3 is the x-coordinate of the image for a permutation map
+	%
+	% determine if bezier should be a straight line
+	\ifthenelse{\equal{#1}{1}}{}{
+		\def\@pdiagbyshift{}\FPset{\pdiagbyshift}{0.1}\def\@pdiagdyshift{}\FPset{\pdiagdyshift}{1.9} %
+		\def\@pdiagcyshift{}\FPadd{\pdiagcyshift}{\pdiagbyshift}{\pdiagdyshift}\FPdiv{\pdiagcyshift}{\pdiagcyshift}{2} % 
+		\FPclip{\pdiagbyshift}{\pdiagbyshift}\FPclip{\pdiagcyshift}{\pdiagcyshift}\FPclip{\pdiagdyshift}{\pdiagdyshift} % 
+	} %
+	%
+	\def\@pdiagxa{}\FPset{\pdiagxa}{#2} % Set initial x-coord
+	\def\@pdiagya{}\FPset{\pdiagya}{\thepdiagthisrow} % Set initial y-coord
+	\def\@pdiagxe{}\FPset{\pdiagxe}{#3} % Set terminal x-coord
+	\def\@pdiagye{}\FPset{\pdiagye}{\thepdiagnextrow} % Set terminal y-coord
+	%
+	% count the initial x-coord in the vertex list (unused vertices per row have automatic lines drawn)
+	% add a \pdiagxa^{th} power of ten to \pdiagrowassign
+	\def\@pdiagtenpow{}\FPset{\pdiagtenpow}{2}\FPpow{\pdiagtenpow}{\pdiagtenpow}{\pdiagxa}\FPclip{\pdiagtenpow}{\pdiagtenpow} %
+	\FPround{\pdiagtenpow}{\pdiagtenpow}{\thepdiagcolnum}\FPclip{\pdiagtenpow}{\pdiagtenpow} %
+	\FPadd{\pdiagrowassign}{\pdiagrowassign}{\pdiagtenpow}\FPclip{\pdiagrowassign}{\pdiagrowassign} %
+	%
+	% put a bullet at the endpoints
+	\put(\pdiagxa,\pdiagya){\circle*{0.2}}
+	\put(\pdiagxe,\pdiagye){\circle{0.2}}
+	%
+	% calculate other points for use in beziers
+	% reset endpoints so they do not overlap dots (only need to change y-coordinate)
+	\ifthenelse{\equal{#1}{1}}
+	{ % drawing a standard bezier
+		\FPsub{\pdiagya}{\pdiagya}{0.1}\FPadd{\pdiagye}{\pdiagye}{0.1} %
+	}{} % drawing a line
+	% find point b (second point in bezier from top)
+	\def\@pdiagxb{}\FPset{\pdiagxb}{\pdiagxa} % x-coord same as with point a
+	\def\@pdiagyb{}\FPset{\pdiagyb}{\pdiagya}\FPsub{\pdiagyb}{\pdiagyb}{\pdiagbyshift} %
+	% find point d (fourth point in bezier from top)
+	\def\@pdiagxd{}\FPset{\pdiagxd}{\pdiagxe} % x-coord same as with point a
+	\def\@pdiagyd{}\FPsub{\pdiagyd}{2}{\pdiagdyshift}\FPadd{\pdiagyd}{\pdiagyd}{\pdiagye} %
+	% find point c (midpoint in bezier)
+	\def\@pdiagxc{}\FPadd{\pdiagxc}{\pdiagxa}{\pdiagxe}\FPdiv{\pdiagxc}{\pdiagxc}{2}\FPclip{\pdiagxc}{\pdiagxc} % x-coord between x-coords for a and e
+	\def\@pdiagyc{}\FPadd{\pdiagyc}{\pdiagyb}{\pdiagyd}\FPdiv{\pdiagyc}{\pdiagyc}{2}\FPclip{\pdiagyc}{\pdiagyc} % y-coord between y-coords for b and d
+	% draw beziers
+	\ifthenelse{\equal{#1}{1}}
+	{ % drawing a standard bezier
+		\qbezier(\pdiagxa,\pdiagya)(\pdiagxb,\pdiagyb)(\pdiagxc,\pdiagyc) %
+		\qbezier(\pdiagxc,\pdiagyc)(\pdiagxd,\pdiagyd)(\pdiagxe,\pdiagye) %
+	}{ % drawing a line
+		\qbezier(\pdiagxa,\pdiagya)(\pdiagxa,\pdiagya)(\pdiagxc,\pdiagyc) %
+		\qbezier(\pdiagxc,\pdiagyc)(\pdiagxe,\pdiagye)(\pdiagxe,\pdiagye) %
+	} %
+	% reset default bezier shift values
+	\def\@pdiagbyshift{}\FPset{\pdiagbyshift}{0.6}\def\@pdiagdyshift{}\FPset{\pdiagdyshift}{1.4} % set default shift values for 2nd and 4th points in bezier curves
+	\def\@pdiagcyshift{}\FPadd{\pdiagcyshift}{\pdiagbyshift}{\pdiagdyshift}\FPdiv{\pdiagcyshift}{\pdiagcyshift}{2} % set shift value for middle point in bezier curve
+	\FPclip{\pdiagbyshift}{\pdiagbyshift}\FPclip{\pdiagcyshift}{\pdiagcyshift}\FPclip{\pdiagdyshift}{\pdiagdyshift} % make shift values readable
+} %
+%
+%
+%
+%
+%
+%% ---------------------------- Command to fill all dots in diagram
+% ---------------------------- Command to edit bezier parameters
+\newcommand{\pdiagbump}[2] % If called (optional) then drag 2nd and 4th points of bezier curve
+{	% Entry values will be integers
+	% -1 is as close to the top row as possible
+	% 1 is as close to the bottom row as possible
+	\def\@pdiagbyshift{}\FPset{\pdiagbyshift}{#1}\def\@pdiagdyshift{}\FPset{\pdiagdyshift}{#2} % set default shift values for 2nd and 4th points in bezier curves
+	\FPmul{\pdiagbyshift}{\pdiagbyshift}{0.9}\FPadd{\pdiagbyshift}{\pdiagbyshift}{1} %
+	\FPmul{\pdiagdyshift}{\pdiagdyshift}{0.9}\FPadd{\pdiagdyshift}{\pdiagdyshift}{1} %
+	\def\@pdiagcyshift{}\FPadd{\pdiagcyshift}{\pdiagbyshift}{\pdiagdyshift}\FPdiv{\pdiagcyshift}{\pdiagcyshift}{2} % set shift value for middle point in bezier curve
+	\FPclip{\pdiagbyshift}{\pdiagbyshift}\FPclip{\pdiagcyshift}{\pdiagcyshift}\FPclip{\pdiagdyshift}{\pdiagdyshift} % make shift values readable
+} %
+% ---------------------------- Command to edit bezier parameters
+%
+%
+%
+%
+%
+% ---------------------------- Command to fill all dots in diagram
+\newcommand{\pdiagfill} % If called (optional) then fill all dots in the corresponding diagram
+{	%
+	\setcounter{pdiagi}{\value{pdiagcolnum}-1} % counter to iterate over columns
+	\whiledo{\value{pdiagi}>0} { % iterate from right to left on columns, drawing a bullet at top and bottom rows
+		\setcounter{pdiagj}{\value{pdiagrownum}} % counter to iterate over rows
+		\whiledo{\value{pdiagj}>-1} {
+			\put(\value{pdiagi},\value{pdiagj}){\circle*{0.2}} %
+			\setcounter{pdiagj}{\value{pdiagj}-2} %
+		} %
+		\setcounter{pdiagi}{\value{pdiagi}-1} %
+	} %
+} %
+% ---------------------------- End command to fill all dots in diagram
+%
+%
+%
+%
+% ---------------------------- Command to end a row and draw lines representing unmapped vertices
+\newcommand{\pdiagendmap}
+{ %
+	\setcounter{pdiagi}{\value{pdiagcolnum}-1} % counter to iterate over columns
+	%\FPsub{\pdiagrowassign}{\pdiagrowassign}{1}\FPclip{\pdiagrowassign}{\pdiagrowassign}
+	\whiledo{\value{pdiagi}>0} { % iterate from right to left on columns, drawing a bullet at top and bottom rows
+		\setcounter{pdiagj}{\value{pdiagi}+1} % set counter for rounding
+		\def\@pdiagtens{}\FPpow{\pdiagtens}{2}{\thepdiagi}\FPround{\pdiagtens}{\pdiagtens}{\thepdiagj} %
+		\FPsub{\pdiagtens}{\pdiagtens}{1}\FPclip{\pdiagtens}{\pdiagtens} % power of ten to check
+		\ifthenelse{\pdiagtens<\pdiagrowassign}
+			{ % \pdiagi has a line from it already
+				\whiledo{\pdiagtens<\pdiagrowassign}{ % possible that a vertex has more than one map associated with it?
+					\FPsub{\pdiagrowassign}{\pdiagrowassign}{\pdiagtens} %
+					\FPsub{\pdiagrowassign}{\pdiagrowassign}{1} %
+					\FPclip{\pdiagrowassign}{\pdiagrowassign} %
+					% do nothing
+				} %
+			} %
+			{ % draw a line from vertex \pdiagi and draw empty dots
+				\def\@pdiagxa{}\FPset{\pdiagxa}{\thepdiagi} % Set initial x-coord
+				\def\@pdiagya{}\FPset{\pdiagya}{\thepdiagthisrow}
+				\put(\pdiagxa,\pdiagya){\circle{0.2}} %
+				\FPsub{\pdiagya}{\pdiagya}{0.1} % Set initial y-coord
+				\def\@pdiagxe{}\FPset{\pdiagxe}{\thepdiagi} % Set terminal x-coord
+				\def\@pdiagye{}\FPset{\pdiagye}{\thepdiagnextrow}
+				\put(\pdiagxe,\pdiagye){\circle{0.2}} %
+				\FPadd{\pdiagye}{\pdiagye}{0.1} % Set terminal y-coord
+				\qbezier(\pdiagxa,\pdiagya)(\pdiagxa,\pdiagya)(\pdiagxe,\pdiagye) %
+			} %
+		\setcounter{pdiagi}{\value{pdiagi}-1} %
+	} %
+	\setcounter{pdiagthisrow}{\value{pdiagthisrow}-2} %
+	\setcounter{pdiagnextrow}{\value{pdiagnextrow}-2} %
+	\FPset{\pdiagrowassign}{0} % reset count to zero for vertices
+}%
+% ---------------------------- End command to end a row and draw lines representing unmapped vertices
+%
+%
+%
+%
+% ---------------------------- Command to label a permutation
+\newcommand{\pdiagname}[2][1] % If called (optional), puts the name #2 at the side of the row
+{	% if #1=1 then place label #2 at left side, otherwise at right side
+	\setcounter{pdiagk}{\value{pdiagthisrow}-1} %
+	% \put(0,\value{pdiagk}){\footnotesize{#2}} %
+	\ifthenelse{\equal{#1}{1}}{\put(0,\value{pdiagk}){#2}}{\put(\value{pdiagcolnum},\value{pdiagk}){\hspace{-5pt}#2}} %
+
+} %
+% ---------------------------- End command to label a permutation
+%
+%
+%
+%
+% ---------------------------- Main Environment Definition
+\newenvironment{pdiag}[3][1]
+{	% Creates a picture environment with scale #1*1cm
+	% #2 is the width of the diagram (add a column on each side for labels, etc.)
+	% #3 is the height of the diagram (given in number of permutations, add empty rows between rows for readability)
+	\@ifundefined{c@pdiagi}{\newcounter{pdiagi}\newcounter{pdiagj}\newcounter{pdiagk}}{} % supply generic counters
+	\@ifundefined{c@pdiagcolnum}{\newcounter{pdiagcolnum}\newcounter{pdiagrownum}}{} %
+	\@ifundefined{c@pdiagthisrow}{\newcounter{pdiagthisrow}\newcounter{pdiagnextrow}}{} % Define a counter to keep track of iteration dimensions
+	\setcounter{pdiagcolnum}{#2+1} % Define a counter to keep track of overall column dimension 
+	\setcounter{pdiagrownum}{#3*\real{2}} % Define a counter to keep track of overall row dimension	
+	\setcounter{pdiagthisrow}{#3*\real{2}} % initial count for thisrow
+	\setcounter{pdiagnextrow}{#3*\real{2}-2} % initial count for nextrow skip rows
+	\def\@pdiagbyshift{}\FPset{\pdiagbyshift}{0.6}\def\@pdiagdyshift{}\FPset{\pdiagdyshift}{1.4} % set default shift values for 2nd and 4th points in bezier curves
+	\def\@pdiagcyshift{}\FPadd{\pdiagcyshift}{\pdiagbyshift}{\pdiagdyshift}\FPdiv{\pdiagcyshift}{\pdiagcyshift}{2} % set shift value for middle point in bezier curve
+	\FPclip{\pdiagbyshift}{\pdiagbyshift}\FPclip{\pdiagcyshift}{\pdiagcyshift}\FPclip{\pdiagdyshift}{\pdiagdyshift} % make shift values readable
+	\def\@pdiagrowassign{}\FPset{\pdiagrowassign}{0} % for each row, keep track of vertices used
+\setlength{\unitlength}{0.5cm*\real{#1}} %
+\begin{array}{c}\begin{picture}(\thepdiagcolnum,\thepdiagrownum) %
+	% start by drawing the initial dots at the top/bottom of the diagram
+	\setcounter{pdiagi}{\value{pdiagcolnum}-1} %
+	\whiledo{\value{pdiagi}>0} { % iterate from right to left on columns, drawing an empty bullet at top and bottom rows
+			\put(\value{pdiagi},\value{pdiagrownum}){\circle{0.2}} %
+			\put(\value{pdiagi},0){\circle{0.2}} %
+			\setcounter{pdiagi}{\value{pdiagi}-1} %
+		} %
+}{\end{picture}\end{array}} %
+% ---------------------------- End Main Environment Definition
+
+
+
+
+
+
+

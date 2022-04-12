@@ -1,0 +1,27 @@
+\subsection*{Useful Formulae and Theorems}
+\begin{align*}
+    \tag{Geometric Series}
+    \sum_{k = 0}^{n - 1} r^k    & = \left( \frac{1 - r^n}{1 - r} \right)                         \\
+                                & \text{or}                                                      \\
+    \sum_{i = 0}^{\infty} r^{i} & = \frac{1}{1 - r} \quad \text{with} \quad \left| r \right| < 1
+    \label{eqn:geometric-series}
+\end{align*}
+
+\begin{equation*} \tag{Euler's formula}
+    e^{i x}=\cos x+i \sin x
+    \label{eqn:Euler}
+\end{equation*}
+
+\begin{equation*}
+    \tag{Newton's Binomial formula}
+    (a+b)^{n}=\sum_{k=0}^{n} \binom{n}{k} a^{n-k} b^{k}
+    \label{eqn:nbf}
+\end{equation*}
+
+\begin{thm}[Young's inequality for products] \label{theorem: youngs}
+    If $a \geq 0$ and $b \geq 0$ are nonnegative real numbers and if $p > 1$ and $q > 1$ are real numbers such that $\frac{1}{p} + \frac{1}{p} = 1$, then
+    \[
+        ab \leq \frac{a^p}{p} + \frac{b^q}{q}.
+    \]
+    Equality holds iff $a^p = b^q$.
+\end{thm}

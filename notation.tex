@@ -1,0 +1,51 @@
+\section*{Symbols and Notation}
+
+Matrices are capitalized bold face letters while vectors are lowercase bold face letters.
+\begin{longtable}{lp{.70\textwidth}}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \\\bottomrule
+    \hline
+    \emph{Syntax}                                                                                              & \emph{Meaning}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \\\midrule
+    $\triangleq$                                                                                               & An equality which acts as a statement                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \\\\
+    $\left| \bm{A} \right|$                                                                                    & The determinate of a matrix.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \\\\
+    $\bm{x}^{\intercal}, \bm{X}^{\intercal}$                                                                   & The transpose operator.
+    \\\\
+    $\bm{x}^{\ast}, \bm{X}^{\ast}$                                                                             & The hermitian operator.
+    \\\\
+    $\bm{a} .\ast \bm{b}$ or $\bm{A} .\ast \bm{B}$                                                             & Element-wise vector (matrix) multiplication, similar to Matlab.
+    \\\\
+    $\propto$                                                                                                  & Proportional to.
+    \\\\
+    $\nabla$ or $\nabla_{\bm{f}}$                                                                              & The partial derivative (with respect to $\bm{f}$).
+    \\\\
+    $\nabla$                                                                                                   & The Hessian.
+    \\\\
+    $\sim$                                                                                                     & Distributed according to, example $x \sim \calN \left( 0,1 \right)$
+    \\\\
+    $\bm{0}$ or $\bm{0}_{n}$ or $\bm{0}_{n \times m}$                                                          & The zero vector (matrix) of appropriate length (size) or the zero vector of length $n$ or the zero matrix with dimensions $n \times m$.
+    \\\\
+    $\bm{1}$ or $\bm{1}_{n}$ or $\bm{1}_{n \times m}$                                                          & The one vector (matrix) of appropriate length (size) or the one vector of length $n$ or the one matrix with dimensions $n \times m$.
+    \\\\
+    $\Id_{n \times m}$                                                                                         & The matrix with ones along the diagonal and zeros on off diagonal elements.
+    \\\\
+    $\bm{A}_{(\cdot,\cdot)}$                                                                                   & Index slicing to extract a submatrix from the elements of $\bm{A} \in \RR^{n \times m}$, similar to indexing slicing from the python and Matlab programming languages. Each parameter can receive a single value or a 'slice' consisting of a start and an end value separated by a semicolon. The first and second parameter describe what row and columns should be selected, respectively. A single value means that only values from the single specified row/column should be selected. A slice tells us that all rows/columns between the provided range should be selected. Additionally if now start and end values are specified in the slice then all rows/columns should be selected. For example, the slice $\bm{A}_{(1:3,j:j')}$ is the submatrix $\RR^{3 \times (j' - j + 1)}$ matrix containing the first three rows of $\bm{A}$ and columns $j$ to $j'$. As another example, $\bm{A}_{(:,j)}$ is the $j^{th}$ column of $\bm{A}$.
+    \\\\
+    $\bm{A}^{\dagger}$                                                                                         & Denotes the unique psuedo inverse or Moore-Penore inverse of $\bm{A}$.
+    \\\\
+    $\CC$                                                                                                      & The complex numbers.
+    \\\\
+    $\operatorname{diag} \left( \bm{w} \right)$                                                                & Vector argument, a diagonal matrix containing the elements of vector $\bm{w}$.
+    \\\\
+    $\operatorname{diag} \left( \bm{W} \right)$                                                                & Matrix argument, a vector containing the diagonal elements of the matrix $\bm{W}$.
+    \\\\
+    $\EE$ or $\EE_{q(x)} \left[ z(x) \right]$                                                                  & Expectation, or expectation of $z(x)$ where $x \sim q(x)$.
+    \\\\
+    $\RR$                                                                                                      & The real numbers.
+    \\\\
+    $\operatorname{tr} \left( \bm{A} \right)$                                                                  & The trace of a matrix.
+    \\\\
+    $\VV$ or $\VV_{q(x)} \left[ z(x) \right]$                                                                  & Variance, the variance of $z(x)$ when $x \sim q(x)$.
+    \\\\
+    $\ZZ$                                                                                                      & The integers, $\ZZ = \left\{ \ldots ,-2,-1,0,1,2,\ldots \right\}$.
+
+    \\\bottomrule
+    \hline
+\end{longtable}

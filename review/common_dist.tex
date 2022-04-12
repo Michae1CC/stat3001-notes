@@ -1,0 +1,20 @@
+\subsection*{Common Distributions}
+
+Common distributions seen from prior courses. Notations mostly borrowed from STAT2003.
+
+\begin{longtable}{lccccc}                                                                                                                                                                                                                                   \\\bottomrule
+    \hline
+    \emph{Name} & \emph{Notation}          & \emph{Support}                 & \emph{pf}                                                                                                & \emph{Expectation}       & \emph{Variance}            \\\midrule
+    Bernoulli   & $\Ber (p)$               & $\left\{ 0,1 \right\}$         & $p^k (1-p)^{1-k}$                                                                                        & $p$                      & $p(1-p)$                   \\\\
+    Binomial    & $\Bin (n,p)$             & $\left\{ 0,\ldots ,n \right\}$ & $\binom{n}{k} p^{k} (1-p)^{n-k}$                                                                         & $np$                     & $np(1-p)$                  \\\\
+    Geometric   & $\Geo (n,p)$             & $\NN_{0}$                      & $(1-p)^k p$                                                                                              & $\frac{1-p}{p}$          & $\frac{1-p}{p^2}$          \\\\
+    Poisson     & $\Poi (\lambda)$         & $\NN_{0}$                      & $\frac{\lambda^x}{x!}e^{-\lambda}$                                                                       & $\lambda$                & $\lambda$                  \\\\
+    Uniform     & $\Uni [a,b]$             & $[a,b]$                        & $\frac{1}{b-a}$                                                                                          & $\frac{a+b}{2}$          & $\frac{(a-b)^2}{12}$       \\\\
+    Exponential & $\Exp (\lambda)$         & $\RR^{+}$                      & $\lambda e^{-\lambda x}$                                                                                 & $\frac{1}{\lambda}$      & $\frac{1}{\lambda}$        \\\\
+    Normal      & $\Nor (\mu, \sigma^2)$   & $\RR$                          & $\frac{1}{\sigma \sqrt{2 \pi}} \exp \left( -\frac{1}{2} \left( \frac{x - \mu}{\sigma} \right)^2 \right)$ & $\mu$                    & $\sigma^2$                 \\\\
+    Gamma       & $\Gam (\alpha, \lambda)$ & $\RR^{+}$                      & $\frac{\lambda^{\alpha} x^{\alpha - 1} \exp (-\lambda x)}{\Gamma (\alpha)}$                              & $\frac{\alpha}{\lambda}$ & $\frac{\alpha}{\lambda^2}$ \\\\
+    Chi-Squared & $\chi^2_{n}$               & $\RR^{+}$                      & $\frac{x^{\frac{n}{2} - 1} \exp (-\frac{1}{2} x)}{2^{\frac{n}{2}} \Gamma (\frac{n}{2})}$                 & $n$                      & $2n$                       \\\\
+
+    \\\bottomrule
+    \hline
+\end{longtable}

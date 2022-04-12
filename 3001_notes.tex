@@ -1,0 +1,268 @@
+\documentclass[11pt]{amsart}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\allowdisplaybreaks
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks   = true, % Colours links instead of ugly boxes
+  urlcolor     = {blue!80!black}, % Colour for external hyperlinks
+  linkcolor    = {red!80!black}, % Colour of internal links
+  citecolor   = {blue!50!black} % Colour of citations	
+}
+\usepackage[left=0.8in,right=0.8in,top=1in,bottom=1in]{geometry}
+\usepackage{amsmath, amsthm, amssymb, amsfonts, amsthm, bbold, bm, yhmath}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{adjustbox}
+\usepackage{tikz, tikz-cd, tikz-3dplot, float, paralist, pgfplots, tcolorbox, subfig, filecontents, booktabs, longtable, ragged2e}
+\usepackage[pdftex,outline]{contour}
+\usepgfplotslibrary{fillbetween}
+\usetikzlibrary{arrows}
+\usetikzlibrary{shapes.geometric}
+\usepackage[nobysame]{amsrefs}
+\usepackage{tgpagella}
+\usepackage{pdiag}
+\usepackage{cleveref}
+\crefname{algocf}{Algorithm}{Algorithms}
+\Crefname{algocf}{Algorithm}{Algorithms}
+
+\newcounter{GPRcount}
+\newcounter{savecounter}
+
+\tdplotsetmaincoords{60}{115}
+\pgfplotsset{compat=newest}
+
+% Algorithm package
+% \usepackage[linesnumbered,lined,boxed,vlined,ruled]{algorithm2e}
+\usepackage[lined,boxed,vlined,ruled,linesnumbered]{algorithm2e}
+\SetKw{Continue}{continue}
+\SetKw{Or}{or}
+\SetKw{Until}{until}
+% Set the algorithm comments to blue
+\newcommand\mycommfont[1]{\ttfamily\textcolor{blue}{#1}}
+\SetCommentSty{mycommfont}
+
+\DeclareMathOperator*{\argmin}{\arg\min}
+\def\cdf(#1)(#2)(#3){0.5*(1+(erf((#1-#2)/(#3*sqrt(2)))))}%
+
+\tikzset{
+    declare function={
+        normcdf(\x,\m,\s)=1/(1 + exp(-0.07056*((\x-\m)/\s)^3 - 1.5976*(\x-\m)/\s));
+    }
+}
+
+
+\newcommand{\nc}{\newcommand}
+\newcommand{\rc}{\renewcommand}
+\nc{\on}{\operatorname}
+
+
+\newcommand{\Ber}{{\sf Ber}}
+\newcommand{\Bin}{{\sf Bin}}
+\newcommand{\Nbin}{{\sf NB}}
+\newcommand{\Geo}{{\sf Geo}}
+\newcommand{\Poi}{{\sf Poi}}
+\newcommand{\G}{{\sf G}}
+\newcommand{\Hyp}{{\sf Hyp}}
+\newcommand{\Po}{{\sf Po}}
+\newcommand{\Exp}{{\sf Exp}}
+\newcommand{\Nor}{{\sf N}}
+\newcommand{\Gam}{{\sf Gam}}
+\newcommand{\Uni}{{\sf U}}
+\newcommand{\Var}{{\mbox{Var}}}
+\newcommand{\cov}{{\mbox{Cov}}}
+
+% Commands 
+\rc{\AA}{\mathbb{A}}	\nc{\calA}{\mathcal{A}}	\nc{\fraka}{\mathfrak{a}}
+\nc{\BB}{\mathbb{B}}	\nc{\calB}{\mathcal{B}}	\nc{\frakb}{\mathfrak{b}}
+\nc{\CC}{\mathbb{C}}	\nc{\calC}{\mathcal{C}}	\nc{\frakc}{\mathfrak{c}}
+\nc{\DD}{\mathbb{D}}	\nc{\calD}{\mathcal{D}}	\nc{\frakd}{\mathfrak{d}}
+\nc{\EE}{\mathbb{E}}	\nc{\calE}{\mathcal{E}}	\nc{\frake}{\mathfrak{e}}
+\nc{\FF}{\mathbb{F}}	\nc{\calF}{\mathcal{F}}	\nc{\frakf}{\mathfrak{f}}
+\nc{\GG}{\mathbb{G}}	\nc{\calG}{\mathcal{G}}	\nc{\frakg}{\mathfrak{g}}
+\nc{\HH}{\mathbb{H}}	\nc{\calH}{\mathcal{H}}	\nc{\frakh}{\mathfrak{h}}
+\nc{\II}{\mathbb{I}}	\nc{\calI}{\mathcal{I}}	\nc{\fraki}{\mathfrak{i}}
+\nc{\JJ}{\mathbb{J}}	\nc{\calJ}{\mathcal{J}}	\nc{\frakj}{\mathfrak{j}}
+\nc{\KK}{\mathbb{K}}	\nc{\calK}{\mathcal{K}}	\nc{\frakk}{\mathfrak{k}}
+\nc{\LL}{\mathbb{L}}	\nc{\calL}{\mathcal{L}}	\nc{\frakl}{\mathfrak{l}}
+\nc{\MM}{\mathbb{M}}	\nc{\calM}{\mathcal{M}}	\nc{\frakm}{\mathfrak{m}}
+\nc{\NN}{\mathbb{N}}	\nc{\calN}{\mathcal{N}}	\nc{\frakn}{\mathfrak{n}}
+\nc{\OO}{\mathbb{O}}	\nc{\calO}{\mathcal{O}}	\nc{\frako}{\mathfrak{o}}
+\nc{\PP}{\mathbb{P}}	\nc{\calP}{\mathcal{P}}	\nc{\frakp}{\mathfrak{p}}
+\nc{\QQ}{\mathbb{Q}}	\nc{\calQ}{\mathcal{Q}}	\nc{\frakq}{\mathfrak{q}}
+\nc{\RR}{\mathbb{R}}	\nc{\calR}{\mathcal{R}}	\nc{\frakr}{\mathfrak{r}}
+\rc{\SS}{\mathbb{S}}	\nc{\calS}{\mathcal{S}}	\nc{\fraks}{\mathfrak{s}}
+\nc{\TT}{\mathbb{T}}	\nc{\calT}{\mathcal{T}}	\nc{\frakt}{\mathfrak{t}}
+\nc{\UU}{\mathbb{U}}	\nc{\calU}{\mathcal{U}}	\nc{\fraku}{\mathfrak{u}}
+\nc{\VV}{\mathbb{V}}	\nc{\calV}{\mathcal{V}}	\nc{\frakv}{\mathfrak{v}}
+\nc{\WW}{\mathbb{W}}	\nc{\calW}{\mathcal{W}}	\nc{\frakw}{\mathfrak{w}}
+\nc{\XX}{\mathbb{X}}	\nc{\calX}{\mathcal{X}}	\nc{\frakx}{\mathfrak{x}}
+\nc{\YY}{\mathbb{Y}}	\nc{\calY}{\mathcal{Y}}	\nc{\fraky}{\mathfrak{y}}
+\nc{\ZZ}{\mathbb{Z}}	\nc{\calZ}{\mathcal{Z}}	\nc{\frakz}{\mathfrak{z}}
+
+\nc{\Id}{\mathbb{1}}
+\nc{\vect}[1]{\boldsymbol #1}
+\nc{\norm}[1]{\left\lVert#1\right\rVert}
+\nc{\abs}[1]{\left\lvert#1\right\rvert}
+
+\nc{\Lie}{\on{Lie}}
+\nc{\GL}{\on{GL}}
+\nc{\SL}{\on{SL}}
+\nc{\Sp}{\on{Sp}}
+\nc{\gl}{\on{\mathfrak{gl}}}
+\rc{\sl}{\on{\mathfrak{sl}}}
+\nc{\Mat}{\on{Mat}}
+\nc{\mO}{\on{O}}
+
+\nc{\Fun}{\on{Fun}}
+\nc{\Aut}{\on{Aut}}
+\nc{\End}{\on{End}}
+\nc{\Hom}{\on{Hom}}
+\nc{\Span}{\on{Span}}
+\nc{\Ind}{\on{Ind}}
+\nc{\Res}{\on{Res}}
+\nc{\stab}{\on{stab}}
+\rc{\ker}{\on{ker}}
+\nc{\im}{\on{im}}
+
+\nc{\Sym}{\on{Sym}}
+\nc{\tr}{\on{tr}}
+\nc{\Rank}{\on{Rank}}
+\nc{\Nullity}{\on{Nullity}}
+\nc{\ch}{\on{char}}
+\nc{\supp}{\on{supp}}
+\nc{\Spec}{\on{Spec}}
+\nc{\Jac}{\on{Jac}}
+
+% \nc{\Id}{\on{Id}}
+\nc{\op}{\mathrm{op}}
+\nc{\triv}{\mathrm{triv}}
+\nc{\alg}{\mathrm{alg}}
+\nc{\rel}{\mathrm{rel}}
+\nc{\1}{\mathbf{1}}
+\nc{\diag}{\mathrm{diag}}
+
+% Environments
+\newtheorem{thm}{Theorem}
+\newtheorem{lem}[thm]{Lemma}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{conj}[thm]{Conjecture}
+\newtheorem{cor}[thm]{Corollary}
+\newtheorem{defe}[thm]{Definition}
+\newtheorem{prob}[thm]{Problem} 
+\theoremstyle{remark}
+\newtheorem{rem}[thm]{Remark}
+\newtheorem{exam}[thm]{Example}
+\newtheorem{ntn}[thm]{Notation}
+\newtheorem{claim}[thm]{Claim}
+
+% TOC SC font
+\makeatletter
+%Table of Contents
+\setcounter{tocdepth}{3}
+% Add smallcaps to \section titles in ToC and remove . after numbers
+\renewcommand{\tocsection}[3]{%
+  \indentlabel{\@ifnotempty{#2}{\scshape\ignorespaces#1 #2.\quad}}\scshape#3\dotfill}
+% Add smallcaps to \subsection titles in ToC and remove . after numbers
+\renewcommand{\tocsubsection}[3]{%
+  \indentlabel{\@ifnotempty{#2}{\scshape\ignorespaces#1 #2.\quad}}\scshape#3\dotfill}
+
+\renewcommand{\tocsubsubsection}[3]{%
+  \indentlabel{\@ifnotempty{#2}{\scshape\ignorespaces#1 #2.\quad}}\scshape#3\dotfill}
+%\let\tocsubsubsection\tocsubsection% Update for \subsubsection
+%...
+\def\l@subsection{\@tocline{2}{0pt}{2.5pc}{5pc}{}}
+\def\l@subsubsection{\@tocline{3}{0pt}{4pc}{7pc}{}}
+\makeatother
+
+\makeatletter
+\def\thm@space@setup{\thm@preskip=2mm
+\thm@postskip=2mm}
+\makeatother
+
+\linespread{1.2}
+
+\begin{document}
+% Title page
+\thispagestyle{empty}
+\begin{center}
+    \includegraphics{university.png} \\
+    \vspace{3cm}
+    {\LARGE\textsc{Course Notes for STAT3001 \\ Mathematical Statistics}} \\
+    \vspace{0.3cm}
+    {\bf\textsc{Contributors:}} \\
+    {\textsc{Michael Ciccotosto-Camp}} \\
+    {\textsc{NAME2}} \\
+    \vspace{1cm}
+    \vspace{5cm}
+    \vspace{1cm}
+    {\textsc{\href{https://www.uq.edu.au/}{The University of Queensland}}} \\
+    {\textsc{\href{https://smp.uq.edu.au/}{School of Mathematics and Physics}}}
+\end{center}
+\newpage
+
+% blank page
+%\thispagestyle{empty}
+%\ 
+%\newpage
+
+% blank page
+%\thispagestyle{empty}
+%\hspace{0pt}\vfill\begin{center}\emph{For mum and dad}\end{center}\vspace{18cm}\hspace{0pt}
+%\newpage
+
+% blank page
+\thispagestyle{empty}
+\
+\newpage
+
+% frontmatter
+\pagenumbering{roman}
+\tableofcontents
+\setlength{\parindent}{0pt} % Default is 15pt.
+\setlength{\parskip}{2mm}
+\newpage
+
+% blank page
+\
+\newpage
+
+
+% blank page
+\newpage
+
+\input{notation.tex}
+\clearpage
+
+\input{review/review.tex}
+
+% thesis start
+\pagenumbering{arabic}
+
+
+\clearpage
+\linespread{1.58}
+\begin{bibdiv}
+    \begin{biblist}[\normalsize]*{labels={alphabetic}}
+
+        % Statistical Inference
+        % Casella, George ; Berger, Roger
+        \bib{CasellaGeorge2001SI}{book}{
+            pages = {xxviii--xxviii},
+            publisher = {Cengage},
+            booktitle = {Statistical inference},
+            isbn = {0534243126},
+            year = {2001},
+            title = {Statistical Inference},
+            language = {eng},
+            address = {Mason, OH},
+            author = {Casella, George and Berger, Roger},
+            keywords = {Mathematical statistics ; Mathematics ; Probabilities ; Probability ; Statistical analysis ; Statistics ; Textbooks},
+        }
+
+    \end{biblist}
+\end{bibdiv}
+\clearpage
+
+% \input{appendix/appendix.tex}
+
+\end{document}
