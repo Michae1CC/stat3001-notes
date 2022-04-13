@@ -20,6 +20,7 @@ For any random variables, the following hold.
     \tag{Bayes' Theorem} \Pm (A \mid B)   & = \frac{\Pm (B \mid A) \Pm (A)}{\Pm (B)}                                                                                                                       \\
     \Pm \left( A_1 , \ldots , A_n \right) & = \Pm \left( A_1 \right) \Pm \left( A_2 \mid A_1 \right) \Pm \left( A_3 \mid A_1 , A_2 \right) \cdots \Pm \left( A_n \mid A_1 , A_2 , \ldots , A_{n-1} \right) \\
 \end{align}
+
 Let $\Omega = \bigcup\limits_{i=1}^{n} B_{i}$ (that is $B_{i}$ partitions the sample space) then
 \begin{align}
     \tag{TLoP} \Pm (A) & = \sum_{i=1}^{n} \Pm (A\mid B_i) \Pm (B_i) \label{eqn:TLoP} \\
@@ -29,17 +30,46 @@ which, when \ref{eqn:TLoP} used in conjunction with Bayes' Rule gives
 \begin{equation}
     \Pm (B_i \mid A) = \frac{\Pm (A\mid B_i) \Pm (B_i)}{\sum_{j=1}^{n} \Pm (A\mid B_j) \Pm (B_j)}.
 \end{equation}
+
+\vspace{1cm}
+
 If $X_1 , X_2 , \ldots , X_n \overset{\text{iid}}{\sim} \Wn (\mu,\sigma^2)$ and $S_n = \sum_{i=1}^{n} X_i$, then for all $\varepsilon > 0$
 \begin{equation}
     \tag{Weak Law of Large Numbers} \Pm \left( \left| \frac{S_n}{n} -\mu \right| \geq \epsilon \right) = 0 .
 \end{equation}
+
+\vspace{1cm}
+
 If $X_1 , X_2 , \ldots , X_n \overset{\text{iid}}{\sim} \Wn (\mu,\sigma^2)$ and $S_n = \sum_{i=1}^{n} X_i$, then for all $x \in \RR$
 \begin{equation}
     \tag{CLT} \Pm \left( \frac{S_n - n \mu}{\sigma \sqrt{n}} \right) \leq x = \Phi (x) .
 \end{equation}
+
+\vspace{1cm}
+
 If $X$ is a random variable and $h$ is a convex function then
 \begin{equation}
     \tag{Jensens Inequality} h(\Em (X)) \leq \Em (h(X)).
 \end{equation}
 
 \subsubsection*{Probabilistic Identities}
+
+If $X_1 , \ldots , X_n \iid \Ber(p)$ then
+\begin{equation}
+    \sum_{i=1}^{n} X_i \sim \Bin (n,p).
+\end{equation}
+
+\vspace{1cm}
+
+If $X \sim \Bin (n,p)$ and $Y \sim \Bin (m,p)$, then $X + Y \sim \Bin (n+m,p)$.
+
+\vspace{1cm}
+
+If $X \sim \Nor (\mu_X,\sigma^2_X)$ and $Y \sim \Nor (\mu_Y,\sigma^2_Y)$, then $X + Y \sim \Nor (\mu_X + \mu_Y,\sigma^2_X + \sigma^2_Y)$.
+
+\vspace{1cm}
+
+If $X_1 , X_2 , \ldots X_n \iid \calN \left( \mu , \sigma \right)$ then
+\begin{equation}
+    \sum_{i=1}^{n} X_i^2 = \chi_n^2 .
+\end{equation}
