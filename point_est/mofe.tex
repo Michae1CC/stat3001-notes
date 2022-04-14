@@ -1,0 +1,25 @@
+\subsection*{Methods of Finding Estimates}
+
+\begin{defe}[Statistic] \label{defe: statistic}
+    Let $X_1, \ldots , X_n$ be a random sample of size $n$ from a population and let $T(x_1, \ldots , x_n)$ be a real-valued or vector-valued function whose domain includes the sample space of $(X_1, \ldots , X_n)$. The the random variable or random vector $Y = T(X_1, \ldots , X_n)$ is called a {\bf statistic}. The probability distribution of a statistic $Y$ is called the {\bf sampling distribution} of $Y$ \cite{CasellaGeorge2001SI}*{page 211}.
+\end{defe}
+
+\begin{defe}[Sample Mean] \label{defe: sample_mean}
+    The {\bf sample mean} is the arthicmetic average of the values in a random sample. It is usually denoted by
+    \begin{equation}
+        \overline{X} = \frac{1}{n} \sum_{i=1}^{n} X_i
+    \end{equation}
+    \cite{CasellaGeorge2001SI}*{page 212}.
+\end{defe}
+
+\begin{defe}[Sample Variance and Standard Deviation] \label{defe: var_std_dev}
+    The {\bf sample variance} is the statistic defined by
+    \begin{equation}
+        S^2 = \frac{1}{n-1} \sum_{i=1}^{n} (X_i - \overline{X})^2.
+    \end{equation}
+    The {\bf sample standard deviation} is the statistic defined by $S = \sqrt{S^2}$ \cite{CasellaGeorge2001SI}*{page 212}.
+\end{defe}
+
+\begin{defe}[Sufficient Statistic] \label{defe: sufficient_statistic}
+    A statistic $T(\bm{X})$ is a {\bf sufficient statistic} for $\theta$ if the conditional distribution of the sample $\bm{X}$ given the value of $T(\bm{X})$ does not depend on $\theta$ \cite{CasellaGeorge2001SI}*{page 272}.
+\end{defe}
