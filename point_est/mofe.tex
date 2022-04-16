@@ -23,3 +23,95 @@
 \begin{defe}[Sufficient Statistic] \label{defe: sufficient_statistic}
     A statistic $T(\bm{X})$ is a {\bf sufficient statistic} for $\theta$ if the conditional distribution of the sample $\bm{X}$ given the value of $T(\bm{X})$ does not depend on $\theta$ \cite{CasellaGeorge2001SI}*{page 272}.
 \end{defe}
+
+\begin{thm} \label{thm: sufficient_statistic_ratio}
+    If $p(\bm{x} \mid \theta)$ is the joint pdf or pmf of $\bm{X}$ and $q(\theta \mid \theta)$ is the pdf or pmf of $T(\bm{X})$, then $T(\bm{X})$ is a sufficient statistic for $\theta$ if, for every $\bm{x}$ in the sample space, the ratio $p(\bm{x} \mid \theta) / q(T(\bm{x}) \mid \theta)$ is a constant function of $\theta$ \cite{CasellaGeorge2001SI}*{page 274}.
+\end{thm}
+
+\begin{thm}[Factorization Theorem] \label{thm: factorization_theorem}
+    Let $f(\bm{x} \mid \theta)$ denote the joint pdf or pmf of a sample $\bm{X}$. A statistic $T(\bm{X})$ is a sufficient statistic for $\theta$, if and only if there exist function $g(t\mid \theta)$ and $h(\bm{x})$ such that, for all sample points $\bm{x}$ and all parameter points $\theta$,
+    \begin{equation*}
+        f(\bm{x} \mid \theta) = g(T(\bm{x}) \mid \theta) h(\bm{x})
+    \end{equation*}
+    \cite{CasellaGeorge2001SI}*{page 276}.
+\end{thm}
+
+\begin{exam}[Uniform Sufficient Statistic] \label{exam: uni_ss_p1}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 277} and can also be found on tutorial sheet 3. Let $X_1 , \ldots , X_n$ be iid observations from the discrete uniform distribution on $1 , \ldots , \theta$. That is, the unknown parameter, $\theta$, is a positive integer and the pmf of $X_i$ is
+    \begin{equation*}
+        f(x \mid \theta) =
+        \left\{
+        \begin{matrix}
+            \frac{1}{\theta}, & x = 1,2,\ldots \theta \\
+            0,                & \text{otherwise}
+        \end{matrix}
+        \right. .
+    \end{equation*}
+    The restriction $x_i \in \left\{ 1, \ldots ,\theta \right\}$ for $i=1,\ldots ,n$ can be re-expressed as $x_i \in \left\{ 1,2 , \ldots \right\}$ for $i = 1,\ldots n$ (note that there is no $\theta$ in this restriction) and $\max_i x_i \leq \theta$. If we define $T(\bm{x}) = \max_i x_i = x_{(n)}$,
+    \begin{equation*}
+        h(x) =
+        \left\{
+        \begin{matrix}
+            1, & x_i \in \left\{ 1, \ldots ,\theta \right\} \; \text{for} \; i=1,\ldots ,n \\
+            0, & \text{otherwise}
+        \end{matrix}
+        \right.
+    \end{equation*}
+    and
+    \begin{equation*}
+        g(t \mid \theta) =
+        \left\{
+        \begin{matrix}
+            \theta^{-n} & t \leq \theta    \\
+            0,          & \text{otherwise}
+        \end{matrix}
+        \right. .
+    \end{equation*}
+    It is easily verified that $f(\bm{x} \mid \theta) = g(T(\bm{x}) \mid \theta)$ for all $\bm{x}$ and $\theta$. Thus, according to \Cref{thm: factorization_theorem}, the largest order statistic, $T(\bm{X}) = X_{(n)}$, is a sufficient statistic in this problem. This type of analysis can sometimes be carried out more clearly and concisely using indicator function. Let $\NN$ be the set of natural numbers (discluding $0$) and $\NN_{\theta}$ be the natural numbers up to and including $\theta$. Then the joint pmf of $X_1 , \ldots , X_n$ is
+    \begin{equation*}
+        f(\bm{x} \mid \theta) = \prod_{i=1}^{n} \theta^{-1} \Id_{N_\theta} (x_i) = \theta^{-n} \prod_{i=1}^{n} \Id_{N_\theta} (x_i).
+    \end{equation*}
+    Defining $T(\bm{x}) = x_{(n)}$, we see that
+    \begin{equation*}
+        \prod_{i=1}^{n} \Id_{N_\theta} (x_i) = \left( \prod_{i=1}^{n} \Id_{N} (x_i) \right) \Id_{N_\theta} (T(x))
+    \end{equation*}
+    thus providing the factorization
+    \begin{equation*}
+        f(\bm{x} \mid \theta) = \theta^{-n} \Id_{N_\theta} (T(x)) \left( \prod_{i=1}^{n} \Id_{N} (x_i) \right).
+    \end{equation*}
+    The first factor depends on $x_1 , \ldots , x_n$ only through the value of $T(\bm{x}) = x_{(n)}$, and the second factor does not depend on $\theta$. Again, according to \Cref{thm: factorization_theorem}, $T(\bm{X}) = X_{(n)}$, is a sufficient statistic in this problem.
+\end{exam}
+
+\begin{defe}[Expotential Family] \label{defe: exp_fam}
+    In the case of $p-$dimensional observation $\bm{x}_1 , \bm{x}_2 , \ldots , \bm{x}_n \in \CC^{p}$, a $d-$dimensional parameter vector $\bm{\theta} \in \CC^{d}$, and a $q-$dimensional sufficient statistic $T(\bm{x}_1 , \ldots , \bm{x}_n) \in \CC^{q}$, the likelihood function $L (\bm{\theta})$ for the $d-$parameter vector $\bm{\theta}$ has the following form if it belongs to the $d-$parameter {\bf exponential family}
+    \begin{equation*}
+        L (\bm{\theta}) = b(\bm{x}_1 , \ldots , \bm{x}_n) \exp \left\{ c(\bm{\theta})^{\intercal} T(\bm{x}_1 , \ldots , \bm{x}_n) \right\} / a(\bm{\theta})
+    \end{equation*}
+    where $c(\bm{\theta}) \in \CC^{q}$ and $b(\bm{x}_1 , \ldots , \bm{x}_n)$ and $a(\bm{\theta})$ are scalar functions \cite{CasellaGeorge2001SI}*{page 279}.
+\end{defe}
+
+\begin{thm} \label{thm: exp_fam_ss}
+    Let $\bm{X}_1 , \bm{X}_2 , \ldots , \bm{X}_n$ be iid observations from a pdf or pmf $f(x \mid \bm{\theta})$ that belongs to an exponential family as seen in \Cref{defe: exp_fam}, then
+    \begin{equation*}
+        T(\bm{X}_1 , \ldots , \bm{X}_n) = \left( \sum_{j=1}^{n} t_1 (\bm{X}_j) , \ldots , \sum_{j=1}^{n} t_k (\bm{X}_j) \right)
+    \end{equation*}
+    is a sufficient statistic for $\bm{\theta}$ \cite{CasellaGeorge2001SI}*{page 279}.
+\end{thm}
+
+\begin{defe}[Minimal Sufficient Statistic] \label{defe: minimal_sufficient_statistic}
+    A sufficient statistic $T(\bm{X})$ is called a {\bf minimal sufficient statistic} if, for any other sufficient statistic $T'(\bm{X})$, $T(\bm{x})$ is a function of $T'(\bm{x})$ \cite{CasellaGeorge2001SI}*{page 280}.
+\end{defe}
+
+\begin{thm} \label{thm: mss_ratio_test}
+    Let $f(\bm{x} \mid \theta)$ be the pd of a sample $\bm{X}$. Suppose there exists a function $T(\bm{x})$ such that, for every two sample points $\bm{x}$ and $\bm{y}$, the ratio $f(\bm{x} \mid \theta) / f(\bm{y} \mid \theta)$ is constant as a function of $\theta$ if and only if $T(\bm{x}) = T(\bm{y})$. Then $T(\bm{X})$ is a minimal sufficient statistic \cite{CasellaGeorge2001SI}*{page 281}.
+\end{thm}
+
+\begin{exam}[Normal Minimal Sufficient Statistic] \label{exam: norm_min_ss}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 281}. Let $X_1 , \ldots , X_n \iid \Nor (\mu , \sigma^2)$, where both $\mu$ and $\sigma^2$ unknown. Let $\bm{x}$ and $\bm{y}$ denote two sample points, and let $(\overline{x}, s_{\bm{x}}^2)$ and $(\overline{y}, s_{\bm{y}}^2)$ be the sample means and variances corresponding to the $\bm{x}$ and $\bm{y}$ samples, respectively. Then, the ratio of the densities becomes
+    \begin{align*}
+        \frac{f\left(\mathbf{x} \mid \mu, \sigma^{2}\right)}{f\left(\mathbf{y} \mid \mu, \sigma^{2}\right)} \
+         & =\frac{\left(2 \pi \sigma^{2}\right)^{-n / 2} \exp \left(-\left[n(\bar{x}-\mu)^{2}+(n-1) s_{\mathbf{x}}^{2}\right] /\left(2 \sigma^{2}\right)\right)}{\left(2 \pi \sigma^{2}\right)^{-n / 2} \exp \left(-\left[n(\bar{y}-\mu)^{2}+(n-1) s_{\mathbf{y}}^{2}\right] /\left(2 \sigma^{2}\right)\right)} \\
+         & =\exp \left(\left[-n\left(\bar{x}^{2}-\bar{y}^{2}\right)+2 n \mu(\bar{x}-\bar{y})-(n-1)\left(s_{\mathbf{x}}^{2}-s_{\mathbf{y}}^{2}\right)\right] /\left(2 \sigma^{2}\right)\right) .
+    \end{align*}
+    This ratio will be constant as a function of $\mu$ and $\sigma^2$ if and only if $\overline{x}=\overline{y}$ and $s_{\bm{x}}^2 = s_{\bm{y}}^2$. Thus by \Cref{thm: mss_ratio_test}, $(\overline{X}, S^2)$ is a minimal sufficient statistic for $(\mu , \sigma^2 )$.
+\end{exam}
