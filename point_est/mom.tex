@@ -1,0 +1,30 @@
+\subsection*{Method of Moments}
+
+\begin{defe}[Method of Moments] \label{defe: mom}
+    Let $X_1, \ldots , X_n$ be a random sample of size $n$ from a population with pf $f(x \mid \theta_1 , \ldots , \theta_k)$. Method of moments estimators are found by equation the first $k$ sample moments to the corresponding $k$ population moments, and solving the resulting system of simultaneous equations. More precisely, define
+    \begin{align*}
+        m_1 & = \frac{1}{n} \sum_{i=1}^{n} X_{i}^{1}, \quad \mu_{1}' = \EE X^1   \\
+        m_2 & = \frac{1}{n} \sum_{i=1}^{n} X_{i}^{2}, \quad \mu_{2}' = \EE X^2   \\
+            & \vdots                                                             \\
+        m_k & = \frac{1}{n} \sum_{i=1}^{n} X_{i}^{k}, \quad \mu_{k}' = \EE X^k .
+    \end{align*}
+    The population moment $\mu_{j}'$ will typically be a function of $\theta_1 , \ldots , \theta_k$, say $\mu_{j}' (\theta_1 , \ldots , \theta_k)$. The method of moments estimator $(\tilde{\theta}_1 , \ldots , \tilde{\theta}_k)$ of $(\theta_1 , \ldots , \theta_k)$ is obtained by solving the following system of equations for $(\theta_1 , \ldots , \theta_k)$ in terms of $(m_1 , \ldots , m_k)$
+    \begin{align*}
+        m_1 & = \mu_{1}' (\theta_1 , \ldots , \theta_k) \\
+        m_2 & = \mu_{2}' (\theta_1 , \ldots , \theta_k) \\
+            & \vdots                                    \\
+        m_k & = \mu_{k}' (\theta_1 , \ldots , \theta_k)
+    \end{align*}
+    \cite{CasellaGeorge2001SI}*{page 312}.
+\end{defe}
+
+\begin{exam}[Normal Methods of Moments] \label{exam: normal_mom}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 313}. Suppose $X_1, \ldots , X_n \iid \Nor (\theta , \sigma^2)$. In the preceding notation, $\theta_1 = \theta$ and $\theta_2 = \sigma^2$. We have $m_1 = \overline{X}, \; m_s = (1/n) \sum X_{i}^{2}, \; \mu_{1}' = \theta, \; \mu_{2}' = \theta^2 + \sigma^2$, and hence we must solve
+    \begin{equation*}
+        \overline{X} = \theta, \quad \frac{1}{n} \sum X_{i}^{2} = \theta^2 + \sigma^2.
+    \end{equation*}
+    Solving for $\theta$ and $\sigma^2$ yields the methods of moments estimators
+    \begin{equation*}
+        \tilde{\theta} = \overline{X} \quad \text{and} \quad \tilde{\sigma}^2 = \frac{1}{n} \sum X_{i}^{2} - \overline{X}^2 = \frac{1}{n} \sum (X_{i}^{2} - \overline{X}^2).
+    \end{equation*}
+\end{exam}

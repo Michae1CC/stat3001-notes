@@ -1,0 +1,49 @@
+\subsection*{Maximum Likelihood Estimates}
+
+\begin{defe}[Maximum Likelihood Estimator] \label{defe: mle}
+    For each sample point $\bm{x}$, let $\hat{\theta} (\bm{x})$ be a parameter value at which $L(\theta \mid \bm{x})$ attains its maximum as a function of $\theta$, with $\bm{x}$ held fixed. A {\bf maximum likelihood estimator (MLE)} of the parameter $\theta$ based on a sample $\bm{X}$ is $\hat{\theta} (\bm{X})$ \cite{CasellaGeorge2001SI}*{page 316}.
+\end{defe}
+
+\begin{exam}[Normal Likelihood] \label{exam: normal_mle}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 316}. Suppose $X_1, \ldots , X_n \iid \Nor (\theta , 1)$, and let $L(\theta \mid \bm{x})$ denote the likelihood function. Then
+    \begin{equation*}
+        L(\theta \mid \bm{x}) = \prod_{i=1}^{n} \frac{1}{(2 \pi)^{1/2}} \exp \left( -(1/2) (x_i - \theta)^2 \right) = \frac{1}{(2 \pi)^{1/2}} \exp \left( -(1/2) \sum_{i=1}^{n} (x_i - \theta)^2 \right).
+    \end{equation*}
+    The equation $(d / d\theta) L(\theta \mid \bm{x}) = 0$ reduces to
+    \begin{equation*}
+        \sum_{i=1}^{n} (x_i - \theta) = 0,
+    \end{equation*}
+    which has the solution $\hat{\theta} = \overline{x}$. Hence, $\overline{x}$ is a candidate for the MLE. To verify that $\overline{x}$ is, in fact, a global maximim of the likelihood function, we can use the following argument. First, note that $\hat{\theta} = \overline{x}$ is the only solution to $\sum_{i=1}^{n} (x_i - \theta) = 0$; hence $\overline{x}$ is the only zero of the first derivative. Second, verify that
+    \begin{equation*}
+        \frac{d^2}{d \theta^2} \left. L(\theta \mid \bm{x}) \right|_{\theta = \overline{x}} < 0.
+    \end{equation*}
+    Thus, $\overline{x}$ is the only extreme point in the interior and it is a maximum. To finally verify that $\overline{x}$ is a global maximum, we must check the boundaries at $\pm \infty$. So $\tilde{\theta} = \overline{x}$ is a global maximum and hence $\overline{X}$ is the MLE.
+\end{exam}
+
+\begin{thm} \label{thm: invariance_of_mles}
+    If $\hat{\theta}$ is the MLE of $\theta$, the for any function $\tau (\theta)$, the MLE of $\tau (\theta)$ is $\tau (\hat{\theta})$ \cite{CasellaGeorge2001SI}*{page 320}.
+\end{thm}
+
+\begin{exam}[Normal MLE, $\mu$ and $\sigma$ unknown] \label{exam: normal_mle_mu_sigma}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 321}. Suppose $X_1, \ldots , X_n \iid \Nor (\theta , \sigma^2)$ with both $\mu$ and $\sigma^2$ unknown. Then
+    \begin{equation*}
+        L(\theta \mid \bm{x}) = \frac{1}{(2 \pi \sigma^2)^{1/2}} \exp \left( -(1/2) \sum_{i=1}^{n} (x_i - \theta)^2 / \sigma^2 \right)
+    \end{equation*}
+    and
+    \begin{equation*}
+        \ln L(\theta \mid \bm{x}) = -\frac{n}{2} \ln 2 \pi - \frac{n}{2} \ln \sigma^2 - \frac{1}{2} \sum_{i=1}^{n} (x_i - \theta)^2 / \sigma^2 .
+    \end{equation*}
+    The partial derivatives, with respect to $\theta$ and $\sigma^2$ are
+    \begin{equation*}
+        \frac{\partial}{\partial \theta} \ln L(\theta \mid \bm{x}) = \frac{1}{\sigma^2} \sum_{i=1}^{n} (x_i - \theta)
+    \end{equation*}
+    and
+    \begin{equation*}
+        \frac{\partial}{\partial \sigma^2} \ln L(\sigma^2 \mid \bm{x}) = - \frac{1}{2\sigma^2} + \frac{1}{2 \sigma^4} \sum_{i=1}^{n} (x_i - \theta).
+    \end{equation*}
+    Setting the partial derivatives equal to $0$ and solving for the solution $\hat{\theta} = \overline{x}, \; \hat{\sigma}^2 = n^{-1} \sum_{i=1}^{n} (x_i - \overline{x})$. To verify that this solution is, in fact, a global maximum, recall first that if $\theta \neq \overline{x}$, then $\sum (x_i - \theta)^2 > \sum (x_i - \overline{x})^2$. Hence, for any value of $\sigma^2$,
+    \begin{equation*}
+        \frac{1}{(2 \pi \sigma^2)^{1/2}} \exp \left( -(1/2) \sum_{i=1}^{n} (x_i - \overline{x})^2 / \sigma^2 \right) \geq \frac{1}{(2 \pi \sigma^2)^{1/2}} \exp \left( -(1/2) \sum_{i=1}^{n} (x_i - \theta)^2 / \sigma^2 \right) .
+    \end{equation*}
+    Therefore, verifying that we have found the maximum likelihood estimators is reduced to a one-dimensional problem, verifying that $(\sigma^2)^{-n/2} \exp \left( -\frac{1}{2} \sum (x_i - \overline{x})^2 / \sigma^2 \right)$ achieves its global maximum at $\sigma^2 = n^{-1} \sum (x_i - \overline{x})^2$. This is straightforward to do using univariate calculus and, in fact, the estimators $\left( \overline{X} , n^{-1} \sum \left( X_i - \overline{X} \right)^2 \right)$ are the MLEs.
+\end{exam}

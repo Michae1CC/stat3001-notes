@@ -1,4 +1,4 @@
-\subsection*{Methods of Finding Estimates}
+\subsection*{Methods of Finding Estimates Introduction}
 
 \begin{defe}[Statistic] \label{defe: statistic}
     Let $X_1, \ldots , X_n$ be a random sample of size $n$ from a population and let $T(x_1, \ldots , x_n)$ be a real-valued or vector-valued function whose domain includes the sample space of $(X_1, \ldots , X_n)$. The the random variable or random vector $Y = T(X_1, \ldots , X_n)$ is called a {\bf statistic}. The probability distribution of a statistic $Y$ is called the {\bf sampling distribution} of $Y$ \cite{CasellaGeorge2001SI}*{page 211}.
@@ -82,6 +82,22 @@
     The first factor depends on $x_1 , \ldots , x_n$ only through the value of $T(\bm{x}) = x_{(n)}$, and the second factor does not depend on $\theta$. Again, according to \Cref{thm: factorization_theorem}, $T(\bm{X}) = X_{(n)}$, is a sufficient statistic in this problem.
 \end{exam}
 
+\begin{defe}[Likelihood, Log-Likelihood and Score Function] \label{defe: likelihood_function}
+    Let $f(\bm{x} \mid \theta)$ denote the joint pdf or pmf of the sample $\bm{X} = (X_1 , \ldots , X_2)$. Then, given that $\bm{X} = \bm{x}$ is observed, the function of $\theta$ defined by
+    \begin{equation*}
+        L(\theta \mid \bm{x}) = f(\bm{x} \mid \theta)
+    \end{equation*}
+    is called the {\bf likelihood function} \cite{CasellaGeorge2001SI}*{page 290}. For a given outcome $\bm{x}$ of $\bm{X}$, the {\bf log-likelihood function}, denoted $l$, is the natural logarithm of the likelihood function
+    \begin{equation*}
+        l(\theta \mid \bm{x}) = \ln L(\theta \mid \bm{x}) = \ln f(\bm{x} \mid \theta).
+    \end{equation*}
+    It's gradient with respect to $\theta$, denoted $S$, is called the {\bf score function}
+    \begin{equation*}
+        S (\theta \mid \bm{x}) = \nabla_{\theta} \, l (\theta \mid \bm{x}) \frac{\nabla_{\theta} f(\bm{x} \mid \theta)}{f(\bm{x} \mid \theta)}
+    \end{equation*}
+    \cite{KroeseDirkP2013SMaC}*{page 165}.
+\end{defe}
+
 \begin{defe}[Expotential Family] \label{defe: exp_fam}
     In the case of $p-$dimensional observation $\bm{x}_1 , \bm{x}_2 , \ldots , \bm{x}_n \in \CC^{p}$, a $d-$dimensional parameter vector $\bm{\theta} \in \CC^{d}$, and a $q-$dimensional sufficient statistic $T(\bm{x}_1 , \ldots , \bm{x}_n) \in \CC^{q}$, the likelihood function $L (\bm{\theta})$ for the $d-$parameter vector $\bm{\theta}$ has the following form if it belongs to the $d-$parameter {\bf exponential family}
     \begin{equation*}
@@ -115,3 +131,28 @@
     \end{align*}
     This ratio will be constant as a function of $\mu$ and $\sigma^2$ if and only if $\overline{x}=\overline{y}$ and $s_{\bm{x}}^2 = s_{\bm{y}}^2$. Thus by \Cref{thm: mss_ratio_test}, $(\overline{X}, S^2)$ is a minimal sufficient statistic for $(\mu , \sigma^2 )$.
 \end{exam}
+
+\begin{defe}[Ancillary Statistic] \label{defe: ancillary_statistic}
+    A statistic $S(\bm{X})$ whose distribution does not depend on the parameter $\theta$ is called an ancillary statistic \cite{CasellaGeorge2001SI}*{page 282}.
+\end{defe}
+
+\begin{defe}[Complete Distributions and Statistics] \label{defe: complete_statistic}
+    Let $f(t \mid \theta)$ be a family of pdfs or pmfs for a statistic $T(\bm{X})$. The family of probability distributions is called {\bf complete} if $\EE_{\theta} g(T) = 0$ for all $\theta$ implies $\PP (g(T) = 0) = 1$ for all $\theta$. Equivalently, $T(\bm{X})$ is called a {\bf complete statistic} \cite{CasellaGeorge2001SI}*{page 285}.
+\end{defe}
+
+\begin{exam}[Binomial Complete Statistic] \label{exam: bin_comp_stat}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 285}. Suppose that $T$ has a $\Bin (n,p)$ distribution, $0<p<1$. Let $g$ be a function such that $\EE_{p} g(T) = 0$. Then
+    \begin{align*}
+        0 = \EE_{p} g(T) & = \sum_{t=0}^{n} g(t) \binom{n}{t} p^{t} (1-p)^{n-1}                        \\
+                         & = (1-p)^n \sum_{t=0}^{n} g(t) \binom{n}{t} \left( \frac{p}{1-p} \right)^{t}
+    \end{align*}
+    for all $p$, $0<p<1$. The factor $(1-p)^n$ is not 0 for any $p$ in this range. Thus it must be that
+    \begin{equation*}
+        0 = \sum_{t=0}^{n} g(t) \binom{n}{t} \left( \frac{p}{1-p} \right)^{t} = \sum_{t=0}^{n} g(t) \binom{n}{t} r^t
+    \end{equation*}
+    for all, $0 < r < \infty$. But the last expression is a polynomial of degree $n$ in $r$, where the coefficient of $r^t$ is $g(t) \binom{n}{t}$. For the polynomial to be $0$ for all $r$, each coefficient must be $0$. Since none of the $\binom{n}{t}$ terms is $0$, this implies that $g(t) = 0$ for $t=0,1,\ldots n$. Since $T$ takes on the values $0,1,\ldots n$ with probability $1$, this means that $\PP_p (g(T) = 0) = 1$ for all $p$, the desired conclusion. Hence, $T$ is a complete statistic.
+\end{exam}
+
+\begin{defe}[Point Estimator] \label{defe: point_estimator}
+    A {\bf point estimator} is any function $W(X_1 , \ldots , X_n)$ of a sample; that is, any statistic (see \Cref{defe: statistic}) is a point estimator \cite{CasellaGeorge2001SI}*{page 311}.
+\end{defe}
