@@ -1,0 +1,47 @@
+\subsection*{Methods of Evaluating Estimators}
+
+\begin{defe}[Mean Square Error] \label{defe: mse}
+    The {\bf mean square error} (MSE) of an estimator $W$ of a parameter $\theta$ is the function $\theta$ defined by $\EE_{\theta} (W - \theta)^2$ \cite{CasellaGeorge2001SI}*{page 330}.
+\end{defe}
+
+\begin{defe}[Bias] \label{defe: bias}
+    The {\bf bias} of an estimator $W$ of a parameter $\theta$ is the difference between the expected value of $W$ and $\theta$; that is $\Bias_{\theta} W = \EE_{\theta} W - \theta$. An estimator whose bias is identically (in $\theta$) equal to $0$ is called an {\bf unbiased estimator} and satisfies $\EE_{\theta} W = \theta$ for all $\theta$ \cite{CasellaGeorge2001SI}*{page 330}.
+\end{defe}
+
+It is important to note that
+\begin{equation*}
+    \EE_{\theta} \left( W - \theta \right)^{2} = \Var_{\theta} + \left( \EE_{\theta} W - \theta \right)^2 = \Var_{\theta} W + \left( \Bias_{\theta} W \right)^2 .
+\end{equation*}
+
+\begin{exam}[Uniform Sufficient Statistic] \label{exam: uni_ss_p1}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 331}. Let $X_1 , \ldots , X_n \iid \Nor (\mu , \sigma^2)$. The statistics $\overline{X}$ and $S^2$ are both unbiased estimators since
+    \begin{equation*}
+        \EE \overline{X} = \mu, \quad \EE S^2 = \sigma^2, \quad \text{for all} \; \mu and \sigma^2.
+    \end{equation*}
+    The MSEs of these estimators are given by
+    \begin{align*}
+        \EE \left( \overline{X} - \mu \right)^2 & = \Var \overline{X} = \frac{\sigma^2}{n} \\
+        \EE \left( S^2 - \sigma^2 \right)^2 &= \Var S^2 = \frac{2 \sigma^4}{n - 1}.
+    \end{align*}
+    The MSE of $\overline{X}$ remains $\sigma^2 / n$ even if the normality assumption is dropped. However, the above expression for the MSE of $S^2$ does not remain the same if the normality assumption is relaxed. An alternative estimator for $\sigma^2$ is the MLE $\hat{\sigma} = \frac{1}{n} \sum_{i=1}^{n} \left( X_i - \overline{X} \right)^2 = \frac{n-1}{n} S^2$. It is straightforward to calculate
+    \begin{equation*}
+        \EE \hat{\sigma}^2 = \EE \left( \frac{n-1}{n} S^2 \right) = \frac{n-1}{n} \sigma^2,
+    \end{equation*}
+    so that $\hat{\sigma}^2$ is a biased estimator of $\sigma^2$. The variance of $\hat{\sigma}^2$ can also be calculated as
+    \begin{equation*}
+        \Var \; \hat{\sigma}^2 = \Var \left( \frac{n-1}{n} S^2 \right) = \left( \frac{n-1}{n} \right)^2 \Var S^2 = \frac{2(n-1) \sigma^4}{n^2},
+    \end{equation*}
+    and hence, its MSE is given by
+    \begin{equation*}
+        \EE \left( \hat{\sigma}^2 - \sigma^2 \right) = \frac{2(n-1)\sigma^4}{n^2} + \left( \frac{n-1}{n} \sigma^2 - \sigma^2 \right)^2 = \left( \frac{2n-1}{n^2} \right) \sigma^4.
+    \end{equation*}
+    Thus we have
+    \begin{equation*}
+        \EE \left( \hat{\sigma}^2 - \sigma^2 \right)^2 = \left( \frac{2n-1}{n^2} \right) \sigma^4  < \left( \frac{2}{n-1} \right) \sigma^4 = \EE \left( \hat{\sigma}^2 - \sigma^2 \right)^2,
+    \end{equation*}
+    showing that $\hat{\sigma}^2$ has a smaller MSE than $S^2$. Thus, by trading off variance for bias, the MSE is improved.
+\end{exam}
+
+\begin{defe}[Best Unbiased Estimator] \label{defe: bue}
+    An estimator $W^{\ast}$ is a {\bf best unbiased estimator} of $\tau (\theta)$ if it satisfies $EE_{\theta} W^{\ast} = \tau (\theta)$ for all $\theta$ and, for any other estimator $W$ with $\EE_{\theta} W = \tau (\theta)$, we have $\Var_{\theta} W^{\ast} \leq \Var_{\theta} W$ for all $\theta$. $W^{\ast}$ is also called a {\bf uniform minimum variance unbiased estimator} (UMVUE) of $\tau (\theta)$ \cite{CasellaGeorge2001SI}*{page 334}.
+\end{defe}
