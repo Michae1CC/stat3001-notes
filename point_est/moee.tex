@@ -13,15 +13,15 @@ It is important to note that
     \EE_{\theta} \left( W - \theta \right)^{2} = \Var_{\theta} + \left( \EE_{\theta} W - \theta \right)^2 = \Var_{\theta} W + \left( \Bias_{\theta} W \right)^2 .
 \end{equation*}
 
-\begin{exam}[Uniform Sufficient Statistic] \label{exam: uni_ss_p1}
+\begin{exam}[Normal MSE] \label{exam: norm_mse_p1}
     Example taken from \cite{CasellaGeorge2001SI}*{page 331}. Let $X_1 , \ldots , X_n \iid \Nor (\mu , \sigma^2)$. The statistics $\overline{X}$ and $S^2$ are both unbiased estimators since
     \begin{equation*}
-        \EE \overline{X} = \mu, \quad \EE S^2 = \sigma^2, \quad \text{for all} \; \mu and \sigma^2.
+        \EE \overline{X} = \mu, \quad \EE S^2 = \sigma^2, \; \text{for all} \; \mu \; \text{and} \; \sigma^2.
     \end{equation*}
     The MSEs of these estimators are given by
     \begin{align*}
         \EE \left( \overline{X} - \mu \right)^2 & = \Var \overline{X} = \frac{\sigma^2}{n} \\
-        \EE \left( S^2 - \sigma^2 \right)^2 &= \Var S^2 = \frac{2 \sigma^4}{n - 1}.
+        \EE \left( S^2 - \sigma^2 \right)^2     & = \Var S^2 = \frac{2 \sigma^4}{n - 1}.
     \end{align*}
     The MSE of $\overline{X}$ remains $\sigma^2 / n$ even if the normality assumption is dropped. However, the above expression for the MSE of $S^2$ does not remain the same if the normality assumption is relaxed. An alternative estimator for $\sigma^2$ is the MLE $\hat{\sigma} = \frac{1}{n} \sum_{i=1}^{n} \left( X_i - \overline{X} \right)^2 = \frac{n-1}{n} S^2$. It is straightforward to calculate
     \begin{equation*}
@@ -42,6 +42,105 @@ It is important to note that
     showing that $\hat{\sigma}^2$ has a smaller MSE than $S^2$. Thus, by trading off variance for bias, the MSE is improved.
 \end{exam}
 
-\begin{defe}[Best Unbiased Estimator] \label{defe: bue}
+\begin{defe}[Best Unbiased Estimator] \label{defe: umvu}
     An estimator $W^{\ast}$ is a {\bf best unbiased estimator} of $\tau (\theta)$ if it satisfies $EE_{\theta} W^{\ast} = \tau (\theta)$ for all $\theta$ and, for any other estimator $W$ with $\EE_{\theta} W = \tau (\theta)$, we have $\Var_{\theta} W^{\ast} \leq \Var_{\theta} W$ for all $\theta$. $W^{\ast}$ is also called a {\bf uniform minimum variance unbiased estimator} (UMVUE) of $\tau (\theta)$ \cite{CasellaGeorge2001SI}*{page 334}.
 \end{defe}
+
+\begin{thm}[Cramer-Rao Inequality] \label{thm: cri_neq}
+    Let $X_1 , \ldots , X_n$ be a sample with pdf $f(\bm{x} \mid \theta)$, and let $W(\bm{X}) = W(X_1 , \ldots , X_n)$ be any estimator satisfying
+    \begin{equation*}
+        \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) = \int_{\calX} \frac{\partial}{\partial \theta} \left[ W(\bm{x}) f(\bm{x} \mid \theta) \right]
+    \end{equation*}
+    and
+    \begin{equation*}
+        \Var_{\theta} W(\bm{X}) < \infty.
+    \end{equation*}
+    Then
+    \begin{equation*}
+        \Var_{\theta} (W(\bm{X})) \geq \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{\EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(\bm{X} \mid \theta)  \right)^2 \right)}
+    \end{equation*}
+    \cite{CasellaGeorge2001SI}*{page 335}.
+\end{thm}
+
+\begin{cor}[Cramer-Rao Inequality, iid Case] \label{cor: cri_neq_iid}
+    If the assumptions of \Cref{thm: cri_neq} are satisfied and, additionally, if $X_1 , \ldots , X_n$ are iid with pdf $f(\bm{x} \mid \theta)$, then
+    \begin{equation*}
+        \Var_{\theta} (W(\bm{X})) \geq \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{n \EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(X \mid \theta)  \right)^2 \right)}
+    \end{equation*}
+    \cite{CasellaGeorge2001SI}*{page 337}.
+\end{cor}
+
+\begin{lem} \label{lem: cri_helper}
+    If $f(\bm{x} \mid \theta)$ satisfies
+    \begin{equation*}
+        \frac{d}{d \theta} \EE_{\theta} \left( \frac{\partial}{\partial \theta} \ln f \left( X \mid \theta \right) \right) = \int \frac{\partial}{\partial \theta} \left[ \left( \frac{\partial}{\partial \theta} \ln f (x \mid \theta) \right) f (x \mid \theta) \right] \; dx
+    \end{equation*}
+    (true for the exponential family), then
+    \begin{equation*}
+        \EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(X \mid \theta)  \right)^2 \right) = - \EE_{\theta} \left( \frac{\partial^2}{\partial \theta^2} \ln f(X \mid \theta) \right)
+    \end{equation*}
+    \cite{CasellaGeorge2001SI}*{page 338}.
+\end{lem}
+
+\begin{exam}[Poisson Unbiased Estimate] \label{exam: poi_unbiased_est}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 338}. Let $X_1 , \ldots , X_n \iid \Poi (\lambda)$, and let $\overline{X}$ and $S^2$ be the sample mean and variance, respectively. Recall that for the Poisson pmf both the mean and variance are equal to $\lambda$. We have
+    \begin{align*}
+        \EE_{\lambda} \overline{X} & = \lambda, \quad \text{for all} \; \lambda, \\
+        \EE_{\lambda} S^2          & = \lambda, \quad \text{for all} \; \lambda,
+    \end{align*}
+    so both $\overline{X}$ and $S^2$ are unbiased estimators of $\lambda$. To determine the better estimator, $\overline{X}$ or $S^2$, we should now compare the variances. We have $\Var_{\lambda} \overline{X} = \lambda / n$, but $\Var_{\lambda} S^2$ is quiet a lengthy calculation. Not only this, even if we can establish that $\overline{X}$ is better than $S^2$, consider the class of estimators
+    \begin{equation*}
+        W_a \left( \overline{X} , S^2 \right) = a \overline{X} + (1-a) S^2.
+    \end{equation*}
+    For every constant $a$, $\EE_{\lambda} W_a = \lambda$, so now we have infinitely many unbiased estimators of $\lambda$. Instead, let us show that $\overline{X}$ is the best estimator directly using the Cramer-Rao inequality. Here we are estimating $\tau(\lambda) = \lambda$, so that $\tau ' (\lambda) = 1$. Also, since we have an exponential family, using \Cref{lem: cri_helper} gives us
+    \begin{align*}
+        \EE_{\lambda} \left( \left( \frac{\partial}{\partial \lambda} \ln f(X \mid \lambda)  \right)^2 \right) \
+         & = - n \EE_{\lambda} \left( \frac{\partial^2}{\partial \lambda^2} \ln f(X \mid \lambda) \right)                                \\
+         & = - n \EE_{\lambda} \left( \frac{\partial^2}{\partial \lambda^2} \ln \left( \frac{e^{-\lambda} \lambda^X}{X!} \right) \right) \\
+         & = - n \EE_{\lambda} \left( \frac{\partial^2}{\partial \lambda^2} \left( -\lambda + X \ln \lambda - \ln X! \right) \right)     \\
+         & = - n \EE_{\lambda} \left( - \frac{X}{\lambda^2} \right)                                                                      \\
+         & = \frac{n}{\lambda} .
+    \end{align*}
+    Hence for any unbiased estimator, $W$, of $\lambda$, from \Cref{cor: cri_neq_iid} we must have
+    \begin{align*}
+        \Var_{\theta} (W(\bm{X})) \
+         & \geq \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{n \EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(X \mid \theta)  \right)^2 \right)} \\
+         & = \frac{\left( 1 \right)^2}{\left( \frac{n}{\lambda} \right)}                                                                                                                 \\
+         & = \frac{\lambda}{n}.
+    \end{align*}
+    Since $\Var_{\lambda} \overline{X} = \lambda / n$, $\overline{X}$ must be the best unbiased estimator.
+\end{exam}
+
+\begin{cor}[Attainment] \label{cor: cri_attainment}
+    Let $X_1 , \ldots , X_n$ be a sample with pdf $f(\bm{x} \mid \theta)$, where $f(x \mid \theta)$ satisfies the conditions of the Cramer-Rao Theorem. $L(\theta \mid \bm{x}) = \prod_{i=1}^{n} f(x_1 \mid \theta)$ denote the likelihood function. If $W(\bm{X}) = W(X_1 , \ldots , X_n)$ is any unbiased estimator of $\tau (\theta)$, then $W(\bm{X})$ attains the Cramer-Rao Lower Bound if and only if
+    \begin{equation*}
+        a(\theta) \left[ W(\bm{x}) - \tau (\theta) \right] = \frac{\partial}{\partial \theta} \ln L (\theta \mid \bm{x})
+    \end{equation*}
+    for some function $a(\theta)$ \cite{CasellaGeorge2001SI}*{page 341}.
+\end{cor}
+
+\begin{exam}[Continuation of \Cref{exam: normal_mle_mu_sigma}] \label{exam: exam: norm_mse_p2}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 341}. Here we know
+    \begin{equation*}
+        L(\mu , \sigma^2 \mid \bm{x}) = \frac{1}{(2 \pi \sigma^2)^{n/2}} \exp \left( -(1/2) \sum_{i=1}^{n} (x_i - \mu)^2 / \sigma^2 \right),
+    \end{equation*}
+    and hence
+    \begin{equation*}
+        \frac{\partial}{\partial \sigma^2} \ln L(\mu , \sigma^2 \mid \bm{x}) = \frac{n}{2 \sigma^4} \left( \sum_{i=1}^{n} \frac{(x_i - \mu)^2}{n} - \sigma^2 \right).
+    \end{equation*}
+    Thus, taking $a(\sigma^2) = n / (2 \sigma^4)$ shows that the best unbiased estimator of $\sigma^2$ is $\frac{(x_i - \mu)^2}{n}$, which is calculable only if $\mu$ is known. If $\mu$ is not known, the bound {\it cannot} be attained.
+\end{exam}
+
+\subsubsection*{Sufficiency and Unbiasedness}
+
+\begin{thm}[Rao-Blackwell] \label{thm: rao_bw_thrm}
+    Let $W$ be any unbiased estimator of $\tau (\theta)$, and let $T$ be a sufficient statistic for $\theta$. Define $\phi (T) = \EE (W \mid T)$. Then $\EE_{\theta} \phi (T) = \tau (\theta)$ and $\Var_{\theta} \phi (T) \leq \Var_{\theta} W$ for all $\theta$; that is, $\phi (T)$ is a uniformly better unbiased estimator of $\tau (\theta)$ \cite{CasellaGeorge2001SI}*{page 342}.
+\end{thm}
+
+\begin{thm} \label{thm: best_unbiased_uniq}
+    If $W$ is the best unbiased estimator of $\tau (\theta)$, then $W$ is unique \cite{CasellaGeorge2001SI}*{page 343}.
+\end{thm}
+
+\begin{thm} \label{thm: best_unbiased_uniq}
+    Let $T$ be a complete sufficient statistic for a parameter $\theta$, and let $\phi (T)$ be any estimator based only on $T$. Then $\phi (T)$ is the best unbiased estimator of its expected value \cite{CasellaGeorge2001SI}*{page 347}.
+\end{thm}
