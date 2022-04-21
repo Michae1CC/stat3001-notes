@@ -57,7 +57,7 @@ It is important to note that
     \end{equation*}
     Then
     \begin{equation*}
-        \Var_{\theta} (W(\bm{X})) \geq \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{\EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(\bm{X} \mid \theta)  \right)^2 \right)}
+        \Var_{\theta} (W(\bm{X})) \geq \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{\EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(\bm{X} \mid \theta)  \right)^2 \right)} = \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{\calJ (\theta)}
     \end{equation*}
     \cite{CasellaGeorge2001SI}*{page 335}.
 \end{thm}
@@ -141,6 +141,51 @@ It is important to note that
     If $W$ is the best unbiased estimator of $\tau (\theta)$, then $W$ is unique \cite{CasellaGeorge2001SI}*{page 343}.
 \end{thm}
 
-\begin{thm} \label{thm: best_unbiased_uniq}
+\begin{thm} \label{thm: best_css_est}
     Let $T$ be a complete sufficient statistic for a parameter $\theta$, and let $\phi (T)$ be any estimator based only on $T$. Then $\phi (T)$ is the best unbiased estimator of its expected value \cite{CasellaGeorge2001SI}*{page 347}.
 \end{thm}
+
+\subsubsection*{Consistency}
+
+\begin{defe}[Consistency] \label{defe: consistent}
+    A sequence of estimators $T_n$ of $g(\bm{\theta})$ is said to be {\bf consistent} if for every $\bm{\theta} \in \Omega$,
+    \begin{equation*}
+        T_n \overset{\PP_{\bm{\theta}}}{\to} g (\bm{\theta}), \quad \text{as} \; n \to \infty
+    \end{equation*}
+    that is, given any $\varepsilon > 0$, then
+    \begin{equation*}
+        \PP \left[ \left| T_n \left( \bm{X}_1 , \ldots , \bm{X}_n \right) - g (\bm{\theta}) \right| \geq \varepsilon \right] \to 0, \quad \text{as} \; n \to \infty
+    \end{equation*}
+    \cite{KroeseDirkP2013SMaC}*{page 176} [Background Notes, page 44].
+\end{defe}
+
+\begin{thm} \label{thm: var_bias_consistent}
+    If $\Var (T_n) \to 0$ and $\Bias (T_n) \to 0$, as $n \to \infty$, then the sequence of estimates $T_n$ is consistent for estimating $g(\bm{\theta})$ [Background Notes, page 44].
+\end{thm}
+
+\begin{proof}
+    Let $f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta})$ denote the joint pdf of $\bm{X}_1 , \ldots , \bm{X}_n$. Then we have
+    \begin{equation*}
+        \PP \left[ \left| T_n - g (\bm{\theta}) \right| \geq \varepsilon \right] = {\int \ldots \int}_{\left| T_n - g (\bm{\theta}) \right| \geq \varepsilon} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \; d \bm{x}_1 \; \ldots \; d \bm{x}_n.
+    \end{equation*}
+    On the region of integration in the above,
+    \begin{align*}
+        \left| T_n - g (\bm{\theta}) \right|                         & \geq \varepsilon   \\
+        \left( T_n - g (\bm{\theta}) \right)^2                       & \geq \varepsilon^2 \\
+        \frac{\left( T_n - g (\bm{\theta}) \right)^2}{\varepsilon^2} & \geq 1,
+    \end{align*}
+    and since $f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta})$ is non-negative,
+    \begin{equation*}
+        f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \leq f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \frac{\left( T_n - g (\bm{\theta}) \right)^2}{\varepsilon^2}.
+    \end{equation*}
+    Thus
+    \begin{align*}
+         & \PP \left[ \left| T_n - g (\bm{\theta}) \right| \geq \varepsilon \right]                                                                                                                                                         \\
+         & = {\int \ldots \int}_{\left| T_n - g (\bm{\theta}) \right| \geq \varepsilon} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \; d \bm{x}_1 \; \ldots \; d \bm{x}_n                                                                 \\
+         & \leq {\int \ldots \int}_{\left| T_n - g (\bm{\theta}) \right| \geq \varepsilon} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \frac{\left( T_n - g (\bm{\theta}) \right)^2}{\varepsilon^2} \; d \bm{x}_1 \; \ldots \; d \bm{x}_n \\
+         & \leq \frac{1}{\varepsilon^2} {\int \ldots \int} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \left( T_n - g (\bm{\theta}) \right)^2 \; d \bm{x}_1 \; \ldots \; d \bm{x}_n                                                       \\
+         & \leq \frac{1}{\varepsilon^2} \MSE (T_n)                                                                                                                                                                                          \\
+         & \leq \frac{1}{\varepsilon^2} \left[ \Var (T_n) + \left( \Bias (T_n) \right)^2 \right]
+    \end{align*}
+    which tends to $0$ as $n \to \infty$, since $\Var (T_n)$ and $\Bias (T_n)$ both tend to $0$.
+\end{proof}

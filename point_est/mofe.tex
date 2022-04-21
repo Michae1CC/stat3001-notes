@@ -156,3 +156,55 @@
 \begin{defe}[Point Estimator] \label{defe: point_estimator}
     A {\bf point estimator} is any function $W(X_1 , \ldots , X_n)$ of a sample; that is, any statistic (see \Cref{defe: statistic}) is a point estimator \cite{CasellaGeorge2001SI}*{page 311}.
 \end{defe}
+
+\begin{defe}[Fisher Information Matrix] \label{defe: fim}
+    For the model $\bm{X} \sim f(\cdot ; \bm{\theta})$, let $S(\bm{\theta})$ be the score function (see \Cref{defe: likelihood_function}) of $\bm{\theta}$. The covariance matrix of the random vector $S(\bm{\theta})$, denoted by $\calJ (\theta)$, is called the {\bf Fisher Information Matrix} where
+    \begin{equation*}
+        \calJ (\bm{\theta}) = \EE_{\bm{\theta}} \left[ S(\bm{\theta}) S(\bm{\theta})^{\intercal} \right]
+    \end{equation*}
+    in the multivariate case and
+    \begin{equation*}
+        \calJ (\theta) = \EE_{\theta} \left( \frac{d}{d \theta} \ln f(\bm{X} ; \theta) \right)^2
+    \end{equation*}
+    in the one-dimensional case \cite{KroeseDirkP2013SMaC}*{page 168}.
+\end{defe}
+
+\begin{defe}[Observed Information] \label{defe: oim}
+    For the model $\bm{X} \sim f(\cdot ; \bm{\theta})$, let $S(\bm{\theta})$ be the score function (see \Cref{defe: likelihood_function}) of $\bm{\theta}$. The negative of the Hessian of the random vector $S(\bm{\theta})$, denoted by $I (\theta)$, is called the {\bf Observed Information} where
+    \begin{equation*}
+        I (\bm{\theta}) = - \nabla \nabla S(\bm{\theta})
+    \end{equation*}
+    in the multivariate case and
+    \begin{equation*}
+        I (\bm{\theta}) = - \frac{\partial^2}{\partial \theta^2} \ln f(\bm{X} ; \theta)
+    \end{equation*}
+    in the one-dimensional case [Background Notes, page 8].
+\end{defe}
+
+\begin{thm} \label{thm: fim_and_oim}
+    Under regularity conditions, the following equality holds
+    \begin{equation*}
+        \calJ (\bm{\theta}) = \EE \left[ I (\bm{\theta}) \right]
+    \end{equation*}
+    \cite{KroeseDirkP2013SMaC}*{page 169}.
+\end{thm}
+
+\begin{thm}[Fisher Information Matrix for iid Data] \label{thm: fim_iid}
+    Let $\bm{X} = (X_1 , \ldots , X_n) \iid \mathring{f} (x ; \bm{\theta})$, and let $\mathring{I} (\bm{\theta})$ be the information matrix corresponding to $X \sim \mathring{f} (x ; \bm{\theta})$. Then the information matrix for $\bm{X}$ is given by
+    \begin{equation*}
+        I (\bm{\theta}) = n \mathring{I} (\bm{\theta})
+    \end{equation*}
+    \cite{KroeseDirkP2013SMaC}*{page 170}.
+\end{thm}
+
+\begin{thm} \label{thm: ll_rc}
+    If the $L (\theta)$ belongs to the regular exponential family, then the liklihood equation
+    \begin{equation*}
+        \frac{d}{d \bm{\theta}} \ln L (\bm{\theta}) = \bm{0},
+    \end{equation*}
+    can be expressed as
+    \begin{equation*}
+        T (\bm{x}_1 , \ldots , \bm{x}_n) = \EE \left[ T (\bm{X}_1 , \ldots , \bm{X}_n) \right]
+    \end{equation*}
+    [Lecture Notes 1, page 8].
+\end{thm}
