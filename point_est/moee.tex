@@ -189,3 +189,89 @@ It is important to note that
     \end{align*}
     which tends to $0$ as $n \to \infty$, since $\Var (T_n)$ and $\Bias (T_n)$ both tend to $0$.
 \end{proof}
+
+\begin{exam}[Continuation of \Cref{exam: norm_mse_p1}] \label{exam: exam: norm_consistent_var}
+    Example taken from Background Notes, page 44. The estimators
+    \begin{equation*}
+        s^2 = \frac{1}{n-1} \sum_{i=1}^{n} (x_i - \overline{x})^2 , \quad \hat{\sigma}^2 = \frac{1}{n} \sum_{i=1}^{n} (x_i - \overline{x})^2
+    \end{equation*}
+    are both consistent for $\sigma^2$. This is easily seen with $s^2$ since
+    \begin{equation*}
+        \EE [s^2] = \sigma \quad \text{and} \quad \Var (s^2) \to 0
+    \end{equation*}
+    as $n \to \infty$. To show that $\hat{\sigma}^2$ is also a consistent estimator, note that
+    \begin{equation*}
+        \frac{\sum_{j=1}^{n} \left(X_j - \overline{X} \right)^2}{\sigma^2} \sim \chi_{n-1}^{2} \tag{see \ref{eqn: norm_chi_sq}}
+    \end{equation*}
+    meaning
+    \begin{equation*}
+        \EE \left[ \frac{\sum_{j=1}^{n} \left(X_j - \overline{X} \right)^2}{\sigma^2} \right] =  n-1
+    \end{equation*}
+    and
+    \begin{equation*}
+        \Var \left[ \frac{\sum_{j=1}^{n} \left(X_j - \overline{X} \right)^2}{\sigma^2} \right] =  2(n-1)
+    \end{equation*}
+    so that
+    \begin{equation*}
+        \EE \left[ \sum_{j=1}^{n} \left(X_j - \overline{X} \right)^2 \right] =  (n-1) \sigma^2
+    \end{equation*}
+    and
+    \begin{equation*}
+        \Var \left[ \sum_{j=1}^{n} \left(X_j - \overline{X} \right)^2 \right] =  2(n-1) \sigma^4 .
+    \end{equation*}
+    Hence
+    \begin{align*}
+        \EE \left( \hat{\sigma}^2 \right)  & = \frac{n-1}{n} \sigma^2 = \sigma^2 - \frac{\sigma^2}{n} \\
+        \Var \left( \hat{\sigma}^2 \right) & = \frac{2 (n-1) \sigma^4}{n^2}
+    \end{align*}
+    meaning $\EE \left( \hat{\sigma}^2 \right) \to 0$ and $\Var \left( \hat{\sigma}^2 \right) \to 0$ as $n \to \infty$. Therefore, by \Cref{thm: var_bias_consistent}, $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$.
+\end{exam}
+
+\subsubsection*{Large-Sample Comparisons of Estimators}
+
+\begin{thm}[Information Matrix for iid Data] \label{thm: large_samp_est}
+    Suppose that $\hat{\bm{\theta}}_n$ is a sequence of consistent ML estimates for $\bm{\theta}$. Then $\sqrt{n} \left( \hat{\bm{\theta}}_n - \bm{\theta} \right)$ converges in distribution to a $\Nor \left( \bm{\theta} , \mathring{\calJ}^{-1} (\bm{\theta}) \right)$ distributed random vector as $n \to \infty$. In other words,
+    \begin{align*}
+        \hat{\bm{\theta}}_n \overset{\text{approx}}{\sim} \Nor \left( \bm{\theta} , \mathring{\calJ}^{-1} (\bm{\theta}) / n \right) .
+    \end{align*}
+\end{thm}
+
+\begin{defe}[Asymptotic Relative Efficiency] \label{defe: are}
+    Suppose that $\hat{\theta}_{n_1}$ and $\hat{\theta}_{n_2}$ are two single variable estimates such that
+    \begin{align*}
+        \hat{\theta}_{n_1} & \overset{\text{approx}}{\sim} \Nor \left( \theta , \tau_1^2 / n \right)  \\
+        \hat{\theta}_{n_2} & \overset{\text{approx}}{\sim} \Nor \left( \theta , \tau_2^2 / n \right).
+    \end{align*}
+    The {\bf Asymptotic Relative Efficiency} (ARE) of $\hat{\theta}_{n_2}$ with respect to $\hat{\theta}_{n_1}$ is given by
+    \begin{equation*}
+        \operatorname{ARE} (\hat{\theta}_{n_2}) = \hat{\theta}_{n_1} / \hat{\theta}_{n_2}
+    \end{equation*}
+    [Background Notes, page 46].
+\end{defe}
+
+\begin{exam}[Asymptotic Distribution of Bernoulli MLE] \label{exam: asym_dist_ber}
+    Example taken from \cite{KroeseDirkP2013SMaC}*{page 177}. For $X_1 , \ldots , X_n \iid \Ber (p)$, the MLE for $p$ is
+    \begin{equation*}
+        \hat{p}_n = \overline{x} = \frac{1}{n} \sum_i x_i .
+    \end{equation*}
+    To compute the information number (see \Cref{defe: fim}) for $p$, note that regularity conditions hold so that
+    \begin{equation*}
+        \mathring{\calJ} (p) = \Var_{p} \left( S (p) \right)
+    \end{equation*}
+    where
+    \begin{align*}
+        S (p) & = \frac{d}{dp} \ln \left( p^x (1-p)^{1-x} \right)               \\
+              & = \frac{d}{dp} \left[ x \cdot \ln (p) + (1-x) \ln (1-p) \right] \\
+              & = \frac{x}{p} - \frac{(1-x)}{1-p} = \frac{x}{p(1-p)}.
+    \end{align*}
+    This means that
+    \begin{align*}
+        \mathring{\calJ} (p) & = \Var_{p} \left( S (p) \right)                  \\
+                             & = \Var_p \left( \frac{X}{p(1-p)} \right)         \\
+                             & = \frac{p(1-p)}{p^2 (1-p)^2} = \frac{1}{p(1-p)}.
+    \end{align*}
+    \Cref{thm: large_samp_est} states that
+    \begin{equation*}
+        \hat{p}_n \overset{\text{approx}}{\sim} \Nor \left( p , \frac{p(1-p)}{n} \right) .
+    \end{equation*}
+\end{exam}

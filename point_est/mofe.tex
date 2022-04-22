@@ -98,6 +98,40 @@
     \cite{KroeseDirkP2013SMaC}*{page 165}.
 \end{defe}
 
+\begin{thm} \label{thm: e_score}
+    Under regularity conditions
+    \begin{equation*}
+        \EE \left[ S (\theta \mid \bm{x}) \right] = 0
+    \end{equation*}
+    [Background Notes, page 10].
+\end{thm}
+
+\begin{proof}
+    Since $L(\theta)$ is a density when viewed as a function of the observed data $x_1 , \ldots , x_n$ we have the following identity in $\theta$,
+    \begin{equation*}
+        \int \cdots \int L(\theta) \; d x_1 \; \ldots \; d x_n = 1.
+    \end{equation*}
+    On differentiating both sides of the above with respect to $\theta$ gives
+    \begin{equation*}
+        \int \cdots \int \left[ \frac{\partial L(\theta) }{\partial \theta} \right] \; d x_1 \; \ldots \; d x_n = 0.
+    \end{equation*}
+    Apply the chain rule to $\frac{\partial \ln L(\theta) }{\partial \theta}$ we find
+    \begin{equation*}
+        \frac{\partial \ln L(\theta) }{\partial \theta} = \frac{\partial \ln L(\theta) }{\partial L (\theta)} \cdot \frac{\partial L(\theta) }{\partial \theta} = \frac{1}{L(\theta)} \frac{\partial L(\theta) }{\partial \theta}
+    \end{equation*}
+    meaning
+    \begin{equation*}
+        \frac{\partial \ln L(\theta) }{\partial \theta} L(\theta) = \frac{\partial L(\theta) }{\partial \theta}
+    \end{equation*}
+    so that
+    \begin{align*}
+        \int \cdots \int \left[ \frac{\partial L(\theta) }{\partial \theta} \right] \; d x_1 \; \ldots \; d x_n               & = 0 \\
+        \int \cdots \int \left[ \frac{\partial \ln L(\theta) }{\partial \theta} \right] L(\theta) \; d x_1 \; \ldots \; d x_n & = 0 \\
+        \EE \left[ S (\theta) \right]                                                                                         & = 0
+    \end{align*}
+    as wanted.
+\end{proof}
+
 \begin{defe}[Expotential Family] \label{defe: exp_fam}
     In the case of $p-$dimensional observation $\bm{x}_1 , \bm{x}_2 , \ldots , \bm{x}_n \in \CC^{p}$, a $d-$dimensional parameter vector $\bm{\theta} \in \CC^{d}$, and a $q-$dimensional sufficient statistic $T(\bm{x}_1 , \ldots , \bm{x}_n) \in \CC^{q}$, the likelihood function $L (\bm{\theta})$ for the $d-$parameter vector $\bm{\theta}$ has the following form if it belongs to the $d-$parameter {\bf exponential family}
     \begin{equation*}
@@ -166,7 +200,15 @@
     \begin{equation*}
         \calJ (\theta) = \EE_{\theta} \left( \frac{d}{d \theta} \ln f(\bm{X} ; \theta) \right)^2
     \end{equation*}
-    in the one-dimensional case \cite{KroeseDirkP2013SMaC}*{page 168}.
+    in the one-dimensional case. Note that under regularity conditions $\EE \left[ S (\theta) \right] = 0$ (see \Cref{thm: e_score}) so that
+    \begin{align*}
+        \calJ (\theta) \
+         & = \EE_{\theta} \left[ \frac{d}{d \theta} \ln f(\bm{X} ; \theta) \right]^2                                                                                         \\
+         & = \Var_{\theta} \left( \frac{d}{d \theta} \ln f(\bm{X} ; \theta) \right) + \left( \EE_{\theta} \left[ \frac{d}{d \theta} \ln f(\bm{X} ; \theta) \right] \right)^2 \\
+         & = \Var_{\theta} \left( S (\theta) \right) + \left( \EE_{\theta} \left[ S (\theta) \right] \right)^2                                                               \\
+         & = \Var_{\theta} \left( S (\theta) \right)
+    \end{align*}
+    \cite{KroeseDirkP2013SMaC}*{page 168}.
 \end{defe}
 
 \begin{defe}[Observed Information] \label{defe: oim}
@@ -190,15 +232,15 @@
 \end{thm}
 
 \begin{thm}[Fisher Information Matrix for iid Data] \label{thm: fim_iid}
-    Let $\bm{X} = (X_1 , \ldots , X_n) \iid \mathring{f} (x ; \bm{\theta})$, and let $\mathring{I} (\bm{\theta})$ be the information matrix corresponding to $X \sim \mathring{f} (x ; \bm{\theta})$. Then the information matrix for $\bm{X}$ is given by
+    Let $\bm{X} = (X_1 , \ldots , X_n) \iid \mathring{f} (x ; \bm{\theta})$, and let $\mathring{\calJ} (\bm{\theta})$ be the information matrix corresponding to $X \sim \mathring{f} (x ; \bm{\theta})$. Then the information matrix for $\bm{X}$ is given by
     \begin{equation*}
-        I (\bm{\theta}) = n \mathring{I} (\bm{\theta})
+        \calJ (\bm{\theta}) = n \mathring{\calJ} (\bm{\theta})
     \end{equation*}
     \cite{KroeseDirkP2013SMaC}*{page 170}.
 \end{thm}
 
 \begin{thm} \label{thm: ll_rc}
-    If the $L (\theta)$ belongs to the regular exponential family, then the liklihood equation
+    If the $L (\theta)$ belongs to the regular exponential family, then the likelihood equation
     \begin{equation*}
         \frac{d}{d \bm{\theta}} \ln L (\bm{\theta}) = \bm{0},
     \end{equation*}
