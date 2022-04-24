@@ -1,0 +1,53 @@
+\subsection*{Expectation Maximization Algorithm}
+
+The expectation-maximization (EM) algorithm is a broadly applicable approach to the
+iterative computation of maximum likelihood (ML) estimates, useful in a variety of incomplete data problems, where algorithms such as the Newton-Raphson method may turn out to be more complicated. On each iteration of the EM algorithm, there are two steps called the Expectation step or the $E-$step and the Maximization step or the $M-$step. Because of this, the algorithm is called the EM algorithm.
+
+\subsubsection*{Formulation of the EM Algorithm}
+
+We let $\bm{Y}$ be the random vector corresponding to the observed data $\bm{y}$ having p.d.f. postulated as $g(\bm{y} ; \bm{\Psi})$, where $\bm{\Psi} = \left( \Psi_1 , \Psi_2 , \ldots , \Psi_d \right)^{\intercal}$ is a vector of unknown parameters with parameter space $\Omega$. We let $g_c (\bm{x};\bm{\Psi})$ denote the p.d.f. of the random vector $\bm{X}$ corresponding to the complete data vector $\bm{x}$. Then the complete-data log likelihood function that could be formed for $\bm{\Psi}$ is $\bm{x}$ were fully observable is given by
+\begin{equation*}
+    \ln L_{c} (\bm{\Psi}) = \ln g_c (\bm{x} ; \bm{\Psi}).
+\end{equation*}
+Formally, we have two sample space $X$ and $Y$ and a many-to-one mapping $X$ to $Y$. Instead of observing the complete-data vector $\bm{x} \in X$, we observe the incomplete-data vector $\bm{y} = \bm{y} (\bm{x}) \in Y$. It follows that
+\begin{equation*}
+    g (\bm{y} ; \bm{\Psi}) = \int_{X(\bm{y})} g_c (\bm{x}; \bm{\Psi}) \; d \bm{x}
+\end{equation*}
+where $X(\bm{y})$ is the subset of $X$ determined by the equation $\bm{y} = \bm{y} (\bm{x})$. The EM algorithm approaches the problem of solving the incomplete-data likelihood equation
+\begin{equation*}
+    \nabla_{\bm{\Psi}} \ln L (\bm{\Psi}) = 0
+\end{equation*}
+indirectly by proceeding iteratively in terms of the complete-data log likelihood function, $\ln L_c (\bm{\Psi})$. As it is unobservable, it is replaced by its conditional expectation given $\bm{y}$, using the current fit for $\bm{y}$. More specifically, let $\bm{\Psi}^{(0)}$ be some initial value for $\bm{\Psi}$. Then on the first iteration, the $E-$step requires the calculation of
+\begin{equation*}
+    Q \left( \bm{\Psi} ; \bm{\Psi}^{(0)} \right) = \EE_{\bm{\Psi}^{(0)}} \left[ \ln L_c \left( \bm{\Psi} \right) \mid \bm{y} \right].
+\end{equation*}
+The $M-$step requires the maximization of $Q \left( \bm{\Psi} ; \bm{\Psi}^{(0)} \right)$ with respect to $\bm{\Psi}$ over the parameter space $\Omega$. That is, we choose $\bm{\Psi}^{(1)}$ such that
+\begin{equation*}
+    Q \left( \bm{\Psi}^{(1)} ; \bm{\Psi}^{(0)} \right) \geq Q \left( \bm{\Psi} ; \bm{\Psi}^{(0)} \right)
+\end{equation*}
+for all $\bm{\Psi} \in \Omega$. The $E-$ and $M-$steps are then carried out again, but this time with $\bm{\Psi}^{(0)}$ replaced by the current fit $\bm{\Psi}^{(1)}$. On the $(k+1)^{th}$ iteration, the $E-$ and $M-$steps are defined as follows:
+
+\begin{defe}[$E-$step] \label{defe: e_step}
+    Calculate $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right)$ as
+    \begin{equation*}
+        Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right) = \EE_{\bm{\Psi}^{(k)}} \left[ \ln L_c \left( \bm{\Psi} \right) \mid \bm{y} \right].
+    \end{equation*}
+\end{defe}
+
+\begin{defe}[$M-$step] \label{defe: m_step}
+    Choose $\bm{\Psi}^{(k+1)}$ to be any value of $\bm{\Psi} \in \Omega$ that maximises $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right)$, that is,
+    \begin{equation*}
+        Q \left( \bm{\Psi}^{(k+1)} ; \bm{\Psi}^{(k)} \right) \geq Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right)
+    \end{equation*}
+    for all $\bm{\Psi} \in \Omega$.
+\end{defe}
+
+The $E-$ and $M-$ steps are alternated repeatedly until the difference
+\begin{equation*}
+    L (\bm{\Psi}^{(k+1)}) - L (\bm{\Psi}^{(k)})
+\end{equation*}
+changes by an arbitrarily small amount in the case of convergence of the sequence of likelihood value $L (\bm{\Psi}^{(k)})$. Another way of expressing \Cref{defe: e_step} is to say that $\bm{\Psi}^{(k+1)}$ belongs to
+\begin{equation*}
+    \calM \left( \bm{\Psi}^{(k)} \right) = \operatornamewithlimits{argmax}_{\bm{\Psi}} Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right),
+\end{equation*}
+which is the set of points that maximise $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right)$.

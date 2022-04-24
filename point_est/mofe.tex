@@ -171,8 +171,24 @@
 \end{defe}
 
 \begin{defe}[Complete Distributions and Statistics] \label{defe: complete_statistic}
-    Let $f(t \mid \theta)$ be a family of pdfs or pmfs for a statistic $T(\bm{X})$. The family of probability distributions is called {\bf complete} if $\EE_{\theta} g(T) = 0$ for all $\theta$ implies $\PP (g(T) = 0) = 1$ for all $\theta$. Equivalently, $T(\bm{X})$ is called a {\bf complete statistic} \cite{CasellaGeorge2001SI}*{page 285}.
+    Let $f(t \mid \theta)$ be a family of pdfs or pmfs for a statistic $T(\bm{X})$. The family of probability distributions is called {\bf complete} if $\EE_{\theta} g(T) = 0$, for some function $g$, for all $\theta$ implies $\PP (g(T) = 0) = 1$ for all $\theta$. Equivalently, $T(\bm{X})$ is called a {\bf complete statistic} \cite{CasellaGeorge2001SI}*{page 285}.
 \end{defe}
+
+\begin{thm} \label{thm: exp_fam_complete}
+    Let $\bm{X}_1 , \bm{X}_2 , \ldots , \bm{X}_n$ be iid observations from a pdf or pmf $f(x \mid \bm{\theta})$ that belongs to an exponential family as seen in \Cref{defe: exp_fam}, then the statistic
+    \begin{equation*}
+        T(\bm{X}_1 , \ldots , \bm{X}_n) = \left( \sum_{j=1}^{n} t_1 (\bm{X}_j) , \ldots , \sum_{j=1}^{n} t_k (\bm{X}_j) \right)
+    \end{equation*}
+    is complete as long as the parameter space is non-meager \cite{CasellaGeorge2001SI}*{page 288}.
+\end{thm}
+
+\begin{thm} \label{thm: min_and_complete}
+    If a minimal sufficient statistic exists, then any complete statistic is also a minimal sufficient statistic \cite{CasellaGeorge2001SI}*{page 289}.
+\end{thm}
+
+\begin{thm} \label{thm: suf_comp_min}
+    A complete, sufficient statistic is always minimal [Background Notes, page 25].
+\end{thm}
 
 \begin{exam}[Binomial Complete Statistic] \label{exam: bin_comp_stat}
     Example taken from \cite{CasellaGeorge2001SI}*{page 285}. Suppose that $T$ has a $\Bin (n,p)$ distribution, $0<p<1$. Let $g$ be a function such that $\EE_{p} g(T) = 0$. Then
@@ -185,6 +201,74 @@
         0 = \sum_{t=0}^{n} g(t) \binom{n}{t} \left( \frac{p}{1-p} \right)^{t} = \sum_{t=0}^{n} g(t) \binom{n}{t} r^t
     \end{equation*}
     for all, $0 < r < \infty$. But the last expression is a polynomial of degree $n$ in $r$, where the coefficient of $r^t$ is $g(t) \binom{n}{t}$. For the polynomial to be $0$ for all $r$, each coefficient must be $0$. Since none of the $\binom{n}{t}$ terms is $0$, this implies that $g(t) = 0$ for $t=0,1,\ldots n$. Since $T$ takes on the values $0,1,\ldots n$ with probability $1$, this means that $\PP_p (g(T) = 0) = 1$ for all $p$, the desired conclusion. Hence, $T$ is a complete statistic.
+\end{exam}
+
+\begin{exam}[Sum of iid Bernoulli RVs] \label{exam: sum_ber_rv}
+    Example taken from [Tutorial Sheet 2, Q6]. Let $X_1 , \ldots , X_n \iid \Ber (\theta)$. The likelihood function for $\theta$ is given by
+    \begin{align*}
+        L (\theta) \
+         & = \prod_{j=1}^{n} \binom{n}{x_j} \theta^{x_j} (1-\theta)^{1-x_j}                             \\
+         & = \left[ \prod_{j=1}^{n} \binom{n}{x_j} \right] \theta^{t} (1-\theta)^{n - t}                \\
+         & = \left[ \prod_{j=1}^{n} \binom{n}{x_j} \right] \exp \left[ c(\theta) t \right] (1-\theta)^n \\
+         & = b (\bm{x}) \exp \left[ c(\theta) t \right] / a (\theta)
+    \end{align*}
+    where
+    \begin{align*}
+        t (\bm{X}) & = \sum_{i=1}^{n} X_i              \\
+        c(\theta)  & = \ln \frac{\theta}{1-\theta}     \\
+        a(\theta)  & = (1-\theta)^{-n}                 \\
+        b(\bm{x})  & = \prod_{j=1}^{n} \binom{n}{x_j}.
+    \end{align*}
+    Clearly, the likelihood belongs to the regular exponential family with canonical parameter $c(\theta)$ and complete sufficient statistic $T = t (\bm{X})$. Also, the score statistic (\Cref{defe: likelihood_function}) is given by
+    \begin{equation*}
+        S(\theta) = \frac{\partial}{\partial \theta} \ln L(\theta) = \frac{n}{\theta (1-\theta)} \left( \frac{t}{n} - \theta \right)
+    \end{equation*}
+    showing that the estimator $T$ attains the Cramer-Rao lower bound is estimating $\theta$. Hence, it attains the MVB (\Cref{cor: cri_attainment}) and is therefore also a UMVU estimator of $\theta$. On the other hand, the estimator
+    \begin{equation*}
+        V = \left( X_n , T_{n-1} \right)^{\intercal}
+    \end{equation*}
+    where $T_{n-1} = \sum_{j=1}^{n-1} X_j$, while sufficient (with canonical parameter $c(\theta)= (\ln \frac{\theta}{1-\theta} , \ln \frac{\theta}{1-\theta})^{\intercal}$), is not complete. To demonstrate that $V$ is not complete, we have that
+    \begin{equation*}
+        \EE \left[ X_n - \frac{1}{n-1} T_{n-1} \right] = 0
+    \end{equation*}
+    however, consider
+    \begin{align*}
+        \PP \left[ X_n - \frac{1}{n-1} T_{n-1} = 0 \right].
+    \end{align*}
+    Since, $X_n \sim \Ber (\theta)$, $T_{n-1} \sim \Bin (n-1, \theta)$ and $X_i$ are iid
+    \begin{align*}
+        \PP \left[ X_n - \frac{1}{n-1} T_{n-1} = 0 \right] \
+         & = \PP \left[ T_{n-1} = 0 \mid X_n = 0 \right] \cdot \PP \left[ X_n = 0 \right] + \PP \left[ T_{n-1} = n-1 \mid X_n = 0 \right] \cdot \PP \left[ X_n = 1 \right] \\
+         & = (1 - \theta)^{n} + \theta^{n} \neq 1
+    \end{align*}
+    for $0 < \theta < 1$. So by \Cref{defe: complete_statistic}, $V$ is not complete. Furthermore, as $T$ is a complete, sufficient statistic, it is a minimal sufficient statistic (\Cref{thm: suf_comp_min}) for $\theta$. It is a function of every other sufficient statistic (\Cref{defe: minimal_sufficient_statistic}) and here we can see it is a function of $V$ with
+    \begin{equation*}
+        T = (V)_1 + (V)_2 = X_n + T_{n-1}.
+    \end{equation*}
+    This also shows that $V$ is not a (sufficient) minimal statistic (again by \Cref{defe: minimal_sufficient_statistic}). Now lets consider the variance between two estimators of $\theta$, $T = \frac{1}{n} \sum_{i=1}^{n} X_i$ and $W(V) = \EE \left[ X_1 \mid V \right]$. We saw that $T$ is UMVU and its variance attains MVB. Its variance can be computed as
+    \begin{equation*}
+        \Var (T) = \frac{1}{n^2} (n \theta (1-\theta)) = \frac{1}{n} \theta (1 - \theta).
+    \end{equation*}
+    Now let us try and find an explicit espression for $W(V(\bm{x}))$. We have
+    \begin{align*}
+        W(V(\bm{x})) \
+         & = \EE \left[ X_1 \mid X_n = x_n , \sum_{i=1}^{n-1} X_i = t_{n-1} \right]                                                                                                                                  \\
+         & = \sum_{x_1 = 0}^{1} x_1 \cdot \PP \left[ X_1 = x_1 \mid X_n = x_n , \sum_{i=1}^{n-1} X_i = t_{n-1} \right]                                                                                               \\
+         & = \PP \left[ X_1 = 1 \mid X_n = x_n , \sum_{i=1}^{n-1} X_i = t_{n-1} \right]                                                                                                                              \\
+         & = \frac{\PP \left[ X_1 = 1 , X_n = x_n , \sum_{i=1}^{n-1} X_i = t_{n-1} \right]}{\PP \left[ X_n = x_n , \sum_{i=1}^{n-1} X_i = t_{n-1} \right]}                                                           \\
+         & = \frac{\PP \left[ X_1 = 1 , X_n = x_n , \sum_{i=2}^{n-1} X_i = t_{n-1} - 1 \right]}{\PP \left[ X_n = x_n , \sum_{i=1}^{n-1} X_i = t_{n-1} \right]}                                                       \\
+         & = \frac{\PP \left[ X_1 = 1 \right] \PP \left[  X_n = x_n \right]  \PP \left[ \sum_{i=2}^{n-1} X_i = t_{n-1} - 1 \right]}{\PP \left[ X_n = x_n \right] \PP \left[ \sum_{i=1}^{n-1} X_i = t_{n-1} \right]}.
+    \end{align*}
+    Since $X_1 \sim \Ber (\theta)$, $\sum_{i=1}^{n-1} X_i \sim \Bin (n-1,\theta)$ and $\sum_{i=2}^{n-1} X_i \sim \Bin (n-2,\theta)$, we have
+    \begin{align*}
+        W(V(\bm{x})) \
+         & = \frac{\theta \binom{n-2}{t_{n-1}-1} \theta^{t_{n-1}-1} {(1-\theta)}^{(n-2)-(t_{n-1}-1)}}{\binom{n-1}{t_{n-1}} \theta^{t_{n-1}} (1-\theta)^{(n-1)-t_{n-1}}} \\
+         & = t_{n-1}/(n-1)
+    \end{align*}
+    where $t_{n-1} = \sum_{i=1}^{n-1} x_i$. This means $W(V(\bm{X})) = \frac{1}{n-1} \sum_{i=1}^{n-1} X_i$ and
+    \begin{equation*}
+        \Var \left( W(V) \right) = \frac{(n-1)}{(n-1)^2} \theta (1-\theta) = \frac{1}{(n-1)} \theta (1 - \theta) < \frac{1}{n} \theta (1 - \theta).
+    \end{equation*}
 \end{exam}
 
 \begin{defe}[Point Estimator] \label{defe: point_estimator}

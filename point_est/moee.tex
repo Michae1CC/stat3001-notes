@@ -59,7 +59,7 @@ It is important to note that
     \begin{equation*}
         \Var_{\theta} (W(\bm{X})) \geq \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{\EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f(\bm{X} \mid \theta)  \right)^2 \right)} = \frac{\left( \frac{d}{d \theta} \EE_{\theta} W(\bm{X}) \right)^2}{\calJ (\theta)}
     \end{equation*}
-    \cite{CasellaGeorge2001SI}*{page 335}.
+    which is commonly refereed to as the {\bf minimum variance bound} (MVB). If $W(\bm{X})$ attains the MVB (for all values of $\theta$), it is said to be a MVB estimator \cite{CasellaGeorge2001SI}*{page 335}.
 \end{thm}
 
 \begin{cor}[Cramer-Rao Inequality, iid Case] \label{cor: cri_neq_iid}
@@ -119,7 +119,29 @@ It is important to note that
     for some function $a(\theta)$ \cite{CasellaGeorge2001SI}*{page 341}.
 \end{cor}
 
-\begin{exam}[Continuation of \Cref{exam: normal_mle_mu_sigma}] \label{exam: exam: norm_mse_p2}
+\begin{exam} \label{exam: MSE_Cramer_ineq}
+    Example taken from Tutorial Sheet 2 Q5. Let $T$ be an estimator of the parameter $\theta$, having bias $b(\theta)$. Assuming that the usual regularity conditions and using the Cramer-Rao lower bound (\Cref{thm: cri_neq}) for the variance of an unbiased estimator of $\theta$, we can show that
+    \begin{equation*}
+        \MSE (T) \geq \left[ 1 + \frac{\partial}{\partial \theta} b(\theta) \right]^2 \cdot \calJ^{-1} (\theta) + [b(\theta)]^2
+    \end{equation*}
+    where $\calJ (\theta)$ is the Fisher information matrix (\Cref{defe: fim}). To start, since $b(\theta) = \EE [\theta] - \theta$ we have
+    \begin{equation*}
+        \EE [T] = \theta + b(\theta) \triangleq g(\theta)
+    \end{equation*}
+    so that $T$ is an unbiased estimate for $g(\theta)$. By the Cramer-Rao lower bound,
+    \begin{equation*}
+        \Var (T) \geq [g'(\theta)]^2 \cdot \calJ^{-1} (\theta) = \left[ 1 + \frac{\partial}{\partial \theta} b(\theta) \right]^2 \cdot \calJ^{-1} (\theta).
+    \end{equation*}
+    Now
+    \begin{align*}
+        \MSE (T) \
+         & = \Var (T) + [\Bias (T)]^2                                                                                                     \\
+         & = \Var (T) + [b(\theta)]^2                                                                                                     \\
+         & \geq \left[ 1 + \frac{\partial}{\partial \theta} b(\theta) \right]^2 \cdot \calJ^{-1} (\theta) + [b(\theta)]^2.
+    \end{align*}
+\end{exam}
+
+\begin{exam}[Continuation of \Cref{exam: normal_mle_mu_sigma}] \label{exam: norm_mse_p2}
     Example taken from \cite{CasellaGeorge2001SI}*{page 341}. Here we know
     \begin{equation*}
         L(\mu , \sigma^2 \mid \bm{x}) = \frac{1}{(2 \pi \sigma^2)^{n/2}} \exp \left( -(1/2) \sum_{i=1}^{n} (x_i - \mu)^2 / \sigma^2 \right),
@@ -184,8 +206,8 @@ It is important to note that
          & = {\int \ldots \int}_{\left| T_n - g (\bm{\theta}) \right| \geq \varepsilon} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \; d \bm{x}_1 \; \ldots \; d \bm{x}_n                                                                 \\
          & \leq {\int \ldots \int}_{\left| T_n - g (\bm{\theta}) \right| \geq \varepsilon} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \frac{\left( T_n - g (\bm{\theta}) \right)^2}{\varepsilon^2} \; d \bm{x}_1 \; \ldots \; d \bm{x}_n \\
          & \leq \frac{1}{\varepsilon^2} {\int \ldots \int} f(\bm{x}_1 , \ldots , \bm{x}_n ; \bm{\theta}) \left( T_n - g (\bm{\theta}) \right)^2 \; d \bm{x}_1 \; \ldots \; d \bm{x}_n                                                       \\
-         & \leq \frac{1}{\varepsilon^2} \MSE (T_n)                                                                                                                                                                                          \\
-         & \leq \frac{1}{\varepsilon^2} \left[ \Var (T_n) + \left( \Bias (T_n) \right)^2 \right]
+         & = \frac{1}{\varepsilon^2} \MSE (T_n)                                                                                                                                                                                          \\
+         & = \frac{1}{\varepsilon^2} \left[ \Var (T_n) + \left( \Bias (T_n) \right)^2 \right]
     \end{align*}
     which tends to $0$ as $n \to \infty$, since $\Var (T_n)$ and $\Bias (T_n)$ both tend to $0$.
 \end{proof}
@@ -244,7 +266,7 @@ It is important to note that
     \end{align*}
     The {\bf Asymptotic Relative Efficiency} (ARE) of $\hat{\theta}_{n_2}$ with respect to $\hat{\theta}_{n_1}$ is given by
     \begin{equation*}
-        \operatorname{ARE} (\hat{\theta}_{n_2}) = \hat{\theta}_{n_1} / \hat{\theta}_{n_2}
+        \operatorname{ARE} (\hat{\theta}_{n_2}) = \tau_1^2 / \tau_2^2
     \end{equation*}
     [Background Notes, page 46].
 \end{defe}
@@ -262,11 +284,12 @@ It is important to note that
     \begin{align*}
         S (p) & = \frac{d}{dp} \ln \left( p^x (1-p)^{1-x} \right)               \\
               & = \frac{d}{dp} \left[ x \cdot \ln (p) + (1-x) \ln (1-p) \right] \\
-              & = \frac{x}{p} - \frac{(1-x)}{1-p} = \frac{x}{p(1-p)}.
+              & = \frac{x}{p} - \frac{(1-x)}{1-p} = \frac{x - \theta}{p(1-p)}.
     \end{align*}
     This means that
     \begin{align*}
         \mathring{\calJ} (p) & = \Var_{p} \left( S (p) \right)                  \\
+                             & = \Var_p \left( \frac{X- \theta}{p(1-p)} \right) \\
                              & = \Var_p \left( \frac{X}{p(1-p)} \right)         \\
                              & = \frac{p(1-p)}{p^2 (1-p)^2} = \frac{1}{p(1-p)}.
     \end{align*}
