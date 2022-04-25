@@ -51,3 +51,76 @@ changes by an arbitrarily small amount in the case of convergence of the sequenc
     \calM \left( \bm{\Psi}^{(k)} \right) = \operatornamewithlimits{argmax}_{\bm{\Psi}} Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right),
 \end{equation*}
 which is the set of points that maximise $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right)$.
+
+\begin{exam}[A Multinomial Example] \label{exam: em_mutlinomial_eg}
+    Example taken from \cite{McLachlanGeoffreyJohn2008TEaa}*{page } \cite{KroeseDirkP2013SMaC}*{page 185}. We consider first the multinomial example that DLR used to introduce the EM algorithm and that has been subsequently used many times in the literature to illustrate various modifications and extensions of this algorithm. The data relates to a problem of estimation of linkage in genetics where an observed data vector of frequencies
+    \begin{equation*}
+        \bm{y} = (y_1 , y_2 , y_3 , y_4)^{\intercal}
+    \end{equation*}
+    is a postulated to arise from a multinomial distribution with four cells with cell probabilities
+    \begin{equation*}
+        \frac{1}{2} + \frac{1}{4} \Psi , \frac{1}{4} \left( 1 - \Psi \right) , \frac{1}{4} \left( 1 - \Psi \right), \; \text{and} \; \frac{1}{4} \Psi
+    \end{equation*}
+    with $0 \leq \Psi \leq 1$. The parameter $\Psi$ is to be estimated on the basis of the observed information $\bm{y}$. The probability of the observed data $\bm{y}$ is given by
+    \begin{equation*}
+        g (\bm{y} ; \Psi) = \frac{n!}{y_1 ! y_2 ! y_3 ! y_4 !} \left( \frac{1}{2} + \frac{1}{4} \Psi \right)^{y_1} \left( \frac{1}{4} - \frac{1}{4} \Psi \right)^{y_2} \left( \frac{1}{4} - \frac{1}{4} \Psi \right)^{y_3} \left( \frac{1}{4} \Psi \right)^{y_4}.
+    \end{equation*}
+    Suppose now that the first of the original four multinomial cells, which has an associated probability of $\frac{1}{2} + \frac{1}{4} \Psi$, could be split into two subcells have probabilities $\frac{1}{2}$ and $\frac{1}{4}$, respectively, and let $y_{11}$ and $y_{12}$ be the corresponding split of $y_1$, where
+    \begin{equation*}
+        y_1 = y_{11} + y_{12}.
+    \end{equation*}
+    Thus, the observed vector of frequencies $y$ is viewed as being incomplete and the complete-data vector is taken to be
+    \begin{equation*}
+        \bm{x} = (y_{11} , y_{12} , y_{2} , y_{3} , y_{4})^{\intercal}.
+    \end{equation*}
+    The cell frequencies in $\bm{x}$ are assumed to arise from a multinomial distribution having five cells with probabilities
+    \begin{equation*}
+        \frac{1}{2} , \frac{1}{4} \Psi , \frac{1}{4} \left( 1 - \Psi \right) , \frac{1}{4} \left( 1 - \Psi \right), \; \text{and} \; \frac{1}{4} \Psi .
+    \end{equation*}
+    In this framework, $y_{11}$ and $y_{12}$ are regraded as the unobservable or missing data since we only get their sum $y_1$. The complete-data log likelihood is then
+    \begin{equation*}
+        g_c (\bm{y} ; \Psi) = C(\bm{x}) \left( \frac{1}{2} \right)^{y_{11}}  \left( \frac{1}{4} \Psi \right)^{y_{12}} \left( \frac{1}{4} - \frac{1}{4} \Psi \right)^{y_2} \left( \frac{1}{4} - \frac{1}{4} \Psi \right)^{y_3} \left( \frac{1}{4} \Psi \right)^{y_4}
+    \end{equation*}
+    Thus, the complete-data log likelihood is, therefore
+    \begin{equation*}
+        \ln L_c (\Psi) = (y_{12} + y_{4}) \ln \Psi + (y_{2} + y_{3}) \ln (1 - \Psi) + c.
+    \end{equation*}
+    for some constant $c$ not involving $\Psi$. Let $\Psi^{(0)}$ be the value specified initially for $\Psi$. Then on the first iteration of the EM algorithm, the $E-$step requires the computation of the conditional expectation of $L_c (\Psi)$ given $\bm{y}$, using $\Psi^{(0)}$, which can be written as
+    \begin{equation*}
+        Q \left( \Psi ; \Psi^{(0)} \right) = \EE_{\Psi^{(0)}} \left[ \ln L_{c} (\Psi) \mid \bm{y} \right].
+    \end{equation*}
+    As $\ln L_c (\Psi)$ is a linear function of the unobservable data $y_{11}$ and $y_{12}$ for this problem, the $E-$step is effected simply by replacing $y_{11}$ and $y_{12}$ by their current conditional expectations given the observed data $\bm{y}$. Considering the random variable $Y_{11}$ corresponding to $y_{11}$, it is easy to verify that conditional on $\bm{y}$, effectively $y_1$, $Y_{11}$ has a binomial distribution with sample size $y_1$ and probability parameter
+    \begin{equation*}
+        \frac{1}{2} / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(0)} \right),
+    \end{equation*}
+    where $\Psi^{(0)}$ is used in place of the unknown parameter $\Psi$. Thus the initial conditional expectation of $Y_{11}$ given $y_{1}$ is
+    \begin{equation*}
+        \EE_{\Psi^{(0)}} \left[ Y_{11} \mid y_1 \right] = y_{11}^{(0)},
+    \end{equation*}
+    where
+    \begin{align*}
+        y_{11}^{(0)} & = \frac{1}{2} y_1 - y_{11}^{(0)}                                                     \\
+                     & = \frac{1}{4} y_{1} \Psi^{(0)} / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(0)} \right)
+    \end{align*}
+    The M-step is undertaken on the first iteration by choosing $\Psi^{(1)}$ to be the value of Q that maximizes $Q \left( \Psi ; \Psi^{(0)} \right)$ with respect to $\Psi$. Since this $Q-$function is given simply by replacing the unobservable frequencies $y_{11}$ and $y_{12}$ with their current conditional expectations $y_{11}^{(0)}$ and $y_{12}^{(0)}$ in the complete-data log likelihood, $\Psi^{(1)}$ is obtained taking the derivative of $\ln L_c (\Psi)$ to find its maximising value, that is,
+    \begin{align*}
+        \frac{\partial}{\partial \Psi} \ln L_c (\Psi) = 0  \
+         & = \left( y_{12}^{(0)} + y_4 \right) \frac{1}{\Psi} - \left( y_2 + y_3 \right) \frac{1}{1-\Psi} \\
+        \Psi \left( y_2 + y_3 \right)
+         & = (1-\Psi) \left( y_{12}^{(0)} + y_4 \right)                                                   \\
+        \Psi \left( y_{12}^{(0)} + y_2 + y_3 + y_4 \right)
+         & = \left( y_{12}^{(0)} + y_4 \right)                                                            \\
+        \Psi
+         & = \frac{y_{12}^{(0)} + y_4}{y_{12}^{(0)} + y_2 + y_3 + y_4}                                    \\
+         & = \frac{y_{12}^{(0)} + y_4}{n - y_{11}^{(0)}}.
+    \end{align*}
+    It follows on so alternating the $E-$ and $M-$steps on the $(k+1)^{th}$ iteration of the EM algorithm that
+    \begin{equation*}
+        \Psi^{(k+1)} = \frac{y_{12}^{(k)} + y_4}{n - y_{11}^{(k)}}
+    \end{equation*}
+    where
+    \begin{align*}
+        y_{11}^{(k)} & = \frac{1}{2} y_1 / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(k)} \right) \\
+        y_{12}^{(k)} & = y_1 - y_{11}^{(k)}
+    \end{align*}
+\end{exam}

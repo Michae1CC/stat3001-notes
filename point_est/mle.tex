@@ -47,3 +47,38 @@
     \end{equation*}
     Therefore, verifying that we have found the maximum likelihood estimators is reduced to a one-dimensional problem, verifying that $(\sigma^2)^{-n/2} \exp \left( -\frac{1}{2} \sum (x_i - \overline{x})^2 / \sigma^2 \right)$ achieves its global maximum at $\sigma^2 = n^{-1} \sum (x_i - \overline{x})^2$. This is straightforward to do using univariate calculus and, in fact, the estimators $\left( \overline{X} , n^{-1} \sum \left( X_i - \overline{X} \right)^2 \right)$ are the MLEs.
 \end{exam}
+
+\begin{defe}[Quantile of Order $\alpha$] \label{defe: quant_ord}
+    The quantile of order $\alpha$, $q_{\alpha}$, is the value of the random variable $X$ such that
+    \begin{equation*}
+        \PP \left[ X \leq q_{\alpha} \right] = \alpha.
+    \end{equation*}
+\end{defe}
+
+\begin{exam}
+    Let $X_1 , \ldots , X_n$ denote a random sample from a $N (\mu , \sigma^2)$ distribution, where both $\mu$ and $\sigma$ are unknown. Let us consider a way to find the maximum likelihood for quantile of order $\alpha$. Take $X \sim N \left( \mu , \sigma^2 \right)$. As $Z = (X  - \mu) / \sigma$ has a standard normal distribution with the function $\Phi (z)$, we can express the left hand for the expression of the quantile of order $\alpha$ as
+    \begin{equation*}
+        \PP \left[ X \leq q_{\alpha} \right] = \PP \left[ \frac{X - \mu}{\sigma} \leq \frac{q_{\alpha} - \mu}{\sigma} \right] = \PP \left[ Z \leq \frac{q_{\alpha} - \mu}{\sigma} \right].
+    \end{equation*}
+    This means
+    \begin{align*}
+        \frac{q_{\alpha} - \mu}{\sigma} & = \Phi^{-1} (\alpha)               \\
+        q_{\alpha}                      & = \mu + \sigma \Phi^{-1} (\alpha).
+    \end{align*}
+    Hence, as a consequence of \Cref{thm: invariance_of_mles}, $g(\hat{\bm{\theta}}) = \hat{\mu} + \hat{\sigma} \Phi^{-1} (\alpha)$ is the maximum likelihood estimate of $q_{\alpha}$. Note, however, that this is not an unbiased estimate of $q_{\alpha}$ by virtue of the fact that $\EE [\hat{\sigma}] \neq \sigma$. If we adjusted this estimate by multiplying by some constant $k_n$, that is,
+    \begin{equation*}
+        \EE [\hat{\sigma}] = k_n \sigma
+    \end{equation*}
+    then it would be an unbiased estimator of $q_{\alpha}$. To compute such a $k_n$, we have that $n \hat{\sigma}^2 / \sigma^2 \sim \chi_{n-1}^2$ that is, $\frac{1}{2} n \hat{\sigma}^2 / \sigma^2 \sim \gamma (m/2)$ where $m = (n-1)/2$. This is equivalent to saying $\hat{\sigma} = \sigma \sqrt{2/n} \sqrt{Y}$ where $Y \sim \gamma (m)$. Thus $\EE [\hat{\sigma}] = k_n \sigma$, where $k_n = \sqrt{2/n} \EE [\sqrt{Y}]$ and where
+    \begin{align*}
+        \EE [\sqrt{Y}] \
+         & = \frac{\int_{0}^{\infty} y^{1/2} \exp (-y) y^{m-1} \; dy}{\Gamma (m)}     \\
+         & = \frac{\int_{0}^{\infty} \exp (-y) y^{m+\frac{1}{2}-1} \; dy}{\Gamma (m)} \\
+         &= \frac{\Gamma (m + \frac{1}{2})}{\Gamma(m)} \\
+         &= \frac{\Gamma (\frac{n}{2})}{\Gamma(\frac{n-1}{2})}
+    \end{align*}
+    Upon substituting the result for $\EE [\sqrt{Y}]$ into the right-hand side of of expression for $k_n$ we obtain
+    \begin{equation*}
+        k_n = \sqrt{\frac{2}{n}} \frac{\Gamma (\frac{n}{2})}{\Gamma(\frac{n-1}{2})} .
+    \end{equation*}
+\end{exam}
