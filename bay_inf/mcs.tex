@@ -58,3 +58,43 @@ where $z_{1 - \alpha / 2}$ is the $1 - \alpha / 2$ quantile of the standard norm
     \frac{i}{N} \pm z_{1 - \alpha / 2} \sqrt{\frac{i(1 - i/n)}{N^2}}
 \end{equation*}
 \cite{KroeseDirkP2013SMaC}*{page 198}.
+
+\subsubsection*{Simultaneous Confidence Bands}
+
+% Week Lec 2, Ch 7.1
+
+\begin{defe}[Kolmogorov–Smirnov statistic] \label{defe: TBD}
+    For a continuous $F$, the statistic of
+    \begin{equation*}
+        D_n = \sup_{x \in \RR} \left| \hat{F}_N (x) - F(x) \right|
+    \end{equation*}
+    is called the {\bf Kolmogorov–Smirnov statistic} \cite{KroeseDirkP2013SMaC}*{page 200}.
+\end{defe}
+
+Note that this statistic does not depend on $F$ and can be used to test whether iid samples $X_1 , \ldots , X_n$ come from a specified distribution as well as constructing a simultaneous confidence band for $F$. The empirical cdf can be used to estimate any cdf, both discrete and continuous, but it is always 'jumpy' which may be undesirable, for example when the underlying distribution is continuous. When we have continuous data, we may want a continuous density estimate instead. This leads to our next topic of density estimation.
+
+\subsubsection*{Kernel Density Estimation}
+
+\begin{defe}[Kernel Density Estimator] \label{defe: KDE}
+    Let $X_1 , \ldots X_n \iid f$ from a continuous distribution with cdf $F$. A {\bf Kernel density estimator} (KDE), also known as a sliding window estimator, with bandwidth $h$ is given by
+    \begin{equation*}
+        \hat{f} (x;h) = \frac{1}{N} \sum_{i=1}^{N} K \left( \frac{x_i - x}{h} \right).
+    \end{equation*}
+    The function $K (\cdot)$ is the kernel function ("window shape") and $h$ is the window ("window size").
+\end{defe}
+
+There are many choice of $K$, but we shall just focus on the Gaussian kernel.
+
+\begin{defe}[Gaussian Kernel] \label{defe: gauss_kern}
+    The {\bf Gaussian Kernel} uses a kernel of
+    \begin{equation*}
+        K(x) = \frac{1}{\sqrt{2 \pi}} \exp \left( - \frac{1}{2} x^2 \right)
+    \end{equation*}
+    so that
+    \begin{equation*}
+        \hat{f} (x;h) = \frac{1}{N} \sum_{i=1}^{N} \frac{1}{\sqrt{2 \pi}} \exp \left( - \frac{1}{2} \left( \frac{x_i - x}{h} \right)^2 \right)
+    \end{equation*}
+    \cite{KroeseDirkP2013SMaC}*{page 201}.
+\end{defe}
+
+Essentially, the Gaussian kernel is just an equally weighted $\frac{1}{N}$ normal mixture model. It has $N$ Gaussian "humps", centered at each observation and has standard deviation $h$. As it turns out, the choice of the kernel is not that crucial, but the choice of the bandwidth is very important.
