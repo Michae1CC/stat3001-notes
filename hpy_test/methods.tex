@@ -1,0 +1,82 @@
+\subsection*{Methods of Finding Tests}
+
+\begin{defe}[Hypothesis] \label{defe: hypothesis}
+    A {\bf hypothesis} is a statement about a population parameter \cite{CasellaGeorge2001SI}*{page 373}.
+\end{defe}
+
+\begin{defe}[Null and Alternative Hypothesis] \label{defe: comp_hypothesis}
+    The complementary hypotheses in a hypothesis testing problem are called the {\bf null hypothesis} and the {\bf alternative hypothesis}. They are denoted by $H_0$ and $H_1$ respectively \cite{CasellaGeorge2001SI}*{page 373}.
+\end{defe}
+
+\begin{defe}[Hypothesis Test] \label{defe: hypothesis_test}
+    A {\bf hypothesis testing procedure} or {\bf hypothesis test} is a rule that specifies
+    \begin{itemize}
+        \item For which sample values the decision is made to accept $H_0$ as true.
+        \item For which sample values $H_0$ is rejected and $H_1$ is accepted as true.
+    \end{itemize}
+    \cite{CasellaGeorge2001SI}*{page 374}.
+\end{defe}
+
+\begin{defe}[Acceptance and Rejection Regions] \label{defe: crit_region}
+    The subset of the sample space for which $H_0$ will be rejected is called the {\bf rejection region} or {\bf critical region}. The complement of the rejection region is called the {\bf acceptance region} \cite{CasellaGeorge2001SI}*{page 374}.
+\end{defe}
+
+\begin{defe}[Acceptance and Rejection Regions] \label{defe: accept_reject_regions}
+    The subset of the sample space for which $H_0$ will be rejected is called the {\bf rejection region} or {\bf critical region}. The complement of the rejection region is called the {\bf acceptance region} \cite{CasellaGeorge2001SI}*{page 374}.
+\end{defe}
+
+\begin{defe}[Likelihood Ratio Test (LRT)] \label{defe: lrt}
+    The {\bf likelihood ratio test statistic} for tetsing $H_0 : \theta \in \Theta_{0}$ versus $H_1 : \theta \in \Theta_{0}^{c}$ is
+    \begin{equation*}
+        \lambda (\bm{x}) = \frac{\sup_{\Theta_0} L \left( \theta \mid \bm{x} \right)}{\sup_{\Theta} L \left( \theta \mid \bm{x} \right)}.
+    \end{equation*}
+    A {\bf likelihood ratio test} (LRT) is any test that has a rejection region of the form $\left\{ \bm{x} : \lambda \left( \bm{x} \right) \leq c \right\}$, where $c$ is any number satisfying $0 \leq c \leq 1$ \cite{CasellaGeorge2001SI}*{page 375}.
+\end{defe}
+
+\begin{exam}[Normal LRT] \label{exam: normal_lrt}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 375}. Let $X_1, X_2 , \ldots , X_n$ be a random sample from a $\Nor \left( \theta , 1 \right)$ population. Consider testing $H_0 : \theta = \theta_0$ versus $H_1 : \theta \neq \theta_0$. Here $\theta_0$ is a number fixed by the experimenter prior the experiment. Since there is only one value of $\theta$ specified by $H_0$, the numerator of $\lambda \left( \bm{x} \right)$ is $L \left( \theta_0 \mid \bm{x} \right)$. In \Cref{exam: normal_mle}, the (unrestricted MLE) we found to be $\overline{X}$, the sample mean. Thus the denominator of $\lambda (\bm{x})$ is $L (\overline{x} \mid \bm{x})$. So the LRT statistic is
+    \begin{align*}
+        \lambda (\bm{x}) & = \frac{(2\pi)^{-n/2} \exp \left[ - \sum_{i=1}^{n} (x_i -\theta_0)^2 /2 \right]}{(2\pi)^{-n/2} \exp \left[ - \sum_{i=1}^{n} (x_i -\overline{x})^2 /2 \right]} \\
+                         & = \exp \left[ \left( - \sum_{i=1}^{n} (x_i -\theta_0)^2 +  \sum_{i=1}^{n} (x_i -\overline{x})^2 \right)/2 \right].
+    \end{align*}
+    The expression for $\lambda (\bm{x})$ can be simplified by nothing that
+    \begin{equation*}
+        \sum_{i=1}^{n} (x_i -\theta_0)^2 = \sum_{i=1}^{n} (x_i -\overline{x})^2 n (\overline{x} - \theta_{0})^2.
+    \end{equation*}
+    Thus the LRT statistic is $\lambda (\bm{x}) = \exp \left[ -n \left( \overline{x} - \theta_0 \right)^2 /2 \right]$.
+\end{exam}
+
+\begin{thm} \label{thm: suff_lrt}
+    If $T(\bm{X})$ is a sufficient statistic for $\theta$ and $\lambda^{\ast} (t)$ and $\lambda (x)$ are the LRT statistics based on $T$ and $\bm{X}$, respectively, then $\lambda^{\ast} (T(\bm{X})) = \lambda (\bm{x})$ for every $\bm{x}$ in the sample space \cite{CasellaGeorge2001SI}*{page 376}.
+\end{thm}
+
+\begin{defe}[Type I and Type II Errors] \label{defe: type_errors}
+    Suppose $R$ denotes the rejection of rejection for a test. then for $\theta \in \Theta_{0}$, the test will make a mistake if $\bm{x} \in R$, so the probability of a {\bf Type I Error} is $\PP_{\theta} \left( \bm{X} \in R \right)$. For $\theta \in \Theta_{0}^{c}$, the probability of a {\bf Type II Error} is $\PP \left( \bm{X} \in R^{c} \right)$ \cite{CasellaGeorge2001SI}*{page 383}.
+\end{defe}
+
+\begin{defe}[Power Function] \label{defe: power_func}
+    The {\bf power function} of a hypothesis test with rejection region $R$ is the function of $\theta$ defined by $\beta (\theta) = \PP_{\theta} \left( \bm{X} \in R \right)$ \cite{CasellaGeorge2001SI}*{page 383}.
+\end{defe}
+
+\begin{exam}[Normal Power Function] \label{exam: normal_pow_func}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 375}. Let $X_1, X_2 , \ldots , X_n$ be a random sample from a $\Nor \left( \theta , \sigma^2 \right)$ population. AN LRT of $H_0 : \theta \leq \theta_0$ versus $H_1 : \theta > \theta_0$ is a test that rejects $H_0$ is $\left( \overline{X} - \theta_0 \right) / \left( \sigma / \sqrt{n} \right) > c$. That constant $c$ can be any positive number. The power function of this test is
+    \begin{align*}
+        \beta (\theta) \
+         & = \PP \left( \frac{\overline{X} - \theta_0}{\sigma / \sqrt{n}} > c \right)                                             \\
+         & = \PP \left( \frac{\overline{X} - \theta}{\sigma / \sqrt{n}} > c + \frac{\theta_0 - \theta}{\sigma / \sqrt{n}} \right) \\
+         & = \PP \left( Z > c + \frac{\theta_0 - \theta}{\sigma / \sqrt{n}} \right),
+    \end{align*}
+    where $Z$ is a standard normal random variable, since $\left( \overline{X} - \theta \right) / \left( \sigma / \sqrt{n} \right) \sim \Nor \left( 0,1 \right)$. As $\theta$ increases from $-\infty$ to $\infty$, it is easy to see that this normal probability increases from $0$ to $1$. Therefore, it follows that $\beta (\theta)$ is an increasing function of $\theta$, with
+    \begin{equation*}
+        \lim_{\theta \to - \infty} \beta (\theta) =0 , \; \lim_{\theta \to \infty} \beta (\theta) = 1 , \; \text{and} \; \beta (\theta_0) = \alpha \; \text{if} \; \PP \left( Z > c \right) = \alpha.
+    \end{equation*}
+    Suppose the experimenter wishes to have a maximum Type I Error probability of $0.1$. Suppose, in addition, the experimenter wishes to have a maximum Type II Error probability of $0.2$ if $\theta \geq \theta_0 + \sigma$. We now show how to choose $c$ and $n$ to achieve these goals, using a test that rejects $H_0 : \theta \leq \theta_0$ if $\left( \overline{X} - \theta_0 \right) / \left( \sigma / \sqrt{n} \right) > c$. As noted above, the power function of such a test is
+    \begin{equation*}
+        \beta (\theta) = \PP \left( Z > c + \frac{\theta_0 - \theta}{\sigma / \sqrt{n}} \right).
+    \end{equation*}
+    Because $\beta (\theta)$ is increasing in $\theta$, the requirements will be met if
+    \begin{equation*}
+        \beta (\theta_0) = 0.1 \quad \text{and} \quad \beta (\theta_0 + \sigma) = 0.8.
+    \end{equation*}
+    By choosing $c=1.28$, we achieve $\beta (\theta_0) = \PP (Z > 1.28) = 0.1$, regardless of $n$. Now we wish to choose $n$ so that $\beta (\theta_0 + \sigma) = \PP (Z > 1.28 - \sqrt{n}) = 0.8$. But, $\PP (Z>-0.84) = 0.8$. So setting $1.28 - \sqrt{n} = -0.84$ and solving for $n$ yields $n = 4.49$. Of course $n$ must be an integer. SO choosing $c=1.28$ and $n=5$ yields a test with error probabilities controlled as a specified by the experimenter.
+\end{exam}
