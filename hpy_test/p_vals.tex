@@ -1,0 +1,17 @@
+\subsection*{p-Values}
+
+\begin{defe}[p-Values] \label{defe: p_val}
+    A {\bf p-value} $p(\bm{X})$ is a test statistic satisfying $0 \leq p(\bm{x})\leq 1$ for every sample point $\bm{x}$. Small value of $p(\bm{X})$ give evidence that $H_1$ is true. A p-value is {\bf valid} if, for every $\theta \in \Theta_0$ and every $0 \leq \alpha 1$,
+    \begin{equation*}
+        \PP_{\theta} \left( p(\bm{X}) \leq \alpha \right) \leq \alpha
+    \end{equation*}
+    \cite{CasellaGeorge2001SI}*{page 397}.
+\end{defe}
+
+\begin{thm}
+    Let $W(\bm{X})$ be a test statistic such that large values of $W$ give evidence that $H_1$ is true. For each sample point $\bm{x}$, define
+    \begin{equation*}
+        p(\bm{x}) = \sup_{\theta \in \Theta_0} \PP_{\theta} \left( W(\bm{X}) \geq W(\bm{x}) \right).
+    \end{equation*}
+    Then, $p(\bm{X})$ is a valid p-value \cite{CasellaGeorge2001SI}*{page 397}.
+\end{thm}

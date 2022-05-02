@@ -78,5 +78,17 @@
     \begin{equation*}
         \beta (\theta_0) = 0.1 \quad \text{and} \quad \beta (\theta_0 + \sigma) = 0.8.
     \end{equation*}
-    By choosing $c=1.28$, we achieve $\beta (\theta_0) = \PP (Z > 1.28) = 0.1$, regardless of $n$. Now we wish to choose $n$ so that $\beta (\theta_0 + \sigma) = \PP (Z > 1.28 - \sqrt{n}) = 0.8$. But, $\PP (Z>-0.84) = 0.8$. So setting $1.28 - \sqrt{n} = -0.84$ and solving for $n$ yields $n = 4.49$. Of course $n$ must be an integer. SO choosing $c=1.28$ and $n=5$ yields a test with error probabilities controlled as a specified by the experimenter.
+    By choosing $c=1.28$, we achieve $\beta (\theta_0) = \PP (Z > 1.28) = 0.1$, regardless of $n$. Now we wish to choose $n$ so that $\beta (\theta_0 + \sigma) = \PP (Z > 1.28 - \sqrt{n}) = 0.8$. But, $\PP (Z>-0.84) = 0.8$. So setting $1.28 - \sqrt{n} = -0.84$ and solving for $n$ yields $n = 4.49$. Of course $n$ must be an integer. So choosing $c=1.28$ and $n=5$ yields a test with error probabilities controlled as a specified by the experimenter.
 \end{exam}
+
+\begin{defe}[Size $\alpha$ Test] \label{defe: size_test}
+    For $0 \leq \alpha \leq 1$, a test with a power function $\beta (\theta)$ is a {\bf size $\alpha$ test} if $\sup_{\theta \in \Theta_0} = \alpha$ \cite{CasellaGeorge2001SI}*{page 385}.
+\end{defe}
+
+\begin{defe}[Level $\alpha$ Test] \label{defe: level_test}
+    For $0 \leq \alpha \leq 1$, a test with a power function $\beta (\theta)$ is a {\bf level $\alpha$ test} if $\sup_{\theta \in \Theta_0} \leq \alpha$ \cite{CasellaGeorge2001SI}*{page 385}.
+\end{defe}
+
+\begin{defe}[Unbiased Tests] \label{defe: unbiased_test}
+    A test with a power function $\beta (\theta)$ is {\bf unbiased} if $\beta (\theta ') \geq \beta (\theta'')$ for every $\theta' \in \Theta_0^c$ and $\theta'' \in \Theta_0$ \cite{CasellaGeorge2001SI}*{page 387}.
+\end{defe}

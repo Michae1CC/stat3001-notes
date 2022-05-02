@@ -1,0 +1,73 @@
+\subsection*{Uniformly Most Powerful Tests}
+
+\begin{defe}[Uniformly Most Powerful Tests] \label{defe: UMP_tests}
+    Let $\calC$ be a class of tests for testing $H_0 : \theta \in \Theta_0$ versus $H_1 : \theta \in \Theta_0^c$. A test in class $\calC$, with power function $\beta (\theta)$, is a {\bf uniformly most powerful} (UMP) class $\calC$ test if $\beta (\theta) \geq \beta' (\theta)$ for every $\theta \in \Theta_0^c$ and every $\beta' (\theta)$ that is a power function of a test in class $\calC$ \cite{CasellaGeorge2001SI}*{page 388}.
+\end{defe}
+
+\begin{thm}[Neyman-Pearson Lemma] \label{thm: npl}
+    Consider testing $H_0 : \theta = \theta_0$ versus $H_1 : \theta = \theta_1$, where the pdf or pmf corressponding to $\theta_i$ is $f(\bm{x} \mid \theta_i), \; i=0,1$, using a test with rejection region $R$ that satisfies
+    \begin{equation} \label{eqn: npl_cond_1}
+        \bm{x} \in R \quad \text{if} \quad f(\bm{x} \mid \theta_1) > k f(\bm{x} \mid \theta_0)
+    \end{equation}
+    and
+    \begin{equation} \label{eqn: npl_cond_2}
+        \bm{x} \in R^c \quad \text{if} \quad f(\bm{x} \mid \theta_1) < k f(\bm{x} \mid \theta_0)
+    \end{equation}
+    for some $k \geq 0$, and
+    \begin{equation} \label{eqn: npl_cond_3}
+        \alpha = \PP_{\theta_0} (\bm{X} \in R).
+    \end{equation}
+    Then
+    \begin{itemize}
+        \item (Sufficiency) Any test that satisfies \ref{eqn: npl_cond_1}, \ref{eqn: npl_cond_2} and \ref{eqn: npl_cond_3} is a UMP $\alpha$ test.
+        \item (Necessity) If there exists a test satisfying \ref{eqn: npl_cond_1}, \ref{eqn: npl_cond_2} and \ref{eqn: npl_cond_3} with $k > 0$, then every UMP level $\alpha$ test is a size $\alpha$ test (satisfies \ref{eqn: npl_cond_3}) and every UMP level $\alpha$ test satisfies \ref{eqn: npl_cond_1} and \ref{eqn: npl_cond_2} except perhaps on a set $A$ satisfying $\PP_{\theta_0} \left( \bm{X} \in A \right) = \PP_{\theta_1} \left( \bm{X} \in A \right) = 0$
+    \end{itemize}
+    \cite{CasellaGeorge2001SI}*{page 388}.
+\end{thm}
+
+\begin{cor} \label{cor: npl_cor}
+    Consider the hypothesis problem posed in \ref{thm: npl}. Suppose $T(\bm{X})$ is a sufficient statistic (see \ref{defe: sufficient_statistic}) for $\theta$ and $g(t \mid \theta_i)$ is the pdf or pmf of $T$ corressponding to $\theta_i  = 0,1$. Then any test based of $T$ with rejection region $S$ (a subset of the sample space of $T$) is a UMP level $\alpha$ test if it satisfies
+    \begin{equation} \label{eqn: npl_cor_cond_1}
+        t \in S \quad \text{if} \quad g(t \mid \theta_1) > k g(t \mid \theta_0)
+    \end{equation}
+    and
+    \begin{equation} \label{eqn: npl_cor_cond_2}
+        t \in S^c \quad \text{if} \quad g(t \mid \theta_1) < k g(t \mid \theta_0)
+    \end{equation}
+    for some $k \geq 0$, where
+    \begin{equation} \label{eqn: npl_cor_cond_3}
+        \alpha = \PP_{\theta_0} \left( T \in S \right)
+    \end{equation}
+    \cite{CasellaGeorge2001SI}*{page 389}.
+\end{cor}
+
+\begin{defe}[Monotone Likelihood Ratio] \label{defe: MLR}
+    A family of pdfs or pmfs $\left\{ g(t \mid \theta) : \theta \in \Theta \right\}$ for a univariate random variable $T$ with real-valued parameter $\theta$ has a {\bf monotone likelihood ratio} (MLR) if, for every $\theta_2 > \theta_1, \; g(t \mid \theta_2) / g(t \mid \theta_1)$ is a monotone (nonincreasing or nondecreasing) function of $t$ on $\left\{ t : g(t \mid \theta_1) > 0 \; \text{or} \; g(t \mid \theta_2) > 0\right\}$. Note that $c/0$ is defind as $\infty$ if $0 < c$ \cite{CasellaGeorge2001SI}*{page 391}.
+\end{defe}
+
+\begin{thm}[Karlin-Rubin] \label{thm: kr}
+    Consider testing $H_0 : \theta \leq \theta_0$ versus $H_1 : \theta > \theta_0$. Suppose that $T$ is a sufficient statistic for $\theta$ and the family of pdfs or pmfs $\left\{ g(t \mid \theta) : \theta \in \Theta \right\}$ of $T$ has a MLR. Then for any $t_0$, the test that rejects $H_0$ if and only if $T > t_0$ is a UMP level $\alpha$ test, where $\alpha = \PP_{\theta_0} \left( T > t_0 \right)$ \cite{CasellaGeorge2001SI}*{page 391}.
+\end{thm}
+
+\begin{exam}[Karlin-Rubin Applied to Beta Distribution] \label{exam: beta-kr}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 405}. Suppose $X$ is one observation from a population with $\Beta (\theta , 1)$ pdf. Furthermore, consider testing $H_0 : \theta \leq 1$ versus $H_1 : \theta > 1$ where the null hypothesis is rejected if $X > \frac{1}{2}$. The power function is simply
+    \begin{align*}
+        \beta (\theta) \
+         & = \PP_{\theta} \left( X > \frac{1}{2} \right)                                                            \\
+         & = \int_{1/2}^{1} \frac{\Gamma (\theta + 1)}{\Gamma (\theta) \Gamma (1)} x^{\theta - 1} (1-x)^{1-1} \; dx \\
+         & = \left[ \theta \frac{1}{\theta} x^{\theta} \right]_{1/2}^1 = 1 - \frac{1}{2}^{\theta}.
+    \end{align*}
+    This size is $\sup_{\theta \in H_0} \beta (\theta) = \sup_{\theta \leq 1} \left( 1- \frac{1}{2}^{\theta} \right) = 1 - 1/2 = 1/2$.
+
+    Now suppose we would like to find the powerful level $\alpha$ test for testing $H_0 : \theta = 1$ versus $H_1 : \theta = 2$. By \Cref{thm: npl}, the most powerful test of $H_0 : \theta = 1$ versus $H_1 : \theta = 2$ is given by rejecting $H_0$ if $f(x \mid 2) / f(x \mid 1) > k$ for some $k > 0$. Substituting the beta pdf gives
+    \begin{equation*}
+        \frac{f(x\mid 2)}{f(x \mid 1)} = \frac{\frac{1}{\Gamma (1) \Gamma (2) / \Gamma (3)} x^{2-1} (1-x)^{1-1}}{\frac{1}{\Gamma (1) \Gamma (1) / \Gamma (2)} x^{1-1} (1-x)^{1-1}} = \frac{\Gamma (3)}{\Gamma (2) \Gamma (1)} x = 2x.
+    \end{equation*}
+    Thus the MP test will reject $H_0$ if $2x > k$. We can now use the $\alpha$ to determine a suitable $k$. We have
+    \begin{equation*}
+        \alpha = \sup_{\theta \in \Theta_0} \beta (\theta) = \beta (1) = \int_{k/2}^{1} f_{X} (x \mid 1) \; dx = \int_{k/2}^{1} \frac{1}{\Gamma (1) \Gamma (1) / \Gamma (2)} x^{1-1} (1-x)^{1-1} \; dx = 1- \frac{k}{2}.
+    \end{equation*}
+    Thus $1 - k/2 = \alpha$, so the most powerful $\alpha$ level test is to reject $H_0$ if $X > 1 - \alpha$.
+
+    Now consider the existence of a UMP test for testing $H_0 : \theta \leq 1$ versus $H_1 : \theta > 1$. For $\theta_2 > \theta_1$ we have $\frac{f(x\mid 2)}{f(x \mid 1)} = (\theta_2 / \theta_1) x^{\theta_2 - \theta_1}$, an increasing function of $x$ (since $\theta_2 > \theta_1$). So this family has MLR (see \Cref{defe: MLR}). By \Cref{thm: kr}, the test that rejects $H_0$ if $X > t$ is the UMP test of this size.
+\end{exam}
