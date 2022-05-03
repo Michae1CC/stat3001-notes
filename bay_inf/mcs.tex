@@ -96,5 +96,58 @@ There are many choice of $K$, but we shall just focus on the Gaussian kernel.
     \end{equation*}
     \cite{KroeseDirkP2013SMaC}*{page 201}.
 \end{defe}
+% Week 9 content
+Essentially, the Gaussian kernel is just an equally weighted $\frac{1}{N}$ normal mixture model. It has $N$ Gaussian "humps", centered at each observation and has standard deviation $h$. As it turns out, the choice of the kernel is not that crucial, but the choice of the bandwidth is very important. An often used {\it rule of thumb} is to take
+\begin{equation*}
+    h_{\text{Rot}} = \left( \frac{4S^5}{3N} \right)^{4/5}
+\end{equation*}
+called the Silverman's rule of thumb where $S^2$ is the variance. This is based on a theoretical analysis of the discrepancy between $f_n (x;h)$ and the true pdf, as $n \to \infty$. This rule f thumb is best suited when the underlying data is roughly normal-looking (i.e unimodel and symmeteric). A more recent bandwidth selection methods \cite{10.1214/10-AOS799}, called the theta KDE, adaptively changes the bandwidth.
 
-Essentially, the Gaussian kernel is just an equally weighted $\frac{1}{N}$ normal mixture model. It has $N$ Gaussian "humps", centered at each observation and has standard deviation $h$. As it turns out, the choice of the kernel is not that crucial, but the choice of the bandwidth is very important.
+\subsubsection*{Bootstrap Method}
+
+A key concept in statistics is the idea of a sampling distribution (i.e. the distribution of the sample quantity, if we could repeat the random experiment over and over again). Unfortunately, we typically only get one realization of the random process, from which we compute sample quantity we want (for example the sample mean or medium). So, how can we get a feel about the sampling distribution if we have only one realization?
+
+\begin{exam}[Bootstrap Median] \label{exam: bootstrap_median}
+    Suppose we have the following sample
+    \begin{equation*}
+        6.45 , 3.52 , 3.92 , 0.64 , 3.73 , 2.00, 2.73 , 4.20, 20.58, 6.80, 3.22, 7.11, 1.08 , 5.94.
+    \end{equation*}
+    From this data, how do we construct a confidence interval for the true population medium $M$ of the distribution $F$ that generated the data? Ideally we sample from $F$ over and over again and each time we compute the sample medium and then we look at the distribution of the computed sample medians. Since we don't have access to the distribution $F$, we can instead employ the bootstrap method.
+    \begin{itemize}
+        \item To start we take iid sample of size $n$, $x^{\ast}$, from the empirical cdf $F_n$ with replacement.
+        \item For each sample, we compute the sample medium $m^{\ast}$ of the resampled data.
+        \item Then we look at the $2.5$ percentile and the $97.5$ percentile of the resampled values of the mediums.
+        \item This percentiles together provide an approximate $95$ percent confidence interval for the population median $M$.
+    \end{itemize}
+\end{exam}
+
+We can use the bootstrap method to estimate any property of the sample distribution, for example, the variance of the sample mean, medium or IQR. In general we may be interested in some property $h$ (eg. bias, variance, MSE) of some statistic $H(\bm{x})$ (eg. median, $\frac{1}{\overline{X}}$) we can apply the bootstrap resampling approach to estimate these properties.
+
+    {\centering
+        \begin{minipage}{.85\linewidth}
+            \begin{algorithm}[H]
+                \caption{Bootstrap Method}
+                \label{alg: bootstrap}
+                \SetAlgoLined
+                \DontPrintSemicolon
+                \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+
+                \Input{Observations $\bm{X}, \bm{y}$ and a test input $\bm{x}_{\star}$.}
+                \Output{A prediction $\overline{f_{\star}} $ with its corresponding variance $ \VV \left[ f_{\star} \right]$.}
+                \BlankLine
+                \For{$i\gets 1 , \ldots , K$}{
+                Resample data $x_1^{\ast} , x_1^{\ast}, \ldots , x_n^{\ast}$ from the original data.\;
+                For each sample, calculate $h(H_k^{\ast}) = h(H(x_k^{\ast}))$\;
+                }
+                Estimate $\EE \left[ h(H(x)) \right]$ using $\frac{1}{K} \sum_{i=1}^{K} h(H_k^{\ast})$
+                \BlankLine
+            \end{algorithm}
+        \end{minipage}
+        \par
+    }
+
+For example to compute the variance of the sample medium we can compute
+\begin{equation*}
+    \VV (\text{medium}) = \EE \left[ (m - \EE(m)) \right]^2 \simeq \sum_{i=1}^{K} (m_i^{\ast} - \overline{m}^{\ast})^2
+\end{equation*}
+where $m_i^{\ast}$ is the sample median of the ith resampled dataset and $\overline{m}^{\ast}$ is the mean of the resampled median values.
