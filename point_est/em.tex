@@ -121,6 +121,81 @@ which is the set of points that maximise $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \
     where
     \begin{align*}
         y_{11}^{(k)} & = \frac{1}{2} y_1 / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(k)} \right) \\
-        y_{12}^{(k)} & = y_1 - y_{11}^{(k)}
+        y_{12}^{(k)} & = y_1 - y_{11}^{(k)}.
     \end{align*}
+\end{exam}
+
+\begin{exam}[Bin Grouped Data (Normal)] \label{exam: em_binned_normal}
+    Example taken from class notes. We consider now the application of the EM algorithm to continuous data that are grouped into
+    intervals. More specifically, let $W$ be a random variable with pdf $f (w; \theta)$ specified up to a vector $\theta$ of unknown parameters. Suppose that the sample space $\calW$ of $W$ is partitioned into $v$ mutually exclusive intervals $W_j , \; (j = 1, \ldots , v)$. Independent observations are made on $W$ , but only the
+    number $n_j$ falling in $W_j , \; (j = 1, \ldots , r)$ is recorded where $r \leq v$. That is, individual observations are not recorded but only the class intervals $W_j$ in which they fall are recorded; further, even such observations are made only if the $W$ value falls in one of the intervals $W_j, (j = 1, \ldots , r)$. We can solve this problem within the EM framework by introducing the vectors
+    \begin{equation*}
+        \boldsymbol{u}=\left(n_{r+1}, \ldots, n_{v}\right)^{T} , \quad \boldsymbol{w}_{j}=\left(w_{j 1}, \ldots, w_{j, n_{j}}\right)^{T} \quad(j=1, \ldots, v)
+    \end{equation*}
+    as the missing data. The vector $\bm{u}$ contains the unobservable frequencies in the case of truncation $(r < v)$, while $\bm{w}_j$ contains the $n_j$ unobservable individual observations in the jth interval $W_j , \; (j = 1, \ldots , v)$. The complete-data vector $\bm{x}$ corresponding to the missing data is
+    \begin{equation*}
+        \boldsymbol{x}=\left(\boldsymbol{y}^{T}, \boldsymbol{u}^{T}, \boldsymbol{w}_{1}^{T}, \ldots, \boldsymbol{w}_{v}^{T}\right)^{T}.
+    \end{equation*}
+    The complete-data log likelihood function for $\bm{\theta} , \; \ln L_c (\bm{\theta})$ is
+    \begin{equation*}
+        \log L_{c} (\bm{\theta}) = \sum_{j=1}^{v} \sum_{l=1}^{n_j} \log f \left( w_{jl} ; \bm{\theta} \right).
+    \end{equation*}
+    To perform the $E-$step, $Q$ can be computed to be
+    \begin{align*}
+        Q \left( \bm{\theta}; \bm{\theta}^{(k)} \right) \
+         & = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \log L_{c} (\bm{\theta}) \mid \bm{y} \right]                                                                                                           \\
+         & = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \sum_{j=1}^{v} \sum_{l=1}^{n_j} \log f \left( W_{jl} ; \bm{\theta} \right) \mid \bm{y} \right]                                                         \\
+         & = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \sum_{j=1}^{v} \sum_{l=1}^{n_j} \log f \left( W_{jl} ; \bm{\theta} \right) \mid \bm{y} , u \right]\right]        \\
+         & = \sum_{j=1}^{v} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ n_j \mid \bm{y} \right] \mathbb{E}_{\bm{\theta}^{(k)}} \left[  \log f \left( W ; \bm{\theta} \right) \mid W \in \mathcal{W}_{j} \right] \\
+         & = \sum_{j=1}^{v} n_{j}^{(k)} Q_j (\bm{\theta} , \bm{\theta}^{(k)})
+    \end{align*}
+    where
+    \[
+        Q_j (\bm{\theta} , \bm{\theta}^{(k)}) = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \log f (W;\bm{\theta}) \mid W \in \mathcal{W}_{j} \right]
+    \]
+    and
+    \begin{align*}
+        n_{j}^{(k)} \
+         & = n_j, \quad 1 \leq j \leq r                                                                                                     \\
+         & = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ n_j \mid \bm{y} \right] = \frac{n P_{v}(\bm{\theta}^{(k)})}{P(\bm{\theta}^{(k)})}, j=v .
+    \end{align*}
+    To perform the $M-$step,
+    \begin{equation*}
+        \partial Q\left(\boldsymbol{\theta} ; \boldsymbol{\theta}^{(k)}\right) / \partial \boldsymbol{\theta}=\sum_{j=1}^{v} n_{j}^{(k)} \partial Q_{j}\left(\boldsymbol{\theta} ; \boldsymbol{\theta}^{(k)}\right) / \partial \boldsymbol{\theta}
+    \end{equation*}
+    where
+    \begin{equation*}
+        \partial Q_{j}\left(\boldsymbol{\theta} ; \boldsymbol{\theta}^{(k)}\right) / \partial \boldsymbol{\theta}=E_{\boldsymbol{\theta}^{(k)}}\left\{\partial \log f(W ; \boldsymbol{\theta}) / \partial \boldsymbol{\theta} \mid W \in \mathcal{W}_{j}\right\}
+    \end{equation*}
+    on interchanging the operations of differentiation and expectation. In this case
+    \begin{align*}
+        Q_j (\bm{\theta} , \bm{\theta}^{(k)}) \
+         & = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \log \left( \frac{1}{\sigma \sqrt{2 \pi}} \exp \left( -\frac{1}{2} \left( \frac{W - \mu}{\sigma} \right)^2 \right) \right) \mid W \in \mathcal{W}_{j} \right]              \\
+         & = \mathbb{E}_{\bm{\theta}^{(k)}} \left[ - \frac{1}{2} \log \left( 2 \pi \right) - \frac{1}{2} \log \left( \sigma^2 \right) -\frac{1}{2} \left( \frac{W - \mu}{\sigma} \right)^2 \mid W \in \mathcal{W}_{j} \right] \\
+         & = - \frac{1}{2} \left( \log \left( 2 \pi \right) + \log \left( \sigma^2 \right) \right) - \frac{\sigma^{-2}}{2} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \left( W - \mu \right)^2 \mid W \in \mathcal{W}_{j} \right]  \\
+    \end{align*}
+    so that
+    \begin{align*}
+        Q \left( \bm{\theta}; \bm{\theta}^{(k)} \right) \
+         & = \sum_{j=1}^{v} n_{j}^{(k)} Q_j (\bm{\theta} , \bm{\theta}^{(k)})                                                                                                                                                                                                       \\
+         & = \sum_{j=1}^{v} n_{j}^{(k)} \left[ - \frac{1}{2} \left( \log \left( 2 \pi \right) + \log \left( \sigma^2 \right) \right) - \frac{\sigma^{-2}}{2} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \left( W - \mu \right)^2 \mid W \in \mathcal{W}_{j} \right] \right]              \\
+         & = - \frac{1}{2} \sum_{j=1}^{v} n_{j}^{(k)} \left( \log \left( 2 \pi \right) + \log \left( \sigma^2 \right) \right) - \frac{\sigma^{-2}}{2} \sum_{j=1}^{v} n_{j}^{(k)} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \left( W - \mu \right)^2 \mid W \in \mathcal{W}_{j} \right].
+    \end{align*}
+    To complete the $M-$step, from the above we have
+    \begin{align*}
+        \partial Q_{j}\left(\boldsymbol{\theta} ; \boldsymbol{\theta}^{(k)}\right) / \partial \mu \
+         & = \EE_{\boldsymbol{\theta}^{(k)}}\left\{\partial \log f(W ; \boldsymbol{\theta}) / \partial \mu \mid W \in \mathcal{W}_{j}\right\}                 \\
+         & = \frac{\sigma^{-2}}{2} \sum_{j=1}^{v} n_{j}^{(k)} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \left( W - \mu \right) \mid W \in \mathcal{W}_{j} \right]
+    \end{align*}
+    so that
+    \begin{align*}
+        \frac{\sigma^{-2}}{2} \sum_{j=1}^{v} n_{j}^{(k)} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \left( W - \mu^{(k+1)} \right) \mid W \in \mathcal{W}_{j} \right] & = 0                                                                                                                                                     \\
+        \sum_{j=1}^{v} n_{j}^{(k)} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ \left( W - \mu^{(k+1)} \right) \mid W \in \mathcal{W}_{j} \right]                       & = 0                                                                                                                                                     \\
+        \sum_{j=1}^{v} n_{j}^{(k)} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ W \mid W \in \mathcal{W}_{j} \right] - \mu^{(k+1)} \sum_{j=1}^{v} n_{j}^{(k)}           & = 0                                                                                                                                                     \\
+        \mu^{(k+1)}                                                                                                                                              & = \sum_{j=1}^{v} n_{j}^{(k)} \mathbb{E}_{\bm{\theta}^{(k)}} \left[ W \mid W \in \mathcal{W}_{j} \right] \left( \sum_{j=1}^{v} n_{j}^{(k)} \right)^{-1}.
+    \end{align*}
+    Do something similar for ${\sigma^{2}}^{(k+1)}$ provides an iterate of
+    \begin{equation*}
+        \sigma^{(k+1)^{2}}=\sum_{j=1}^{v} n_{j}^{(k)}\left[\EE_{\theta^{(k)}}\left\{\left(W-\mu^{(k+1)}\right)^{2} \mid W \in \mathcal{W}_{j}\right\}\right] \left( \sum_{j=1}^{v} n_{j}^{(k)} \right)^{-1}.
+    \end{equation*}
 \end{exam}

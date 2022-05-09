@@ -82,6 +82,11 @@
     The first factor depends on $x_1 , \ldots , x_n$ only through the value of $T(\bm{x}) = x_{(n)}$, and the second factor does not depend on $\theta$. Again, according to \Cref{thm: factorization_theorem}, $T(\bm{X}) = X_{(n)}$, is a sufficient statistic in this problem.
 \end{exam}
 
+\begin{thm}[Basu's Theorem] \label{thm: basu_thrm}
+    Let $T$ be a complete sufficient statistic for $\bm{\theta}$. If the
+    distribution of some statistic $V \left( \bm{X}_1 , \ldots , \bm{X}_n \right)$ does not depend on $\bm{\theta}$, then $V$ is an ancillary statistic (\Cref{defe: ancillary_statistic}). An ancillary statistic will be distributed independently of $T$ \cite{CasellaGeorge2001SI}*{page 287}.
+\end{thm}
+
 \begin{defe}[Likelihood, Log-Likelihood and Score Function] \label{defe: likelihood_function}
     Let $f(\bm{x} \mid \theta)$ denote the joint pdf or pmf of the sample $\bm{X} = (X_1 , \ldots , X_2)$. Then, given that $\bm{X} = \bm{x}$ is observed, the function of $\theta$ defined by
     \begin{equation*}
