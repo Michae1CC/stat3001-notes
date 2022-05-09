@@ -249,6 +249,46 @@ It is important to note that
     meaning $\EE \left( \hat{\sigma}^2 \right) \to 0$ and $\Var \left( \hat{\sigma}^2 \right) \to 0$ as $n \to \infty$. Therefore, by \Cref{thm: var_bias_consistent}, $\hat{\sigma}^2$ is a consistent estimator of $\sigma^2$.
 \end{exam}
 
+\begin{exam}[Conclusion of \Cref{exam: uni_ss_p1}] \label{exam: uni_ss_p2}
+    Example taken from \cite{CasellaGeorge2001SI}*{page 338} and can also be found on tutorial sheet 3. We saw from \Cref{exam: uni_ss_p1} that the likelihood was
+    \begin{align*}
+        L (\theta) & = \theta^{-n} \Id_{N_\theta} (x_{(n)}) \left( \prod_{i=1}^{n} \Id_{N} (x_i) \right)             \\
+                   & = \theta^{-n} \Id_{[0,\theta]} (x_{(n)}) \left( \prod_{i=1}^{n} \Id_{[0,\infty)} (x_i) \right).
+    \end{align*}
+    Thus $L (\theta) = \theta^{-n}$ when $\theta \geq x_{(n)}$ and $0$ otherwise. This implies the MLE of $\theta$ is $\theta_{(n)}$. Since $\frac{\partial}{\partial \theta} \ln f (x \mid \theta) = -\frac{1}{\theta}$, we have
+    \begin{equation*}
+        \EE_{\theta} \left( \left( \frac{\partial}{\partial \theta} \ln f (x \mid \theta) \right)^2 \right) = \frac{1}{\theta^2}.
+    \end{equation*}
+    The Cramer-Rao Theorem (see \Cref{thm: cri_neq}) suggests that if $W$ is any unbiased estimator of $\theta$ then,
+    \begin{equation*}
+        \VV_\theta W \geq \frac{\theta^2}{n}.
+    \end{equation*}
+    We would like to find an unbiased estimator with small variance. As a first guess, consider the sufficient statistic $Y = X_{(n)}$, the largest order statistic and MLE. The pdf of $Y$ is $f_Y (y\mid \theta) = ny^{n-1} / \theta^n, \; 0 < y < \theta$, so
+    \begin{equation*}
+        \EE_{\theta} Y = \int_{0}^{\theta} \frac{ny^{n-1}}{\theta^n} \; dy = \frac{n}{n+1} \theta,
+    \end{equation*}
+    showing that $\frac{n+1}{n}Y$ is an unbiased estimator of $\theta$. We next calculate
+    \begin{align*}
+        \VV_{\theta} \left( \frac{n+1}{n} Y \right) \ 
+        & = \left( \frac{n+1}{n} \right)^2 \VV_{\theta} (Y)                                                             \\
+        & = \left( \frac{n+1}{n} \right)^2 \left( \EE_{\theta} Y^2 - \left( \frac{n}{n+1} \theta \right)^2 \right)      \\
+        & = \left( \frac{n+1}{n} \right)^2 \left( \frac{n}{n+2}\theta^2 - \left( \frac{n}{n+1} \theta \right)^2 \right) \\
+        & = \frac{1}{n(n+2)} \theta^2,
+    \end{align*}
+    which is uniformly smaller than $\frac{\theta^2}{n}$. This indicates that the Cramer-Rao Theorem is not applicable to this pdf. To see this is so, we can use the Leibnitz's Rule which states that if $f(x , \theta), a(\theta)$ and $b(\theta)$ are differentiable with respect to $\theta$, then
+    \begin{equation*}
+        \frac{d}{d \theta} \int_{a(\theta)}^{b(\theta)} f(x, \theta) d x=f(b(\theta), \theta) \frac{d}{d \theta} b(\theta)-f(a(\theta), \theta) \frac{d}{d \theta} a(\theta)+\int_{a(\theta)}^{b(\theta)} \frac{\partial}{\partial \theta} f(x, \theta) d x
+    \end{equation*}
+    we can calculate
+    \begin{align*}
+        \frac{d}{d \theta} \int_{0}^{\theta} h(x) f(x \mid \theta) \; d x \
+         & =\frac{d}{d \theta} \int_{0}^{\theta} h(x) \frac{1}{\theta} \; d x                                                     \\
+         & = \frac{h(\theta)}{\theta}+\int_{0}^{\theta} h(x) \frac{\partial}{\partial \theta}\left(\frac{1}{\theta}\right) \; d x \\
+         & \neq \int_{0}^{\theta} h(x) \frac{\partial}{\partial \theta} f(x \mid \theta) \; d x,
+    \end{align*}
+    unless $h(\theta) / \theta = 0$ for all $\theta$. Hence the Cramer-Rao Theorem does not apply. In general, if the range of the pdf depends on the parameter, the theorem will no be applicable.
+\end{exam}
+
 \subsubsection*{Large-Sample Comparisons of Estimators}
 
 \begin{thm}[Asymptotic Distribution of the MLE] \label{thm: large_samp_est}
@@ -259,7 +299,7 @@ It is important to note that
 \end{thm}
 
 \begin{thm}[Multivariate Central Limit Theorem] \label{thm: mv_cen_lim_thrm}
-    Let $\bm{X}_1 , \bm{X}_2 , \ldots , \bm{X}_n \iid \Wn (\bm{\mu} , \bm{\Sigma})$. For large $n$, the random vector $\sum_{i} \bm{X}_i$ approximately has a $\Nor \left( n \bm{\mu} , \bm{\Sigma} \right)$ distribution. 
+    Let $\bm{X}_1 , \bm{X}_2 , \ldots , \bm{X}_n \iid \Wn (\bm{\mu} , \bm{\Sigma})$. For large $n$, the random vector $\sum_{i} \bm{X}_i$ approximately has a $\Nor \left( n \bm{\mu} , \bm{\Sigma} \right)$ distribution.
 \end{thm}
 
 \begin{thm}[Delta Method] \label{thm: delta_ethod}

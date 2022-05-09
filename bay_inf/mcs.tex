@@ -132,14 +132,14 @@ We can use the bootstrap method to estimate any property of the sample distribut
                 \DontPrintSemicolon
                 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 
-                \Input{Observations $\bm{X}, \bm{y}$ and a test input $\bm{x}_{\star}$.}
-                \Output{A prediction $\overline{f_{\star}} $ with its corresponding variance $ \VV \left[ f_{\star} \right]$.}
+                \Input{Observations $\bm{x}$.}
+                \Output{Estimate of $\EE \left[ h(H(\bm{x})) \right]$.}
                 \BlankLine
                 \For{$i\gets 1 , \ldots , K$}{
-                Resample data $x_1^{\ast} , x_1^{\ast}, \ldots , x_n^{\ast}$ from the original data.\;
-                For each sample, calculate $h(H_k^{\ast}) = h(H(x_k^{\ast}))$\;
+                Resample data $\bm{x}_1^{\ast} , \bm{x}_2^{\ast}, \ldots , \bm{x}_n^{\ast}$ from the original data.\;
+                For each sample, calculate $h(H_k^{\ast}) = h(H(\bm{x}_k^{\ast}))$\;
                 }
-                Estimate $\EE \left[ h(H(x)) \right]$ using $\frac{1}{K} \sum_{i=1}^{K} h(H_k^{\ast})$
+                Estimate $\EE \left[ h(H(\bm{x})) \right]$ using $\frac{1}{K} \sum_{i=1}^{K} h(H_k^{\ast})$
                 \BlankLine
             \end{algorithm}
         \end{minipage}
@@ -150,4 +150,136 @@ For example to compute the variance of the sample medium we can compute
 \begin{equation*}
     \VV (\text{medium}) = \EE \left[ (m - \EE(m)) \right]^2 \simeq \sum_{i=1}^{K} (m_i^{\ast} - \overline{m}^{\ast})^2
 \end{equation*}
-where $m_i^{\ast}$ is the sample median of the ith resampled dataset and $\overline{m}^{\ast}$ is the mean of the resampled median values.
+where $m_i^{\ast}$ is the sample median of the ith resampled dataset and $\overline{m}^{\ast}$ is the mean of the resampled median values. If we replace $F$ by the empirical cdf, $F_n$, this is non-parameteric bootstrap. On this otherhand if replace $F$ by $F_{\hat{\theta}}$, this is parameteric bootstrap. As an example, the mean of the bootstrap estimate of the expectation of $H$ is
+\[
+    \widehat{\EE H} = \bar{H}^{\ast} = \frac{1}{K} \sum_{i=1}^{K} H_i^{\ast},
+\]
+which is simply the sample mean of $\left\{ H_i^{\ast} \right\}$. Similarly, the bootstrap estimate for $\VV (H)$ is the sample variance
+\[
+    \widehat{\VV (H)} = \frac{1}{K} \sum_{i=1}^{K} \left( H_i^{\ast} - \bar{H}^{\ast} \right)^2
+\]
+\cite{KroeseDirkP2013SMaC}*{page 206}.
+
+\subsubsection*{Markov Chain Monte Carlo}
+
+All of the sampling methods so far require us to know the explicit form of the distribution we are sampling from. For example, we know how to sample from $\Uni [0,1], \Nor (\mu , \sigma^2), \ldots , F_n$. But often we want to sample from a distribution $F$ for which we don't know the exact form. However, in a special case, we may know $F$ up to a normalizing constant, or related to some other known function.
+
+\begin{exam} \label{exam: mcmc_intro}
+    Consider sampling from the distribution
+    \begin{equation*}
+        f (x) \propto x^2 \exp \left( -x^2 + \sin (x) \right).
+    \end{equation*}
+    Here, the normalizing constant $c$ has no explicit form. From STAT3004, we can approximately generate samples from a "target" distribution by instead sampling from a Markov Chain whose limiting distribution is the target distribution.
+\end{exam}
+
+This is called Markov Chain Monte Carlo (MCMC). We {\it could} try and integrate $f(x)$ numerically. However, for this amount of computation we could have already obtained an MCMC sample already. Moreover, after we find $c$, obtaining the quantity such as quantiles is not easy (even if we know $c$). This is again very expensive for quantile.
+
+\begin{defe}[Markov Chain] \label{defe: markov_chain}
+    A {\bf Markov Chain} is a collection of random variables $\left\{ X_t : t = 0,1,\ldots \right\}$ indexed by $t$ such that $(X_{t+1} \mid X_{t} , X_{t-1} \mid X_{0}) = (X_{t+1} \mid X_{t})$ for all $t$. This is called the {\bf Markov Property}.
+\end{defe}
+
+To specify a Markov Chain we need to things:
+\begin{itemize}
+    \item the distribution of $X_0$, called the initial distribution of a MC
+    \item the probability of getting from one state to another. That is probability of getting from state $y$ when we are currently at the state $x$, $q (y \mid x)$ (the transition probability).
+\end{itemize}
+Both of these together will complete determine the distribution of the Markov Chain.
+
+\begin{exam}\label{exam: mc_state_intro}
+    Consider the $4$ states shown in the diagram below. Suppose the probability of staying in the current state is $0.5$ and the probability of moving to a neighbouring state is equally likely. The first question we might ask is what are the transition probabilities? We also might want to ask, what is the long-term relative frequency of visiting each of the four states? We can compute probabilities of the first question analytically as
+    \begin{align*}
+        q (1 \mid 1) & = q (2 \mid 1) = 0.5  \\
+        q (3 \mid 1) & = q (4 \mid 1) = 0    \\
+        q(2 \mid 2)  & = 0.5                 \\
+        q (3 \mid 2) & = q (1 \mid 2) = 0.25 \\
+        q(4 \mid 2)  & = 0                   \\
+                     & \vdots
+    \end{align*}
+    which can be written in matrix form as
+    \begin{equation*}
+        \bm{Q}_{i \mid j} =
+        \begin{pmatrix}
+            0.5  & 0.5  & 0    & 0     \\
+            0.25 & 0.5  & 0.25 & 0     \\
+            0    & 0.25 & 0.5  & 0.5   \\
+            0    & 0    & 0.25 & 0.5 .
+        \end{pmatrix}
+    \end{equation*}
+    were ${\bm{Q}_{i \mid j}}_{ij} = q(i \mid j)$. We can use computer sotware to answer our second question.
+\end{exam}
+
+\begin{defe}[Ergodic Markov Chain] \label{defe: erogic_markov_chain}
+    A Markov Chain is {\bf Ergodic} if the probability of $X_t$ converges to some fixed probability function $f(x)$ as $t \to \infty$.
+\end{defe}
+
+\begin{defe}[Global Balance Equation] \label{defe: gbe}
+    For an ergodic MC, the limiting probability function $f(x)$ must satisfy a set of recursive relationships, called the {\bf global balance equations}.
+    \[
+        f(x) = \sum_{y} f(y) q \left( x \mid y \right)
+    \]
+    in the discrete case and
+    \[
+        f(x) = \int_y f(y) q(x \mid y) \; dy
+    \]
+    in the continuous case. The function $f(x)$ is called the long term frequency at state $x$.
+\end{defe}
+
+\begin{exam}[Continuation of \ref{exam: mc_state_intro}] \label{exam: mc_state_intro_cont_1}
+    Again we have the transition matrix
+    \begin{equation*}
+        \bm{Q} =
+        \begin{pmatrix}
+            0.5  & 0.5  & 0    & 0     \\
+            0.25 & 0.5  & 0.25 & 0     \\
+            0    & 0.25 & 0.5  & 0.5   \\
+            0    & 0    & 0.25 & 0.5 .
+        \end{pmatrix}
+    \end{equation*}
+    Let's calculate $f$ using the global balance equations.
+    \begin{align*}
+        f(1) & = \sum_{i=1}^4 f(i) q(1 \mid i) = 0.75  \\
+        f(2) & = \sum_{i=1}^4 f(i) q(2 \mid i) = 1.25  \\
+        f(3) & = \sum_{i=1}^4 f(i) q(3 \mid i) = 1.25  \\
+        f(4) & = \sum_{i=1}^4 f(i) q(4 \mid i) = 0.75.
+    \end{align*}
+    This means
+    \begin{align*}
+        f           & = Q f \\
+        (\Id - Q) f & = 0
+    \end{align*}
+    meaning $f$ must lie in the (right) null space of $Q$. Solving for $f$ provides a vector of $f \simeq [0.316, 0.632, 0.632, 0.316]^{\intercal}$, which when normalized is $f / \norm{f}_1 \simeq [0.166 , 0.333 , 0.333 , 0.166]^{\intercal}$
+\end{exam}
+
+\begin{defe}[Time Reversible (Markov Chain)] \label{defe: trmc}
+    A MC is called {\bf time-reversible} if it is a MC when run backwards in time. Note, not all MC are reversible but all ergodic MCs are reversible.
+\end{defe}
+
+\begin{defe}[Reverse Transition Probabilities] \label{defe: rtp}
+    The {\bf reverse transition probability} is
+    \[
+        \tilde{q} (y \mid x) = \frac{f(y) q(x \mid y)}{f(x)}.
+    \]
+\end{defe}
+
+The influx into state $y$ from state $x$ in the reverse chain is $\tilde{q} (y \mid x) f(x)$ while the influx into state $x$ from state $y$ in the forward chain is $q (y \mid x) f(y)$. At the limit state, the forward MC and backward chain should look the same, that is
+\begin{equation*}
+    f(x) q(y \mid x) = f(y) q (x \mid y)
+\end{equation*}
+for all pairs $x$ and $y$. This set of equations are known as the {\bf local (or detailed) balance equations}.
+
+\begin{exam} \label{exam: lbe}
+    Let us calculate $f$ using the local balance equations. For $x=y$
+    \begin{align*}
+        f (x) q(x \mid x) & = f (x) q(x \mid x).
+    \end{align*}
+    For $x= 1, y=2$
+    \begin{align*}
+        f(1) q (2 \mid 1) & = f(2) q(1 \mid 2) \\
+        2 f(1)            & = f(2).
+    \end{align*}
+    Similarly for $x=4, y=3$ we have $2 f(4) = f(1)$ and by symmetry for $x=2, y=3$ we have $f(2) = f(3)$. This means
+    \begin{align*}
+        \left[ f(1), f(2), f(3), f(4) \right]             & \propto \left[ 1,2,2,1 \right]    \\
+        \Rightarrow \left[ f(1), f(2), f(3), f(4) \right] & = \left[ 1/6,2/6,2/6,1/6 \right].
+    \end{align*}
+\end{exam}
