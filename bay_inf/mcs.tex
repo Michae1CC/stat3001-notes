@@ -283,3 +283,80 @@ for all pairs $x$ and $y$. This set of equations are known as the {\bf local (or
         \Rightarrow \left[ f(1), f(2), f(3), f(4) \right] & = \left[ 1/6,2/6,2/6,1/6 \right].
     \end{align*}
 \end{exam}
+
+\begin{exam} \label{exam: MC_samp_1}
+    Suppose we would like draw samples from
+    \[
+        f(x) \propto x^2 \exp \left( -x^2 + \sin (x) \right).
+    \]
+\end{exam}
+
+Instead of sampling directly, we can build a MC whose limiting distribution is will be our target function $f(x)$. After a long burn, $0$ to $T$, the random variables will form an approximate but dependent sample from $f(x)$. The idea of Metropolis and Hastings has a two phases.
+\begin{itemize}
+    \item Proposal: Given we are currently at state $x$, we generate a proposal state $Y$, from some transition probability $q(\cdot  \mid x)$.
+    \item Accept/Reject: Accept $Y$ with some probability $\alpha (x,Y)$, and reject with probability $1 - \alpha (x,Y)$.
+\end{itemize}
+We can choose $\alpha (x,y)$ such that we get $f(x)$ as our limiting distribution. To do this we set
+\[
+    \alpha (x,y) = \min \left\{
+    \frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} , 1
+    \right\}.
+\]
+If the ratio id greater that $1$, we will always make the move. Otherwise we only sometimes make the move. We only need to know $f(x)$ up to a normalizing constant.
+
+\begin{proof}
+    Check the local balance equations, for this MHMC. The one-step transition probability is
+    \[
+        q_{MH} (y \mid x) = \left\{
+        \begin{matrix}
+            q(y \mid x) \alpha (x,y) ,                     & \text{if} \; x \neq y \; \text{(Case 1)} \\
+            1 - \sum_{z \neq x} q(z \mid x) \alpha (x,z) , & \text{if} \; x = y \; \text{(Case 2)}
+        \end{matrix}
+        \right. .
+    \]
+    Let us check the local balance equation to find the limiting distribution. For Case 1 ($y \neq x$), the left hand side of the local balance equation is
+    \begin{align*}
+        LHS \
+         & = f(x) q_{MH} (y \mid x)        \\
+         & = f(x) q(y \mid x) \alpha (x,y) \\
+         & = f(x) q(y \mid x) \min \left\{
+        \frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} , 1
+        \right\}
+    \end{align*}
+    if $\frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} \geq 1$ then this becomes $f(x) q(y \mid x)$. On the other hand if $\frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} < 1$ or $\frac{f(x) q(y \mid x)}{f(y) q(x \mid y)} > 1$, then
+    \begin{align*}
+         & f(x) q(y \mid x) \alpha (x,y)                                \\
+         & = f(x) q(y \mid x) \frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} \\
+         & = f(y) q(x \mid y).
+    \end{align*}
+    The right hand side of the local balance equation is
+    \begin{align*}
+        RHS \
+         & = f(y) q_{MH} (x \mid y)        \\
+         & = f(y) q(x \mid y) \min \left\{
+        \frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} , 1
+        \right\}                           \\
+         & = \left\{
+        \begin{matrix}
+            f(y) q(x \mid y) , & \text{if ratio} \geq 1 \\
+            f(x) q(y \mid x) , & \text{if ratio} < 1    \\
+        \end{matrix}
+        \right. .
+    \end{align*}
+    For Case 2
+    \[
+        LHS = f(x) q_{MH} (y \mid x) = RHS
+    \]
+    so $f(x)$ is indeed the limiting distribution if the MH samples.
+\end{proof}
+
+\begin{exam}[Example 7.12 form Dirk] \label{exam: MC_samp_1}
+    At the current state $x$, propose a new state $Y = x + Z$, where $Z$ has a symmeteric distribution around $0$ (eg $Z$ comes from a standard normal distribution). In this case
+    \[
+        \alpha (x,y) = \min \left\{
+        \frac{f(y) q(x \mid y)}{f(x) q(y \mid x)} , 1
+        \right\} = \min \left\{
+        \frac{f(y)}{f(x)} , 1
+        \right\} .
+    \]
+\end{exam}

@@ -53,7 +53,7 @@ changes by an arbitrarily small amount in the case of convergence of the sequenc
 which is the set of points that maximise $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \right)$.
 
 \begin{exam}[A Multinomial Example] \label{exam: em_mutlinomial_eg}
-    Example taken from \cite{McLachlanGeoffreyJohn2008TEaa}*{page } \cite{KroeseDirkP2013SMaC}*{page 185}. We consider first the multinomial example that DLR used to introduce the EM algorithm and that has been subsequently used many times in the literature to illustrate various modifications and extensions of this algorithm. The data relates to a problem of estimation of linkage in genetics where an observed data vector of frequencies
+    Example taken from \cite{McLachlanGeoffreyJohn2008TEaa}*{page 10} \cite{KroeseDirkP2013SMaC}*{page 185}. We consider first the multinomial example that DLR used to introduce the EM algorithm and that has been subsequently used many times in the literature to illustrate various modifications and extensions of this algorithm. The data relates to a problem of estimation of linkage in genetics where an observed data vector of frequencies
     \begin{equation*}
         \bm{y} = (y_1 , y_2 , y_3 , y_4)^{\intercal}
     \end{equation*}
@@ -99,8 +99,12 @@ which is the set of points that maximise $Q \left( \bm{\Psi} ; \bm{\Psi}^{(k)} \
     \end{equation*}
     where
     \begin{align*}
-        y_{11}^{(0)} & = \frac{1}{2} y_1 - y_{11}^{(0)}                                                     \\
-                     & = \frac{1}{4} y_{1} \Psi^{(0)} / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(0)} \right)
+        y_{11}^{(0)} & = \frac{1}{2} y_{1} / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(0)} \right).
+    \end{align*}
+    We also have
+    \begin{align*}
+        y_{12}^{(0)} & = \frac{1}{4} y_1 - y_{11}^{(0)}                                                      \\
+                     & = \frac{1}{4} y_{1} \Psi^{(0)} / \left( \frac{1}{2} + \frac{1}{4} \Psi^{(0)} \right).
     \end{align*}
     The M-step is undertaken on the first iteration by choosing $\Psi^{(1)}$ to be the value of Q that maximizes $Q \left( \Psi ; \Psi^{(0)} \right)$ with respect to $\Psi$. Since this $Q-$function is given simply by replacing the unobservable frequencies $y_{11}$ and $y_{12}$ with their current conditional expectations $y_{11}^{(0)}$ and $y_{12}^{(0)}$ in the complete-data log likelihood, $\Psi^{(1)}$ is obtained taking the derivative of $\ln L_c (\Psi)$ to find its maximising value, that is,
     \begin{align*}
