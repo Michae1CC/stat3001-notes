@@ -1,0 +1,157 @@
+\subsection*{Bayesian Statistics}
+
+\begin{defe}[Prior, Liklihood and Posterior] \label{defe: prior_likeli_postr}
+    Let $\bm{x}$ and $\bm{\theta}$ denote the data and the parameters in a Bayesian model and let $f(\bm{z})$ be the distribution of $\bm{z}$ (for some random variable $\bm{z}$)
+    \begin{itemize}
+        \item The pdf of $\bm{\theta}$ is called the {\bf prior} pdf.
+        \item The conditional pdf $f(\bm{x} \mid \bm{\theta})$ is called the {\bf likelihood} function.
+        \item The central object of interest is the {\bf posterior} pdf $f (\bm{\theta} \mid \bm{x})$ which, Baye's theorem, is proportional to the product of the prior and the likelihood:
+              \[
+                  f (\bm{\theta} \mid \bm{x}) \propto f(\bm{x} \mid \bm{\theta}) f(\bm{\theta}).
+              \]
+    \end{itemize}
+    \cite{KroeseDirkP2013SMaC}*{page 228}.
+\end{defe}
+
+There is also not much distinction between random variables and their realizations, both are written in lower case. Bayesian analysis usually consists of three main steps.
+
+\begin{itemize}
+    \item specify a prior belief or prior distribution $f(\bm{\theta})$ on the parameter $\bm{\theta}$. This represents our prior belief about $\bm{\theta}$ before looking at the data.
+    \item The likelihood (model) $f (\bm{x} \mid \bm{\theta})$ characterises how the distribution of $\bm{x}$ depends on $\bm{\theta}$.
+    \item The posterior distribution of $\bm{\theta}$ is given by
+          \[
+              f (\bm{\theta} \mid \bm{x}) \propto f(\bm{x} \mid \bm{\theta}) f(\bm{\theta})
+          \]
+          where $f (\bm{\theta} \mid \bm{x})$ is called the {\bf posterior}, $f(\bm{x} \mid \bm{\theta})$ is called the likelihood and $f(\bm{\theta})$, the {\bf prior}.
+\end{itemize}
+
+Recall Baye's rule
+\[
+    f (\bm{\theta} \mid \bm{x}) = \frac{f(\bm{x},\bm{\theta})}{f(\bm{x})} = \frac{f(\bm{x} \mid \bm{\theta}) f(\bm{\theta})}{f(\bm{x})} \propto f(\bm{x} \mid \bm{\theta}) f(\bm{\theta})
+\]
+
+\begin{exam}[Coin tosses] \label{exam: coin_eg}
+    Suppose we tossed a coin $10$ times, and observe $S$ heads. What is the probability of $\theta$ of heads for this coin? To start we can specify a prior belief on this coin so that $\theta \sim \Uni [0,1]$ ,that is $f(\theta) = 1$ (all possible values of $\theta \in [0,1]$ have equal chance of occur). Next, suppose we observe $S=3$ heads out of $10$ tosses. The likelihood of the data is
+    \[
+        f(x \mid \theta) = \binom{10}{3} \theta^3 (1-\theta)^{7} \propto \theta^3 (1-\theta)^{7}.
+    \]
+    The find the posterior we compute
+    \begin{align*}
+        f(\theta \mid \bm{x})
+         & \propto f(\bm{x} \mid \theta) f(\theta)                             \\
+         & = \theta^3 (1-\theta)^{7} \cdot 1 \; \text{for} \; \theta \in [0,1] \\
+         & \sim \Beta (\alpha = 4, \beta =8).
+    \end{align*}
+    Suppose we started with a different prior and instead suspect $\theta$ to be around $0.5$, but we are still not exactly sure where we change our prior to be $f(\theta) \sim \Beta (3,3)$. But now we will use a more general form of the likelihood
+    \[
+        f(x \mid \theta) \propto \theta^S (1-\theta)^{n-S}.
+    \]
+    The posterior is now
+    \begin{align*}
+        f(\theta \mid \bm{x})
+         & \propto f(\bm{x} \mid \theta) f(\theta)                   \\
+         & = \theta^S (1-\theta)^{n-S} \cdot \theta^2 (1-\theta)^{2} \\
+         & = \theta^{S + 2} (1-\theta)^{n-S+2}                       \\
+         & \sim \Beta (\alpha = S+3, \beta =n-S+3).
+    \end{align*}
+\end{exam}
+
+
+\begin{exam}[Bayesian Inference for Normal Data] \label{exam: bay_norm}
+    Suppose $x_1 , x_2 , \ldots , x_n \sim \Nor \left( \mu , \sigma^2 \right)$ where $\sigma^2$ is known so only $\mu$ is unknown. Let's try $\Nor \left( \mu_0 , \sigma_0^2 \right)$ for some hyperparamters $\mu_0$ and $\sigma_0^2$. To specify the likelihood of the data, from the question we know that
+    \[
+        f (x \mid \mu ) = \left( \frac{1}{\sqrt{2 \pi \sigma^2}} \right)^n \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 \right)
+    \]
+    so for the posterior distribution
+    \begin{align*}
+        f (\mu \mid x) \
+         & \propto f(x \mid \mu ) f(\mu)                                                                                                                                              \\
+         & \propto \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 \right) \exp \left( - \frac{1}{2\sigma_0^2} \left( \mu - \mu_0 \right)^2 \right)       \\
+         & \propto \exp \left( - \frac{1}{2} \left[ \frac{1}{\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 + \frac{1}{\sigma_0^2} \left( \mu - \mu_0 \right)^2 \right] \right).
+    \end{align*}
+    Isolating the exponent
+    \begin{align*}
+         & = \frac{1}{\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 + \frac{1}{\sigma_0^2} \left( \mu - \mu_0 \right)^2                                                                                                                  \\
+         & = \frac{1}{\sigma^2} \sum_{i=1}^{n} \left( x_i^2 - 2 x_i \mu + \mu^2 \right) + \frac{1}{\sigma_0^2} \left( \mu^2 - 2 \mu \mu_0 + \mu^2 \right)                                                                                      \\
+         & = \frac{1}{\sigma^2} \sum_{i=1}^{n} \left( x_i^2 - 2 n \bar{x} \mu + n \mu^2 \right) + \frac{1}{\sigma_0^2} \left( \mu^2 - 2 \mu \mu_0 + \mu^2 \right)                                                                              \\
+         & = \mu^2 \left( \frac{n}{\sigma^2} + \frac{1}{\sigma_0^2} \right) - 2 \mu \left( \frac{n \bar{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right) + c_1                                                                                 \\
+         & = \left( \frac{n}{\sigma^2} + \frac{1}{\sigma_0^2} \right) \left[ \mu^2 - 2 \mu \frac{\left( \frac{n \bar{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)}{\left( \frac{n}{\sigma^2} + \frac{1}{\sigma_0^2} \right)} \right] + c_1
+    \end{align*}
+    This means that $f(\mu \mid x)$ is a normal distribution with parameters $\Nor \left( \EE (\mu \mid x) , \Var (\mu \mid x) \right)$ where
+    \begin{align*}
+        \EE (\mu \mid x) \
+         & = \frac{\left( \frac{n \bar{x}}{\sigma^2} + \frac{\mu_0}{\sigma_0^2} \right)}{\left( \frac{n}{\sigma^2} + \frac{1}{\sigma_0^2} \right)} \\
+         & = \frac{n \bar{x} \sigma_0^2 + \sigma^2 \mu_0}{n \sigma_0^2 + \sigma^2}
+    \end{align*}
+    and
+    \begin{align*}
+        \Var (\mu \mid x) \
+         & = \left( \frac{n}{\sigma^2} + \frac{1}{\sigma_0^2} \right)^{-1} \\
+         & = \frac{\sigma^2 \sigma_0^2}{n \sigma_0^2 + \sigma^2}.
+    \end{align*}
+    So the mean/mode is a weighted avergae between the sample and $\bar{x}$ and our prior mean $\mu_0$, with the weight being $n \sigma_0^2$ and $\sigma^2$, respectively. Observe
+    \begin{align*}
+        \EE (\mu \mid x) \
+         & = \frac{n \bar{x} \sigma_0^2 + \sigma^2 \mu_0}{n \sigma_0^2 + \sigma^2}                                 \\
+         & = \frac{n \sigma_0^2}{n \sigma_0^2 + \sigma^2} \bar{x} + \frac{\sigma^2}{n \sigma_0^2 + \sigma^2} \mu_0 \\
+         & = \left( 1 - w \right) \bar{x} + w \mu_0
+    \end{align*}
+    and for our variance
+    \begin{align*}
+        \Var (\mu \mid x) \
+         & = \frac{\sigma^2 \sigma_0^2}{n \sigma_0^2 + \sigma^2} \\
+         & = w^2 \sigma_0^2 + (1- w)^2 \frac{\sigma^2}{n}        \\
+         & = w^2 \Var (\mu) + (1- w)^2 \Var (\bar{x})
+    \end{align*}
+    What is the effect of the prior on the posterior? The information in the prior of $\mu \sim \Nor \left( \mu_0 , \sigma_0^2 \right)$ is roughly the same as it would be provided is a sample with sample mean $\bar{x} = \mu_0$ and standard error being $\sigma_0$.
+\end{exam}
+
+\begin{exam}[Bayesian Inference for Normal Data with Unknown $\sigma^2$] \label{exam: bay_norm_2}
+    Suppose $x_1 , x_2 , \ldots , x_n \sim \Nor \left( \mu , \sigma^2 \right)$ where $\mu$ is known so only $\sigma^{2}$ is known. We can use a prior of a Inverse-Gamma distribution. Recall $\Invgamma (\alpha_0 , \beta_0)$ has density
+    \[
+        f(x) = \beta_0^{\alpha_0} \left( x \right)^{-\alpha_0 - 1} \exp \left( - \beta_0 / x \right)
+    \]
+    for $x > 0$. If $\sigma^2 \sim \Invgamma (\alpha_0 , \beta_0)$, then $1/\sigma^2 \sim \Gam (\alpha_0, \beta_0)$. The data likelihood has a distribution of
+    \[
+        f(x \mid \sigma^2) \propto \left( \frac{1}{\sigma} \right)^{n/2} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 \right)
+    \]
+    meaning that posterior can be computed as
+    \begin{align*}
+        f (\sigma^2 \mid x) \
+         & = f(x \mid \sigma^2) f(\sigma^2)                                                                                                                                                                    \\
+         & = \left( \frac{1}{\sigma} \right)^{n/2} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 \right) (\sigma)^{-\alpha_0 - 1} \exp \left( - \frac{\beta_0}{\sigma^2} \right) \\
+         & = (\sigma^2)^{-(\frac{n}{2} + \alpha_0 + 1)} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 + \beta_0 \right)                                                          \\
+         & \sim \Invgamma \left( \frac{n}{2} + \alpha_0, \frac{1}{2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 + \beta_0 \right).
+    \end{align*}
+    The posterior is then
+    \[
+        \frac{\frac{1}{2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2 + \beta_0}{\frac{n}{2} + \alpha_0 + 1} = \frac{2 \beta_0 + \sum_{i=1}^{n} \left( x_i - \mu \right)^2}{n + \alpha_0 + 2}.
+    \]
+    It is a weighted average between the prior mode and the sample variance. The Inverse-Gamma is a popular choice of prior since it gives a closed form distribution, and posterior in the same family as the prior.
+\end{exam}
+
+\begin{defe}[Conjugacy] \label{defe: conjugacy}
+    Whenever the posterior distribution has the same form as the prior, this property is called {\bf conjugacy}. The corresponding prior is called the {\bf conjugate prior}.
+\end{defe}
+
+\begin{exam}[Continuation of \Cref{exam: bay_norm}] \label{exam: bay_norm_3}
+    What is the effect of the hyperparameters $\alpha_0$ and $\beta_0$ on the posterior mode on the above example? Recall, the mode was found to be
+    \[
+        \frac{2 \beta_0 + \sum_{i=1}^{n} \left( x_i - \mu \right)^2}{n + \alpha_0 + 2}.
+    \]
+    This is "like" observing $2 \beta_0$ sum of the squares from $2 \alpha_0 + 2$ samples prior to our current experiment. Now what if we take $\alpha_0 \to 0$ and $\beta_0 \to 0$? The mode $\frac{\beta_0}{\alpha_0 + 1} \to 0$ meaning the posterior distribution is $\sigma^2 \mid x \sim \Invgamma (\frac{n}{2} , \frac{1}{2} \sum_{i=1}^{n} \left( x_i - \mu \right)^2)$ which is a valid distribution. But, what about the prior? In this case $f(\sigma^2) \propto \frac{1}{\sigma^2}$ for $\sigma^2 > 0$, this is impossible to normalize since $\int_{0}^{\infty} \frac{1}{\sigma^2} \; d \sigma^2 = \infty$, so this is a {\it improper} prior!
+\end{exam}
+
+\begin{exam}[Normal Data with Unknown $\mu$ and $\sigma^2$] \label{exam: bay_norm_4}
+    Suppose $x_1 , x_2 , \ldots , x_n \sim \Nor \left( \mu , \sigma^2 \right)$ where both $\mu$ and $\sigma^{2}$ is unknown. Let's consider independent priors for $\mu$ and $\sigma^2$ where
+    \begin{align*}
+        \mu      & \sim \Nor \left( \mu_0 , \sigma_0^2 \right) \\
+        \sigma^2 & \sim \Invgamma (\alpha_0 , \beta_0)
+    \end{align*}
+    so that the joint prior becomes
+    \begin{align*}
+        f(\mu,\sigma^2) \
+         & = f(\mu) f(\sigma^2)                                                                                                                                                                                                        \\
+         & = \beta_0^{\alpha_0} \left( \sigma^2 \right)^{-\alpha_0 - 1} \exp \left( - \beta_0 / \sigma^2 \right) \left( \frac{1}{\sqrt{2 \pi \sigma^2}} \right) \exp \left( - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right)
+    \end{align*}
+\end{exam}

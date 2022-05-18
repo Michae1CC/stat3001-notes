@@ -284,6 +284,8 @@ for all pairs $x$ and $y$. This set of equations are known as the {\bf local (or
     \end{align*}
 \end{exam}
 
+\subsubsection*{Metropolis Hastings Algorithm}
+
 \begin{exam} \label{exam: MC_samp_1}
     Suppose we would like draw samples from
     \[
@@ -350,7 +352,7 @@ If the ratio id greater that $1$, we will always make the move. Otherwise we onl
     so $f(x)$ is indeed the limiting distribution if the MH samples.
 \end{proof}
 
-\begin{exam}[Example 7.12 form Dirk] \label{exam: MC_samp_1}
+\begin{exam}[Example 7.12 form Dirk] \label{exam: MC_samp_2}
     At the current state $x$, propose a new state $Y = x + Z$, where $Z$ has a symmeteric distribution around $0$ (eg $Z$ comes from a standard normal distribution). In this case
     \[
         \alpha (x,y) = \min \left\{
@@ -359,4 +361,90 @@ If the ratio id greater that $1$, we will always make the move. Otherwise we onl
         \frac{f(y)}{f(x)} , 1
         \right\} .
     \]
+\end{exam}
+
+\begin{exam} \label{exam: MC_samp_3}
+    Choose $Y$ from $g(y \mid x)$ for some density $g(\cdot)$ that does not depend on the current state $x$. Accept this proposal to $Y$ with probability
+    \[
+        \alpha (x,y) = \min \left\{ \frac{f(y)}{f(x)} \cdot \frac{g(x)}{g(y)} , 1 \right\}
+    \]
+    where $\frac{f(y)}{f(x)}$ is proportional to our target density $f$ and $\frac{g(x)}{g(y)}$ is inversely proportional.
+\end{exam}
+
+When might an independent sampler be better over a random walk sampler? It is usually better when there are both local and global features of our target $f$ or when we can easily sample from our proposed $g$, that somehow resembles our target $f$.
+
+\subsubsection*{Gibbs Samplings}
+
+Suppose we want to sample from a joint pdf $f(x)$. Direct sampling of joints pdfs are usually very difficult, especially if the dimension $p$ is very high. In particular, numerical integration in high dimensions is very computationally expensive. What if instead we sample from each conditional pdf instead. This leads to the Gibbs Sampling Algorithm seen below.
+
+    {\centering
+        \begin{minipage}{.85\linewidth}
+            \begin{algorithm}[H]
+                \caption{Gibbs Sampling}
+                \label{alg: gibb_samp}
+                \SetAlgoLined
+                \DontPrintSemicolon
+                \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
+
+                \Input{Observations $\bm{x}$.}
+                \Output{Estimate of $\EE \left[ h(H(\bm{x})) \right]$.}
+                \BlankLine
+                Given the current state $X_t = x$, draw a vector $Y=y$ using sequnetial sampling from the conditional pdfs\;
+                $Y_1 \sim f(y_1 \mid x_2 , x_3 , \ldots , x_p)$\;
+                $Y_2 \sim f(y_2 \mid Y_1, x_3 , \ldots , x_p)$\;
+                $Y_3 \sim f(y_3 \mid Y_1, Y_2, x_4 , \ldots , x_p)$\;
+                $\vdots$\;
+                $Y_p \sim f(y_p \mid Y_1, Y_2, \ldots , Y_{p-1})$\;
+                Set $X_{t+1} = Y = \left( Y_1 , Y_2 , \ldots , Y_p \right)^{\intercal}$.\;
+                When this is run long enough ($> T$ simulations), then $X_t \sim f(x)$ for $t \geq T$.
+                \BlankLine
+            \end{algorithm}
+        \end{minipage}
+        \par
+    }
+
+This is actually special case of MH with transition probability from state $x$ to $y$ as
+\[
+    q_{1 \to p} (y \mid x) = f_1(y_1 \mid x_2,x_3, \ldots x_p) \cdot f_2(y_2 \mid y_1,x_3, \ldots x_p) \cdot f_p (y_p \mid y_1,y_2, \ldots ,y_{p-1}).
+\]
+We want to check whether the $X_1 , X_2 , \ldots $ indeed has a limiting distribution $f$ we want. Note that the global balance equation do not hold in general in this case. This is because of the one-step transition requiring $p$ small sequential steps that are not reversible
+\[
+    f(x) q_{1 \to p} (y \mid x) \neq f(y) q_{1 \to p} (x \mid y).
+\]
+But we do have a modified local balance equation
+\[
+    f(x) q_{1 \to p} (y \mid x) = f(y) q_{p \to 1} (x \mid y)
+\]
+where $f(x) q_{1 \to p} (y \mid x)$ is the influx from state $x$ into $y$ in our forward chain and $f(y) q_{p \to 1} (x \mid y)$ is the influx from state $y$ into $x$ in our backward sequence. We can use the above expression to show that the global balance equations hold
+\begin{align*}
+    RHS \
+     & = \int f(x) q_{1 \to p} (y \mid x) \; dx \\
+     & = \int f(y) q_{p \to 1} (x \mid y) \; dx \\
+     & = f(y) \int q_{p \to 1} (x \mid y) \; dx \\
+     & = f(y) \cdot 1 = f(y) = LHS
+\end{align*}
+
+\begin{exam}[Example 7.14 form Dirk] \label{exam: gibbs_samp_1}
+    Suppose we want to sample $\bm{X} = (X_1 , X_2)^{\intercal}$ from the following bivariate pdf.
+    \[
+        f(x_1 , x_2) \propto \exp \left( -x_1 x_2 - x_1 - x_2 \right)
+    \]
+    for $x_1 \geq 0 , x_2 \geq 0$. The normalizing constant is not given meaning we cannot sample directly. What are the conditional pdfs?
+    \[
+        f_1 (x_1 \mid x_2) = \frac{f(x_1 , x_2)}{f(x_2)} \propto f(x_1 , x_2)
+    \]
+    as a function of $x_1$ only so that
+    \[
+        f_1 (x_1 \mid x_2) \propto f(x_1 , x_2) \propto \exp \left( -x_1 x_2 - x_1 - x_2 \right) \propto \exp \left( -x_1 x_2 - x_1 \right) \sim \Exp (\lambda = x_2 +1).
+    \]
+    Also
+    \begin{align*}
+        f_2 (x_2 \mid x_1) \propto \exp \left( -x_1 x_2 - x_1 - x_2 \right) \sim \Exp (\lambda = x_1 +1).
+    \end{align*}
+    Given any starting vector $X^{(0)} = \left( X_1^{(0)} , X_2^{(0)} > \bm{0} \right)$, the Gibbs sampling procedure is
+    \begin{itemize}
+        \item $X_1^{(1)} \sim \Exp (\lambda = x_2^{(0)} + 1)$
+        \item $X_2^{(1)} \sim \Exp (\lambda = x_1^{(1)} + 1)$
+    \end{itemize}
+    and we repeat this for as many iterations as we are allowed. After a burn-in period $T$, the sequence $\bm{X}_{T+1} , \bm{X}_{T+2}, \ldots$ forms an approximately (dependent) sample from $f$.
 \end{exam}
