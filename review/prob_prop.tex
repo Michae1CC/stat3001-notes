@@ -5,20 +5,21 @@ Common probabilistic properties seen from prior courses.
 \subsubsection*{Probabilistic Properties}
 For any random variables, the following hold.
 \begin{align}
-    \Em (X)                               & = \int_{0}^{\infty} \left( 1 - F(X) \right) \, dx                                                                                                              \\
-    \Em \left( aX + b \right)             & = a \Em X + b                                                                                                                                                  \\
-    \Em \left( g(X) + h(X) \right)        & = \Em g(X) + \Em h (X)                                                                                                                                         \\
-    \Var (X)                              & = \Em X^2 - \left( \Em X \right)^2                                                                                                                             \\
-    \Var (aX + b)                         & = a^2 \Var (X)                                                                                                                                                 \\
-    \Cov (X,Y)                            & = \Em XY - \Em X \Em Y                                                                                                                                         \\
-    \Var (X + Y)                          & = \Var (X) + \Var (Y) + 2 \Cov (X,Y)                                                                                                                           \\
-    \Em [X]                               & = \Em [ \Em [X \mid Y] ]                                                                                                                                       \\
-    \Var(Y)                               & = \Em [\Var(Y | X)]+\Var(\Em[Y | X])\vspace{-4mm}                                                                                                              \\
-    \left| \Em (X Y) \right|^2            & \leq \Em (X^2) \Em (Y^2)                                                                                                                                       \\
-    \left| \Cov (X Y) \right|^2           & \leq \Var (X) \Var (Y)                                                                                                                                         \\
-    \Pm \left( A \mid B \right)           & = \frac{\Pm \left( A \cap B \right)}{\Pm \left( B \right)}                                                                                                     \\
-    \tag{Bayes' Theorem} \Pm (A \mid B)   & = \frac{\Pm (B \mid A) \Pm (A)}{\Pm (B)}                                                                                                                       \\
-    \Pm \left( A_1 , \ldots , A_n \right) & = \Pm \left( A_1 \right) \Pm \left( A_2 \mid A_1 \right) \Pm \left( A_3 \mid A_1 , A_2 \right) \cdots \Pm \left( A_n \mid A_1 , A_2 , \ldots , A_{n-1} \right) \\
+    \Em (X)                                  & = \int_{0}^{\infty} \left( 1 - F(X) \right) \, dx                                                                                                              \\
+    \Em \left( aX + b \right)                & = a \Em X + b                                                                                                                                                  \\
+    \Em \left( g(X) + h(X) \right)           & = \Em g(X) + \Em h (X)                                                                                                                                         \\
+    \Var (X)                                 & = \Em X^2 - \left( \Em X \right)^2                                                                                                                             \\
+    \Var (aX + b)                            & = a^2 \Var (X)                                                                                                                                                 \\
+    \Cov (X,Y)                               & = \Em XY - \Em X \Em Y                                                                                                                                         \\
+    \Var (X + Y)                             & = \Var (X) + \Var (Y) + 2 \Cov (X,Y)                                                                                                                           \\
+    \Em [X]                                  & = \Em [ \Em [X \mid Y] ]                                                                                                                                       \\
+    \Var(Y)                                  & = \Em [\Var(Y | X)]+\Var(\Em[Y | X])\vspace{-4mm}                                                                                                              \\
+    \left| \Em (X Y) \right|^2               & \leq \Em (X^2) \Em (Y^2)                                                                                                                                       \\
+    \left| \Cov (X Y) \right|^2              & \leq \Var (X) \Var (Y)                                                                                                                                         \\
+    \Pm \left( A \mid B \right)              & = \frac{\Pm \left( A \cap B \right)}{\Pm \left( B \right)}                                                                                                     \\
+    \tag{Bayes' Theorem} \Pm (A \mid B)      & = \frac{\Pm (B \mid A) \Pm (A)}{\Pm (B)}                                                                                                                       \\
+    \Pm \left( A_1 , \ldots , A_n \right)    & = \Pm \left( A_1 \right) \Pm \left( A_2 \mid A_1 \right) \Pm \left( A_3 \mid A_1 , A_2 \right) \cdots \Pm \left( A_n \mid A_1 , A_2 , \ldots , A_{n-1} \right) \\
+    \sum_{i=1}^{n}\left(X_{i}-\mu\right)^{2} & = \sum_{i=1}^{n}\left(X_{i}-\bar{X}\right)^{2}+n(\mu-\bar{X})^{2}
 \end{align}
 
 Let $\Omega = \bigcup\limits_{i=1}^{n} B_{i}$ (that is $B_{i}$ partitions the sample space) then

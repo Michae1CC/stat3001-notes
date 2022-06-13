@@ -16,7 +16,7 @@
 There is also not much distinction between random variables and their realizations, both are written in lower case. Bayesian analysis usually consists of three main steps.
 
 \begin{itemize}
-    \item specify a prior belief or prior distribution $f(\bm{\theta})$ on the parameter $\bm{\theta}$. This represents our prior belief about $\bm{\theta}$ before looking at the data.
+    \item Specify a prior belief or prior distribution $f(\bm{\theta})$ on the parameter $\bm{\theta}$. This represents our prior belief about $\bm{\theta}$ before looking at the data.
     \item The likelihood (model) $f (\bm{x} \mid \bm{\theta})$ characterises how the distribution of $\bm{x}$ depends on $\bm{\theta}$.
     \item The posterior distribution of $\bm{\theta}$ is given by
           \[
@@ -31,7 +31,7 @@ Recall Baye's rule
 \]
 
 \begin{exam}[Coin tosses] \label{exam: coin_eg}
-    Suppose we tossed a coin $10$ times, and observe $S$ heads. What is the probability of $\theta$ of heads for this coin? To start we can specify a prior belief on this coin so that $\theta \sim \Uni [0,1]$ ,that is $f(\theta) = 1$ (all possible values of $\theta \in [0,1]$ have equal chance of occur). Next, suppose we observe $S=3$ heads out of $10$ tosses. The likelihood of the data is
+    Suppose we tossed a coin $10$ times, and observe $S$ heads. What is the probability of $\theta$ of heads for this coin? To start we can specify a prior belief on this coin so that $\theta \sim \Uni [0,1]$, that is $f(\theta) = 1$ (all possible values of $\theta \in [0,1]$ have equal chance of occur). Next, suppose we observe $S=3$ heads out of $10$ tosses. The likelihood of the data is
     \[
         f(x \mid \theta) = \binom{10}{3} \theta^3 (1-\theta)^{7} \propto \theta^3 (1-\theta)^{7}.
     \]
@@ -42,7 +42,7 @@ Recall Baye's rule
          & = \theta^3 (1-\theta)^{7} \cdot 1 \; \text{for} \; \theta \in [0,1] \\
          & \sim \Beta (\alpha = 4, \beta =8).
     \end{align*}
-    Suppose we started with a different prior and instead suspect $\theta$ to be around $0.5$, but we are still not exactly sure where we change our prior to be $f(\theta) \sim \Beta (3,3)$. But now we will use a more general form of the likelihood
+    Suppose we started with a different prior and instead suspect $\theta$ to be around $0.5$ where are change in the prior is made so that $f(\theta) \sim \Beta (3,3)$. Using a more general form of the likelihood
     \[
         f(x \mid \theta) \propto \theta^S (1-\theta)^{n-S}.
     \]
@@ -56,6 +56,45 @@ Recall Baye's rule
     \end{align*}
 \end{exam}
 
+\begin{exam}[Year 2021 Final, Q4] \label{exam: 2021_Q4}
+    Suppose $x_1 , x_2 , \ldots , x_n \sim \Geo (p)$ where $p \in [0,1]$ is unknown. Note that in this parametrization, x represents the number
+    of failures before the First success. Consider a prior distribution on $p$ given by $p \sim \Beta (\alpha , \beta)$ with pdf
+    \[
+        f(p) = \frac{1}{B(\alpha , \beta)} p^{\alpha - 1} (1-p)^{\beta - 1}, \quad p \in [0,1].
+    \]
+    First note that the likelihood is
+    \[
+        f(\bm{x} \mid p) = (1-p)^{\sum_i x_i} p^n
+    \]
+    where the MLE of $p$ can be computed as
+    \begin{align*}
+        \ln f(\bm{x} \mid p)                             & = \sum_i \ln (1-p) + n \ln p                         \\
+        \frac{\partial}{\partial p} \ln f(\bm{x} \mid p) & = - \frac{\sum_i x_i}{1-p} + \frac{n}{p}             \\
+        0                                                & = - \frac{\sum_i x_i}{1-\hat{p}} + \frac{n}{\hat{p}} \\
+        0                                                & = (- \sum_i x_i) \hat{p} + n (1-\hat{p})             \\
+        n                                                & = ( \sum_i x_i + n) \hat{p}                          \\
+        \hat{p}                                          & = \frac{n}{n + n \bar{x}}.
+    \end{align*}
+    The posterior can then be computed as
+    \begin{align*}
+        f(p \mid \bm{x}) \
+         & \propto f(p) f(\bm{x} \mid p)                       \\
+         & = p^{n + \alpha - 1} (1-p)^{\sum_i x_i + \beta - 1}
+    \end{align*}
+    so that $p \mid \bm{x} \sim \Beta \left( n + \alpha , \sum_i x_i + \beta \right)$. Since the posterior distribution and prior distribution belong to the same class of distributions (both beta distributions), $p \sim \Beta (\alpha , \beta)$ is indeed conjugate for this problem. The mean of the posterior is then
+    \[
+        \EE \left[ p \mid \bm{x} \right] = \frac{n + \alpha}{n + \alpha + \sum_i x_i + \beta}.
+    \]
+    As $n \to \infty$
+    \[
+        \lim_{n \to \infty} \frac{n + \alpha}{n + \alpha + \sum_i x_i + \beta} = \frac{1}{1 + \bar{x}} = \frac{n}{n + n \bar{x}}.
+    \]
+    Thus as $n \to \infty$, the posterior mean will approach the MLE of $p$. In other words, our prior information becomes less significant as $n \to \infty$. When $\alpha , \beta \to \infty$
+    \[
+        \lim_{(\alpha , \beta) \to (0,0)} \frac{n + \alpha}{n + \alpha + \sum_i x_i + \beta} = \frac{n}{n + n \bar{x}}
+    \]
+    so, again, we find the posterior mean will approach the MLE of $p$. The effect of the prior parameter $\alpha$ and $\beta$ on the posterior mean is like observing $\alpha$ experiments with $\beta$ total failures prior to our current experiment.
+\end{exam}
 
 \begin{exam}[Bayesian Inference for Normal Data] \label{exam: bay_norm}
     Suppose $x_1 , x_2 , \ldots , x_n \sim \Nor \left( \mu , \sigma^2 \right)$ where $\sigma^2$ is known so only $\mu$ is unknown. Let's try $\Nor \left( \mu_0 , \sigma_0^2 \right)$ for some hyperparamters $\mu_0$ and $\sigma_0^2$. To specify the likelihood of the data, from the question we know that
@@ -89,7 +128,7 @@ Recall Baye's rule
          & = \left( \frac{n}{\sigma^2} + \frac{1}{\sigma_0^2} \right)^{-1} \\
          & = \frac{\sigma^2 \sigma_0^2}{n \sigma_0^2 + \sigma^2}.
     \end{align*}
-    So the mean/mode is a weighted avergae between the sample and $\bar{x}$ and our prior mean $\mu_0$, with the weight being $n \sigma_0^2$ and $\sigma^2$, respectively. Observe
+    So the mean/mode is a weighted average between the sample and $\bar{x}$ and our prior mean $\mu_0$, with the weight being $n \sigma_0^2$ and $\sigma^2$, respectively. Observe
     \begin{align*}
         \EE (\mu \mid x) \
          & = \frac{n \bar{x} \sigma_0^2 + \sigma^2 \mu_0}{n \sigma_0^2 + \sigma^2}                                 \\
@@ -152,6 +191,219 @@ Recall Baye's rule
     \begin{align*}
         f(\mu,\sigma^2) \
          & = f(\mu) f(\sigma^2)                                                                                                                                                                                                        \\
-         & = \beta_0^{\alpha_0} \left( \sigma^2 \right)^{-\alpha_0 - 1} \exp \left( - \beta_0 / \sigma^2 \right) \left( \frac{1}{\sqrt{2 \pi \sigma^2}} \right) \exp \left( - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right)
+         & = \beta_0^{\alpha_0} \left( \sigma^2 \right)^{-\alpha_0 - 1} \exp \left( - \beta_0 / \sigma^2 \right) \left( \frac{1}{\sqrt{2 \pi \sigma^2}} \right) \exp \left( - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right) \\
+         & = \exp \left( - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right) \left( \sigma^2 \right)^{-\alpha_0 - 1}  \exp \left( - \beta_0 / \sigma^2 \right).
+    \end{align*}
+    The likelihood is then
+    \begin{align*}
+        f(\bm{x} \mid \mu,\sigma^2) & \propto \left( \frac{1}{\sigma^2} \right)^{n/2} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 \right)
+    \end{align*}
+    and finally, the posterior is
+    \begin{align*}
+        f(\mu,\sigma^2 \mid \bm{x}) \
+         & \propto f(\bm{x} \mid \mu,\sigma^2) \cdot f(\mu,\sigma^2)                                                                                                                                             \\
+         & \propto \left( \sigma^2 \right)^{-n/2 + \alpha_0 + 1} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 - \beta_0 / \sigma^2 \right).
+    \end{align*}
+    Unfortunately, this joint distribution does not correspond to any common distribution. To sample from this distributions we can employ the Gibbs sampling methods. We find
+    \begin{align*}
+        f (\mu, \sigma^2 \mid x)
+         & \
+        \propto f (\mu \mid \sigma^2 , x)                                                                                                                  \\
+         & = \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right)                     \\
+         & \sim \Nor \left( \frac{\sigma_0 n \bar{x} + \mu \sigma^2}{n \sigma_0^2 + \sigma^2}, \frac{\sigma^2 \sigma_0^2}{n \sigma_0^2 + \sigma^2} \right)
+    \end{align*}
+    and
+    \begin{align*}
+        f (\sigma^2 \mid \mu, x)
+         & \
+        \propto f (\mu, \sigma \mid x)                                                                                                                                                                          \\
+         & \propto \left( \sigma^2 \right)^{-n/2 + \alpha_0 + 1} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 - \beta_0 / \sigma^2 \right) \\
+         & \propto \left( \sigma^2 \right)^{-n/2 + \alpha_0 + 1} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2- \beta_0 / \sigma^2 \right)                                                     \\
+         & \sim \Invgamma \left( \alpha_0 + \frac{n}{2}, \beta_0 + \frac{1}{2} \sum_{i=1}^{n} (x_i - \mu)^2 \right).
+    \end{align*}
+    So now, we can use Gibbs sampling to generate (approximate) samples from the joint posterior $f(\mu , \sigma^2 \mid x)$. Firts we start with initial values $\mu^{(0)}$ and $\sigma^{(0)} > 0$. Then we repeat the following $K$ times: where on the $k^{th}$ we compute
+    \begin{align*}
+        \mu^{(k+1)}        & \sim \Nor \left( \frac{\sigma_0 n \bar{x} + \mu {\sigma^2}^{(k)}}{n \sigma_0^2 + {\sigma^2}^{(k)}}, \frac{{\sigma^2}^{(k)} \sigma_0^2}{n \sigma_0^2 + {\sigma^2}^{(k)}} \right) \\
+        {\sigma^2}^{(k+1)} & \sim \Invgamma \left( \alpha_0 + \frac{n}{2}, \beta_0 + \frac{1}{2} \sum_{i=1}^{n} (x_i - {\mu}^{(k+1)})^2 \right).
+    \end{align*}
+    For large $k \geq T$ (burn in period), we have $\left\{ \mu^{(k)}, {\sigma^{2}}^{(k)}_{K \geq T} \sim f(\mu , \sigma^2 \mid x) \right\}$ approximately.
+\end{exam}
+
+\begin{exam}[Un informative prior for $\mu$ and $\sigma^2$] \label{exam: bay_norm_4}
+    Suppose $x_1 , x_2 , \ldots , x_n \sim \Nor \left( \mu , \sigma^2 \right)$ where both $\mu$ and $\sigma^{2}$ is unknown. Let's consider a joint prior $f (\mu , \sigma^2) \propto \frac{1}{\sigma^2}$ for $\mu \in \RR$ and $\sigma^2 > 0$. To start we have
+    \begin{align*}
+        f (\mu , \sigma^2) \
+         & \propto \frac{1}{\sigma^2}                                                                                                                                                        \\
+        f(x \mid \mu , \sigma^2) \
+         & \propto \left( \sigma^{2} \right)^{-n/2 + \alpha_0 + 1} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right)
+    \end{align*}
+    and
+    \begin{align*}
+        f (\mu , \sigma^2 \mid x) \
+         & \propto f(x \mid \mu , \sigma^2) f (\mu , \sigma^2)                                                                                                           \\
+         & = \left( \sigma^{2} \right)^{-n/2} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 - \frac{1}{2\sigma^2} \left( \mu - \mu_0 \right)^2 \right).
+    \end{align*}
+    Let's start with the marginal posterior,
+    \begin{align*}
+        f (\sigma^2 \mid x) \
+         & = \int_{-\infty}^{\infty} f(\mu , \sigma^2 \mid x) d \; \mu                                                                                                                   \\
+         & = (\sigma^2)^{\frac{n+1}{2}} \exp \left( - (\frac{n-1}{2 \sigma^2})S^2 \right)  \int_{-\infty}^{\infty} \exp \left( - \frac{n}{2 \sigma^2} (\bar{x} - \mu)^2 \right) d \; \mu \\
+    \end{align*}
+    where $\exp \left( - \frac{n}{2 \sigma^2} (\bar{x} - \mu)^2 \right)$ is the kernel of $\Nor \left( \bar{x}, \frac{\sigma^2}{n} \right)$ so that
+    \begin{align*}
+         & = (\sigma^2)^{\frac{n+1}{2}} \exp \left( - (\frac{n-1}{2 \sigma^2})S^2 \right)  \int_{-\infty}^{\infty} \exp \left( - \frac{n}{2 \sigma^2} (\bar{x} - \mu)^2 \right) d \; \mu \\
+         & = (\sigma^2)^{\frac{n+1}{2}} \exp \left( - (\frac{n-1}{2 \sigma^2})S^2 \right)  \left( \frac{\sigma^2}{n} \right)^{\frac{1}{2}} \left( 2 \pi \right)^{\frac{1}{2}}            \\
+         & \propto (\sigma^2)^{\frac{n+1}{2}} \exp \left( - (\frac{n-1}{2 \sigma^2})S^2 \right)                                                                                          \\
+         & \propto \Invgamma \left( \frac{n-1}{2} , \left( \frac{n-1}{2} S^2 \right) \right)
+    \end{align*}
+    and
+    \begin{align*}
+        f(\mu \mid x) \
+         & = \int_{0}^{\infty} f(\mu , \sigma^2 \mid x) \; d \sigma^2                                                                               \\
+         & = \int_{0}^{\infty} (\sigma^2)^{-(\frac{n}{2} + 1)} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 \right) \; d \sigma^2 \\
+    \end{align*}
+    where $(\sigma^2)^{-(\frac{n}{2} + 1)} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2- \beta_0 / \sigma^2 \right)$ is the kernel of $\Invgamma \left( n/2 , \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 \right)$ meaning
+    \begin{align*}
+         & = \int_{0}^{\infty} (\sigma^2)^{-(\frac{n}{2} + 1)} \exp \left( - \frac{1}{2\sigma^2} \sum_{i=1}^{n} (x_i - \mu)^2 \right) \; d \sigma^2 \\
+         & = \Gamma (n/2) \left[ \frac{1}{2} \sum_{i=1}^{n} (x_i - \mu)^2 \right]^{-n/2}                                                            \\
+         & \propto \left[ \sum_{i=1}^{n} (x_i - \mu)^2 \right]^{-n/2}                                                                               \\
+         & \propto \left[ (n-1) S^2 + n (\bar{x} - \mu)^2 \right]^{-n/2}                                                                            \\
+         & \propto \left[ 1 + \frac{1}{n+1} \left( \frac{\bar{x} - \mu}{S / \sqrt{n}} \right) \right]^{-n/2}
+    \end{align*}
+    This is the kernel of the non-standard t-distribution with $n-1$ degrees of freedom. Recall that
+    \[
+        \frac{\bar{x} - \mu}{S / \sqrt{n}} \sim t_{n-1}
+    \]
+    so $\frac{\mu - \bar{x}}{S / \sqrt{n}} \sim t_{n-1}$ and we write $\mu \mid x \sim t_{n-1} \left( \bar{x} , S^2 / n \right)$. Observe, that the joint prior posterior can be written as
+    \[
+        \sigma^2 \mid x \sim \Invgamma \left( \frac{n-1}{2} , \left( \frac{n-1}{2} S^2 \right) \right)
+    \]
+    and
+    \[
+        \frac{\mu - \bar{x}}{S / \sqrt{n}} \mid x \sim t_{n-1} \left( \bar{x} , S^2 / n \right)
+    \]
+    independently.
+\end{exam}
+
+The Bayesian normal model can be generalised to a Bayesian linear regression model:
+\[
+    \bm{y}_i = \bm{x}_i \bm{\beta} + \epsilon_i,
+\]
+for $1 \leq i \leq n$ where $\varepsilon_i \sim \Nor \left( 0, \sigma^2 \right)$ and $\bm{x}_i \in \RR$ (the vectors of covariates) and $\bm{\beta} \in \RR^p$ is a vector of regression coefficients. What are the parameters in this model? We have two, $\bm{\beta}$ and $\sigma^2$. We can set the prior distribution on our model parameters
+\begin{align*}
+    \bm{\beta} & \sim \Nor \left( \bm{\beta}_0, \bm{\Sigma}_0 \right) \\
+    \sigma^2   & \sim \Invgamma \left( \alpha_0 , \beta_0 \right)
+\end{align*}
+and $\bm{\beta}$ and $\sigma^2$ are independent. The likelihood of the data is set to be
+\begin{align*}
+    f(y \mid x, \bm{\beta}, \sigma^2) & \propto \left( \frac{1}{\sigma^2} \right)^{\frac{n}{2}} \exp \left( - \frac{1}{2 \sigma^2} \sum_{i=1}^{n} \left( y_i - \bm{x}_i^{\intercal} \bm{\beta} \right)^2 \right)
+\end{align*}
+which means the posterior turns out to be
+\begin{align*}
+    f \left( \bm{\beta} , \sigma^2 \mid \bm{x} , y \right) \
+     & \propto f \left( y \mid \bm{\beta} , \sigma^2 \bm{x} \right)                                                                                                                                                                                                                                            \\
+     & = (\sigma^2)^{-(\alpha_0 + n/2 -1)} \exp \left( - \frac{1}{2 \sigma^2} \sum_{i=1}^{n} \left( y_i - \bm{x}_i^{\intercal} \bm{\beta} \right)^2 - \frac{1}{2} \left( \bm{\beta - \bm{\beta}_0} \right)^{\intercal} \bm{\Sigma}_0 \left( \bm{\beta - \bm{\beta}_0} \right) - \frac{\bm{\beta}_0}{2}\right).
+\end{align*}
+We can sample from this distribution using Gibbs sampling method, so let's find the conditional posteriors:
+\begin{align*}
+    f ( \sigma^2 \mid \bm{x} , y, \bm{\beta})
+     & \propto (\sigma^2)^{-(\alpha_0 + n/2 -1)} \exp \left( - \frac{1}{2 \sigma^2} \sum_{i=1}^{n} \left( y_i - \bm{x}_i^{\intercal} \bm{\beta} \right)^2 - \frac{\beta_0}{\sigma^2}\right) \\
+     & \sim \Invgamma \left( \alpha_0 + n/2, \frac{1}{2} \sum_{i=1}^{n} \left( y_i - \bm{x}_i^{\intercal} \bm{\beta} \right)^2 + \beta_0 \right)
+\end{align*}
+and
+\begin{align*}
+    f ( \mu \mid \sigma^2 , \bm{x} , y, \bm{\beta})
+     & \propto f (\bm{\beta}, \sigma^2 \mid \bm{x} , y)                                                                                             \\
+     & \vdots                                                                                                                                       \\
+     & \sim \Nor \left( \EE \left( \bm{\beta} \mid \sigma^2 , \bm{x} , y \right), \VV \left( \bm{\beta} \mid \sigma^2 , \bm{x} , y \right) \right).
+\end{align*}
+So we can now use Gibbs sampling to obtain update for $\sigma^2$ and $\bm{\beta}$ to give approximate samples from our joint posterior.
+\begin{defe}[Bayeisan Credible Interval] \label{defe: bci}
+    A $100 (1 - \alpha)$ credible interval for $\theta$ is an $(L,U)$ such that
+    \[
+        1 - \alpha = \PP \left( L \leq \theta \leq U \mid x \right) =
+        \left\{ \begin{matrix}
+            \int_L^U f(\theta \mid x) \; d \theta  & \text{continuous} \\
+            \sum_{\theta = L}^{U} f(\theta \mid x) & \text{discrete}
+        \end{matrix}
+        \right.
+    \]
+\end{defe}
+
+\begin{exam}[Credible Interval Example]
+    Let $X_1 , \ldots , X_n \iid \Nor \left( \mu , \sigma^2 \right)$. Suppose $\sigma^2 = 4$ and a prior for $\mu$ is $\mu \sim \Nor \left( 0,1 \right)$. To find $100 (1 - \alpha) \%$ credible interval for $\mu$, from a previous lecture
+    \[
+        \mu \mid x \sim \Nor \left( \frac{\bar{x}}{1 + \frac{4}{n}}, \frac{1}{1 + \frac{4}{n}} \right).
+    \]
+    We need to find $(L,U)$ such that
+    \begin{align*}
+        1 - \alpha \
+         & = \PP\left( L \leq \mu \leq U \mid x \right)                                                                                                                             \\
+         & = \PP\left( -z_{\alpha/2} \leq \frac{\mu - \frac{\bar{x}}{1 + 4/n}}{\sqrt{\frac{1}{1+4/n}}} \leq z_{\alpha/2}  \mid x \right)                                            \\
+         & = \PP\left( \frac{\bar{x}}{1 + 4/n} -z_{\alpha/2} \frac{1}{\sqrt{1 + 4/n}} \leq \mu \leq \frac{\bar{x}}{1 + 4/n} +z_{\alpha/2} \frac{1}{\sqrt{1 + 4/n}}  \mid x \right).
+    \end{align*}
+    Thus the $100 (1 - \alpha) \%$ credible interval for $\mu$ is $\frac{\bar{x}}{1 + 4/n} \pm z_{\alpha/2} \frac{1}{\sqrt{1 + 4/n}}$. If $f(\theta \mid x)$ is not easy to work with we can use MCMC sampling to generate an approximate sample for it, and then find the appropriate quantiles from the sample.
+\end{exam}
+
+\subsubsection*{Bayesian Multinomial Model}
+
+Let's look at a model for categorical data, in general if we have $K \geq 2$ classes, then we have multinomial data. In this case, the data $\bm{X} = (X_1 , X_2 , \ldots , X_K)$, which is a vector of counts of each category out of sample of $n = \sum_i X_i$. What is the probability function of $X \sim \Multi_K (n,\bm{p})$
+
+\[
+    f (x_1 , \ldots , x_k) = \PP (X_1 = x_1, \ldots , X_k = x_k) =
+    \frac{n!}{x_1 ! x_2 ! \cdots x_k !} \prod_i p_i^{x_i} \propto \prod_i p_i^{x_i}.
+\]
+Note that $\sum_i x_i = n$ and $\sum_i p_i = 1$, which means $x_j$ or $p_j$ could be written as a linear combination of the other $x_i$s or $p_i$s. What would be a good prior for distribution for $\bm{p}$. Dirichlet distribution is typically used as a prior here.
+
+\begin{defe}[Dirichlet Distribution]
+    We say that a random vector $\bm{p} = \left( p_1 , \ldots , p_k \right)$ has a Dirichlet distribution with shape parameters $\bm{\alpha} = \left( \alpha_1 , \alpha_2 , \ldots, \alpha_k \right)$ if its density is in the form
+    \[
+        f(\bm{p} \mid \bm{\alpha}) \propto \prod_{i=1}^k p_i^{\alpha_i - 1} , \quad \text{for} \; 0 \leq p_i \leq 1 \; \text{and} \; \sum_i p_i =1.
+    \]
+    Alternatively, for a vector $\bm{z} = \left( z_1 , z_2 , \ldots , z_m \right)$ is said to follow a Dirichlet distribution with shape parameters $\bm{\alpha} = (\alpha_1, \alpha_2 , \ldots , \alpha_{m+1})$ if its density is
+    \[
+        f(\bm{z} \mid \alpha) \propto \left( \prod_{i=1}^m z_i^{\alpha_i - 1} \right) \left( 1 - \sum_{i=1}^m z_i \right)^{\alpha_{m+1} - 1}
+    \]
+    for $0 \leq z_i \leq 1$ and $\sum_{i=1}^{m} z_i \leq 1$. We write $\bm{z} \sim \Dir \left( \alpha_1 , \alpha_2 , \ldots , \alpha_{m+1} \right)$.
+\end{defe}
+What's s special about the Dirichlet distribution? Let's look at the special case of $k=2$, then
+\[
+    f(\bm{p} \mid \bm{\alpha}) \propto p_1^{\alpha_1 - 1} p_2^{\alpha_2 - 1} = p_1^{\alpha_1 - 1} (1-p_1)^{\alpha_2 - 1}
+\]
+for $0 \leq p_1 \leq 1$. This is the $\Beta (\alpha_1 , \alpha_2)$ distribution and so the Dirichlet distribution is a generalization of the Beta distribution. Since $p_k = 1 - \sum_{i=1}^{k-1} p_i$ we can infact specify a Dirichlet distribution by replacing the last component $p_k$ with $1 - \sum_{i=1}^{k-1} p_i$. A special case of the Dirichlet distribution with parameters $\alpha_i = 1, \; 0 \leq i \leq k$ is a uniform distribution over the set of all multinomial probabilities of $K$ categories, i.e., $f(p) \propto 1$. This is not the same as setting $\alpha_i = 1/K, \; 0 \leq i \leq k$ since this is just one distribution on $K$ categories.
+
+\subsubsection*{Bayesian Inference for the Multinomial Model}
+
+If the data $\bm{x} = \left( x_1 , x_2 , \ldots , x_K \right) \sim \Multi_K (n,\bm{p})$ with prior $p \sim \Dir \left( \alpha_1 , \alpha_2 , \ldots , \alpha_K \right)$, then our posterior is
+\begin{align*}
+    f ( p_1 , p_2 , \ldots , p_k \mid \bm{x} ) \
+     & \propto f (\bm{x} \mid \bm{p}) f(\bm{p})                           \\
+     & \propto \prod_{i=1}^{K} p_i^{x_i} \prod_{i=1}^{K} p_i^{\alpha_i-1} \\
+     & \propto \prod_{i=1}^{K} p_i^{x_i + \alpha_i - 1}                   \\
+     & \sim \Dir \left( \alpha_1 + x_1, \ldots , \alpha_K + x_K \right)
+\end{align*}
+From the form of the posterior distribution, what is the effect of our prior like? In terms of the posterior mode:
+\begin{align*}
+    \left( \frac{\alpha_1 + x_1 - 1}{\sum_i \alpha_i + x_i - 1}, \frac{\alpha_2 + x_2 - 1}{\sum_i \alpha_i + x_i - 1}, \ldots , \frac{\alpha_K + x_K - 1}{\sum_i \alpha_i + x_i - 1} \right)
+\end{align*}
+The effect of our priors parameters, $\alpha_i$, is like observing $(\alpha_i - 1)$ counts in each category prior to our current count. In particular, for our non-informative prior $(\alpha_i = 1)$, then in terms of the posterior mode, it is like observing $0$ counts in each category prior to our current experiment.
+
+\subsubsection*{Sampling from the Dirichlet Distribution}
+
+How do we sample from the Dirichlet distribution?
+
+\begin{thm}[Sampling from a Dirichlet distribution] \label{thm: samp_Dirichlet}
+    Let $Y_i \sim \Gamma (\alpha_i , 1)$. Define
+    \[
+        Z_j = \frac{Y_j}{\sum_{i=1}^K Y_i}
+    \]
+    for $1 \leq j \leq K$. Then $\bm{Z} = \left( Z_1 , \ldots , Z_k \right) \sim \Dir \left( \alpha_1 , \ldots , \alpha_k \right)$. Using the textbook notation $\bm{Z} = \left( Z_1 , \ldots , Z_{k-1} \right) \sim \Dir \left( \alpha_1 , \alpha_2 , \ldots , \alpha_k \right)$.
+\end{thm}
+
+\begin{exam}[Credible Interval Example]
+    Taken from Example 8.3 of Dirk. Suppose we sample $n=501$ people randomly from the same population and ask them if they dislike, and neutral or like anti-smoking campaigns. Gender is also recorded. For male counts $53,57$ and $147$ were against, neutral and encouraging of these campaigns respectively. For female counts $93,38$ and $113$ were against, neutral and encouraging of these campaigns respectively. Let $\bm{p} = \left( p_{11} , p_{12}, p_{13} , p_{21} , p_{22}, p_{23}  \right)$ be the underlying probabilities of each genders position on the campaigns. For our prior beliefs we can set $\bm{p} \sim \Dir (1,1,1,1,1,1)$, i.e., the uniform belief over all the probability vectors of length $6$. The likelihood for the data $x$ can be given as $x \mid p \sim \Multi_6 (n=501,\bm{p})$ so that $f(\bm{x} \mid \bm{p}) \propto p_{11}^{53} p_{12}^{57} p_{13}^{147} p_{21}^{93} p_{22}^{38} p_{23}^{113}$. Our posterior belief is then
+    \begin{align*}
+        f (\bm{p} \mid \bm{x}) \
+         & \propto \text{likelihood} \times \text{prior}
     \end{align*}
 \end{exam}

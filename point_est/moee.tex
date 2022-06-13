@@ -33,17 +33,17 @@ It is important to note that
     \end{equation*}
     and hence, its MSE is given by
     \begin{equation*}
-        \EE \left( \hat{\sigma}^2 - \sigma^2 \right) = \frac{2(n-1)\sigma^4}{n^2} + \left( \frac{n-1}{n} \sigma^2 - \sigma^2 \right)^2 = \left( \frac{2n-1}{n^2} \right) \sigma^4.
+        \EE \left( \hat{\sigma}^2 - \sigma^2 \right)^2 = \frac{2(n-1)\sigma^4}{n^2} + \left( \frac{n-1}{n} \sigma^2 - \sigma^2 \right)^2 = \left( \frac{2n-1}{n^2} \right) \sigma^4.
     \end{equation*}
     Thus we have
     \begin{equation*}
-        \EE \left( \hat{\sigma}^2 - \sigma^2 \right)^2 = \left( \frac{2n-1}{n^2} \right) \sigma^4  < \left( \frac{2}{n-1} \right) \sigma^4 = \EE \left( \hat{\sigma}^2 - \sigma^2 \right)^2,
+        \EE \left( \hat{\sigma}^2 - \sigma^2 \right)^2 = \left( \frac{2n-1}{n^2} \right) \sigma^4  < \left( \frac{2}{n-1} \right) \sigma^4 = \EE \left( S^2 - \sigma^2 \right)^2,
     \end{equation*}
     showing that $\hat{\sigma}^2$ has a smaller MSE than $S^2$. Thus, by trading off variance for bias, the MSE is improved.
 \end{exam}
 
 \begin{defe}[Best Unbiased Estimator] \label{defe: umvu}
-    An estimator $W^{\ast}$ is a {\bf best unbiased estimator} of $\tau (\theta)$ if it satisfies $EE_{\theta} W^{\ast} = \tau (\theta)$ for all $\theta$ and, for any other estimator $W$ with $\EE_{\theta} W = \tau (\theta)$, we have $\Var_{\theta} W^{\ast} \leq \Var_{\theta} W$ for all $\theta$. $W^{\ast}$ is also called a {\bf uniform minimum variance unbiased estimator} (UMVUE) of $\tau (\theta)$ \cite{CasellaGeorge2001SI}*{page 334}.
+    An estimator $W^{\ast}$ is a {\bf best unbiased estimator} of $\tau (\theta)$ if it satisfies $\EE_{\theta} W^{\ast} = \tau (\theta)$ for all $\theta$ and, for any other estimator $W$ with $\EE_{\theta} W = \tau (\theta)$, we have $\Var_{\theta} W^{\ast} \leq \Var_{\theta} W$ for all $\theta$. $W^{\ast}$ is also called a {\bf uniform minimum variance unbiased estimator} (UMVUE) of $\tau (\theta)$ \cite{CasellaGeorge2001SI}*{page 334}.
 \end{defe}
 
 \begin{thm}[Cramer-Rao Inequality] \label{thm: cri_neq}
@@ -124,7 +124,7 @@ It is important to note that
     \begin{equation*}
         \MSE (T) \geq \left[ 1 + \frac{\partial}{\partial \theta} b(\theta) \right]^2 \cdot \calJ^{-1} (\theta) + [b(\theta)]^2
     \end{equation*}
-    where $\calJ (\theta)$ is the Fisher information matrix (\Cref{defe: fim}). To start, since $b(\theta) = \EE [\theta] - \theta$ we have
+    where $\calJ (\theta)$ is the Fisher information matrix (\Cref{defe: fim}). To start, since $b(\theta) = \EE [T] - \theta$ we have
     \begin{equation*}
         \EE [T] = \theta + b(\theta) \triangleq g(\theta)
     \end{equation*}
@@ -269,11 +269,11 @@ It is important to note that
     \end{equation*}
     showing that $\frac{n+1}{n}Y$ is an unbiased estimator of $\theta$. We next calculate
     \begin{align*}
-        \VV_{\theta} \left( \frac{n+1}{n} Y \right) \ 
-        & = \left( \frac{n+1}{n} \right)^2 \VV_{\theta} (Y)                                                             \\
-        & = \left( \frac{n+1}{n} \right)^2 \left( \EE_{\theta} Y^2 - \left( \frac{n}{n+1} \theta \right)^2 \right)      \\
-        & = \left( \frac{n+1}{n} \right)^2 \left( \frac{n}{n+2}\theta^2 - \left( \frac{n}{n+1} \theta \right)^2 \right) \\
-        & = \frac{1}{n(n+2)} \theta^2,
+        \VV_{\theta} \left( \frac{n+1}{n} Y \right) \
+         & = \left( \frac{n+1}{n} \right)^2 \VV_{\theta} (Y)                                                             \\
+         & = \left( \frac{n+1}{n} \right)^2 \left( \EE_{\theta} Y^2 - \left( \frac{n}{n+1} \theta \right)^2 \right)      \\
+         & = \left( \frac{n+1}{n} \right)^2 \left( \frac{n}{n+2}\theta^2 - \left( \frac{n}{n+1} \theta \right)^2 \right) \\
+         & = \frac{1}{n(n+2)} \theta^2,
     \end{align*}
     which is uniformly smaller than $\frac{\theta^2}{n}$. This indicates that the Cramer-Rao Theorem is not applicable to this pdf. To see this is so, we can use the Leibnitz's Rule which states that if $f(x , \theta), a(\theta)$ and $b(\theta)$ are differentiable with respect to $\theta$, then
     \begin{equation*}

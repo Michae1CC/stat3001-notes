@@ -25,7 +25,7 @@
 \end{defe}
 
 \begin{thm} \label{thm: sufficient_statistic_ratio}
-    If $p(\bm{x} \mid \theta)$ is the joint pdf or pmf of $\bm{X}$ and $q(\theta \mid \theta)$ is the pdf or pmf of $T(\bm{X})$, then $T(\bm{X})$ is a sufficient statistic for $\theta$ if, for every $\bm{x}$ in the sample space, the ratio $p(\bm{x} \mid \theta) / q(T(\bm{x}) \mid \theta)$ is a constant function of $\theta$ \cite{CasellaGeorge2001SI}*{page 274}.
+    If $p(\bm{x} \mid \theta)$ is the joint pdf or pmf of $\bm{X}$ and $q(t \mid \theta)$ is the pdf or pmf of $T(\bm{X})$, then $T(\bm{X})$ is a sufficient statistic for $\theta$ if, for every $\bm{x}$ in the sample space, the ratio $p(\bm{x} \mid \theta) / q(T(\bm{x}) \mid \theta)$ is a constant function of $\theta$ \cite{CasellaGeorge2001SI}*{page 274}.
 \end{thm}
 
 \begin{thm}[Factorization Theorem] \label{thm: factorization_theorem}
@@ -198,7 +198,7 @@
 \begin{exam}[Binomial Complete Statistic] \label{exam: bin_comp_stat}
     Example taken from \cite{CasellaGeorge2001SI}*{page 285}. Suppose that $T$ has a $\Bin (n,p)$ distribution, $0<p<1$. Let $g$ be a function such that $\EE_{p} g(T) = 0$. Then
     \begin{align*}
-        0 = \EE_{p} g(T) & = \sum_{t=0}^{n} g(t) \binom{n}{t} p^{t} (1-p)^{n-1}                        \\
+        0 = \EE_{p} g(T) & = \sum_{t=0}^{n} g(t) \binom{n}{t} p^{t} (1-p)^{n-t}                        \\
                          & = (1-p)^n \sum_{t=0}^{n} g(t) \binom{n}{t} \left( \frac{p}{1-p} \right)^{t}
     \end{align*}
     for all $p$, $0<p<1$. The factor $(1-p)^n$ is not 0 for any $p$ in this range. Thus it must be that

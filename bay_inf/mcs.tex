@@ -25,7 +25,7 @@ Note that for the ordered sample $x_{(1)} < x_{(2)} < \cdots < x_{(N)}$,
 
 assuming for the sake of simplicity that all $\left\{ x_i \right\}$ take on different values. If instead of deterministic $\left\{ x_i \right\}$ we take random $X_i$, then $F_N (x)$ becomes random as well. To distinguish between the deterministic and the random case, let us denote the random empirical cdf by $\hat{F}_{N} (x)$. We now have
 \begin{equation*}
-    \PP \left[ \hat{F}_{N} (x) = \frac{i}{N} \right] = \PP \left[ X_{(i)} \leq x , X_{(i+1)}  x \right] = \binom{N}{i} \left( F(x) \right)^{i} \left( 1 - F(x) \right)^{N-i}
+    \PP \left[ \hat{F}_{N} (x) = \frac{i}{N} \right] = \PP \left[ X_{(i)} \leq x , X_{(i+1)}  > x \right] = \binom{N}{i} \left( F(x) \right)^{i} \left( 1 - F(x) \right)^{N-i}
 \end{equation*}
 \cite{KroeseDirkP2013SMaC}*{page 198}. The above equation can be summarized as $N \hat{F}_{N} (x) \sim \Bin (N, F(x))$. Consequently,
 \begin{align*}
@@ -101,7 +101,7 @@ Essentially, the Gaussian kernel is just an equally weighted $\frac{1}{N}$ norma
 \begin{equation*}
     h_{\text{Rot}} = \left( \frac{4S^5}{3N} \right)^{4/5}
 \end{equation*}
-called the Silverman's rule of thumb where $S^2$ is the variance. This is based on a theoretical analysis of the discrepancy between $f_n (x;h)$ and the true pdf, as $n \to \infty$. This rule f thumb is best suited when the underlying data is roughly normal-looking (i.e unimodel and symmeteric). A more recent bandwidth selection methods \cite{10.1214/10-AOS799}, called the theta KDE, adaptively changes the bandwidth.
+called the Silverman's rule of thumb where $S^2$ is the variance. This is based on a theoretical analysis of the discrepancy between $f_n (x;h)$ and the true pdf, as $n \to \infty$. This rule of thumb is best suited when the underlying data is roughly normal-looking (i.e unimodel and symmeteric). A more recent bandwidth selection methods \cite{10.1214/10-AOS799}, called the theta KDE, adaptively changes the bandwidth.
 
 \subsubsection*{Bootstrap Method}
 
@@ -162,7 +162,7 @@ which is simply the sample mean of $\left\{ H_i^{\ast} \right\}$. Similarly, the
 
 \subsubsection*{Markov Chain Monte Carlo}
 
-All of the sampling methods so far require us to know the explicit form of the distribution we are sampling from. For example, we know how to sample from $\Uni [0,1], \Nor (\mu , \sigma^2), \ldots , F_n$. But often we want to sample from a distribution $F$ for which we don't know the exact form. However, in a special case, we may know $F$ up to a normalizing constant, or related to some other known function.
+All of the sampling methods so far require us to know the explicit form of the distribution we are sampling from. For example, we know how to sample from $\Uni [0,1], \Nor (\mu , \sigma^2), \ldots , F_n$. But often we want to sample from a distribution $F$ for which we don't know the exact form. In a special cases, we may know $F$ up to a normalizing constant, or related to some other known function.
 
 \begin{exam} \label{exam: mcmc_intro}
     Consider sampling from the distribution
@@ -178,15 +178,21 @@ This is called Markov Chain Monte Carlo (MCMC). We {\it could} try and integrate
     A {\bf Markov Chain} is a collection of random variables $\left\{ X_t : t = 0,1,\ldots \right\}$ indexed by $t$ such that $(X_{t+1} \mid X_{t} , X_{t-1} \mid X_{0}) = (X_{t+1} \mid X_{t})$ for all $t$. This is called the {\bf Markov Property}.
 \end{defe}
 
-To specify a Markov Chain we need to things:
+To specify a Markov Chain we need to define a few things:
 \begin{itemize}
-    \item the distribution of $X_0$, called the initial distribution of a MC
-    \item the probability of getting from one state to another. That is probability of getting from state $y$ when we are currently at the state $x$, $q (y \mid x)$ (the transition probability).
+    \item The distribution of $X_0$, called the initial distribution of a MC
+    \item The probability of getting from one state to another. That is probability of getting from state $y$ when we are currently at the state $x$, $q (y \mid x)$ (the transition probability).
 \end{itemize}
 Both of these together will complete determine the distribution of the Markov Chain.
 
 \begin{exam}\label{exam: mc_state_intro}
-    Consider the $4$ states shown in the diagram below. Suppose the probability of staying in the current state is $0.5$ and the probability of moving to a neighbouring state is equally likely. The first question we might ask is what are the transition probabilities? We also might want to ask, what is the long-term relative frequency of visiting each of the four states? We can compute probabilities of the first question analytically as
+    Consider the $4$ states shown in the diagram below. Suppose the probability of staying in the current state is $0.5$ and the probability of moving to a neighbouring state is equally likely, as depicted below.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{img/bay_inf/stat3001_MCMC_1.drawio.png}
+        \label{fig: MCMC_ex1}
+    \end{figure}
+    The first question we might ask is what are the transition probabilities? We also might want to ask, what is the long-term relative frequency of visiting each of the four states? We can compute probabilities of the first question analytically as
     \begin{align*}
         q (1 \mid 1) & = q (2 \mid 1) = 0.5  \\
         q (3 \mid 1) & = q (4 \mid 1) = 0    \\
@@ -197,15 +203,15 @@ Both of these together will complete determine the distribution of the Markov Ch
     \end{align*}
     which can be written in matrix form as
     \begin{equation*}
-        \bm{Q}_{i \mid j} =
+        \bm{Q} =
         \begin{pmatrix}
-            0.5  & 0.5  & 0    & 0     \\
-            0.25 & 0.5  & 0.25 & 0     \\
-            0    & 0.25 & 0.5  & 0.5   \\
-            0    & 0    & 0.25 & 0.5 .
+            0.5 & 0.25 & 0    & 0   \\
+            0.5 & 0.5  & 0.25 & 0   \\
+            0   & 0.25 & 0.5  & 0.5 \\
+            0   & 0    & 0.25 & 0.5
         \end{pmatrix}
     \end{equation*}
-    were ${\bm{Q}_{i \mid j}}_{ij} = q(i \mid j)$. We can use computer sotware to answer our second question.
+    were ${\bm{Q}}_{ij} = q(i \mid j)$. We will see soon how to answer the second question.
 \end{exam}
 
 \begin{defe}[Ergodic Markov Chain] \label{defe: erogic_markov_chain}
@@ -225,15 +231,15 @@ Both of these together will complete determine the distribution of the Markov Ch
 \end{defe}
 
 \begin{exam}[Continuation of \ref{exam: mc_state_intro}] \label{exam: mc_state_intro_cont_1}
-    Again we have the transition matrix
+    Hence we can find a limiting distribution $\bm{f}$ using the global balance equations. Again we have the transition matrix
     \begin{equation*}
         \bm{Q} =
         \begin{pmatrix}
-            0.5  & 0.5  & 0    & 0     \\
-            0.25 & 0.5  & 0.25 & 0     \\
-            0    & 0.25 & 0.5  & 0.5   \\
-            0    & 0    & 0.25 & 0.5 .
-        \end{pmatrix}
+            0.5 & 0.25 & 0    & 0   \\
+            0.5 & 0.5  & 0.25 & 0   \\
+            0   & 0.25 & 0.5  & 0.5 \\
+            0   & 0    & 0.25 & 0.5
+        \end{pmatrix}.
     \end{equation*}
     Let's calculate $f$ using the global balance equations.
     \begin{align*}
@@ -242,12 +248,23 @@ Both of these together will complete determine the distribution of the Markov Ch
         f(3) & = \sum_{i=1}^4 f(i) q(3 \mid i) = 1.25  \\
         f(4) & = \sum_{i=1}^4 f(i) q(4 \mid i) = 0.75.
     \end{align*}
-    This means
-    \begin{align*}
-        f           & = Q f \\
-        (\Id - Q) f & = 0
-    \end{align*}
-    meaning $f$ must lie in the (right) null space of $Q$. Solving for $f$ provides a vector of $f \simeq [0.316, 0.632, 0.632, 0.316]^{\intercal}$, which when normalized is $f / \norm{f}_1 \simeq [0.166 , 0.333 , 0.333 , 0.166]^{\intercal}$
+    We can use computer sotware to solve this. For the discrete case, the global balance equations can be written in matrix form as $\bm{Q} \bm{f} = \bm{f}$, where $\bm{Q}$ is the one-step transition matrix and $\bm{f}$ the {\it row vector of the limiting probabilities}. This leads to solving the linear equation $(\Id - \bm{Q}) \bm{f}  = \bm{0}$, where $\Id$ is the identity matrix (with appropriate size). We also know that since $\bm{f}$ is a distribution, meaning must also impose the constraint $\sum_i \bm{f} (i) = 1$. This can be carried out using the following lines of \texttt{MatLab} code.
+    \begin{minted}[mathescape,
+        numbersep=5pt,
+        frame=lines,
+        framesep=2mm]{MatLab}
+        >> Q = [0.5,0.25,0,0;0.5,0.5,0.25,0;0,0.25,0.5,0.5;0,0,0.25,0.5];
+        >> f = null(eye(4) - Q);
+        >> f = f/sum(f);
+        >> f
+        f =
+
+            0.1667
+            0.3333
+            0.3333
+            0.1667
+    \end{minted}
+    Thus the limiting probabilities are $\approx [0.166, 0.333, 0.333, 0.166]^{\intercal}$.
 \end{exam}
 
 \begin{defe}[Time Reversible (Markov Chain)] \label{defe: trmc}
@@ -267,21 +284,31 @@ The influx into state $y$ from state $x$ in the reverse chain is $\tilde{q} (y \
 \end{equation*}
 for all pairs $x$ and $y$. This set of equations are known as the {\bf local (or detailed) balance equations}.
 
-\begin{exam} \label{exam: lbe}
-    Let us calculate $f$ using the local balance equations. For $x=y$
+\begin{exam}[Continuation of \ref{exam: mc_state_intro_cont_1}]  \label{exam: mc_state_intro_cont_2}
+    This suggests we can also solve $\bm{f}$ from \Cref{exam: mc_state_intro_cont_1} using the local balance equations. For $x=y$
     \begin{align*}
-        f (x) q(x \mid x) & = f (x) q(x \mid x).
+        \bm{f} (x) q(x \mid x) & = \bm{f} (x) q(x \mid x).
     \end{align*}
     For $x= 1, y=2$
     \begin{align*}
-        f(1) q (2 \mid 1) & = f(2) q(1 \mid 2) \\
-        2 f(1)            & = f(2).
+        \bm{f}(1) q (2 \mid 1) & = \bm{f}(2) q(1 \mid 2) \\
+        2 \bm{f}(1)            & = \bm{f}(2).
     \end{align*}
-    Similarly for $x=4, y=3$ we have $2 f(4) = f(1)$ and by symmetry for $x=2, y=3$ we have $f(2) = f(3)$. This means
+    Similarly for $x=4, y=3$ we have $2 \bm{f}(4) = \bm{f}(1)$ and by symmetry for $x=2, y=3$ we have $\bm{f}(2) = \bm{f}(3)$. This means
     \begin{align*}
-        \left[ f(1), f(2), f(3), f(4) \right]             & \propto \left[ 1,2,2,1 \right]    \\
-        \Rightarrow \left[ f(1), f(2), f(3), f(4) \right] & = \left[ 1/6,2/6,2/6,1/6 \right].
+        \left[ \bm{f}(1), \bm{f}(2), \bm{f}(3), \bm{f}(4) \right]             & \propto \left[ 1,2,2,1 \right]    \\
+        \Rightarrow \left[ \bm{f}(1), \bm{f}(2), \bm{f}(3), \bm{f}(4) \right] & = \left[ 1/6,2/6,2/6,1/6 \right].
     \end{align*}
+\end{exam}
+
+\begin{exam} \label{exam: mcmc_lbe_2}
+    Example taken from \cite{KroeseDirkP2013SMaC}*{page 213}. Consider a Markov chain that performs a random walk on the graph in the below diagram, at each step jumping from the current vertex (node) to one of the adjacent vertices, with equal probability.
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.3]{img/bay_inf/stat3001_MCMC_2.PNG}
+        \label{fig: MCMC_ex2}
+    \end{figure}
+    Clearly this Markov chain is reversible. It is also irreducible and aperiodic. Let $f(x)$ denote the limiting probability that the chain is in vertex $x$. By symmetry, $f(1) = f(2) = f(7) = f(8), f(4) = f(5),$ and $f(3) = f(6)$. Moreover by the detail balance equations $f(4) / 5 = f(1)/3$, and $f(3)/4 = f(1)/3$. This means that $f$, $\sum_i f(i) = 4 f(1) + 2 \cdot 5/3 f(1) + 2 \cdot 4/3 f(1) = 10 f(1) = 1$ so that $f(1) = 1/10, f(2) = 2/15$, and $f(4) = 1/6$.
 \end{exam}
 
 \subsubsection*{Metropolis Hastings Algorithm}
@@ -386,8 +413,8 @@ Suppose we want to sample from a joint pdf $f(x)$. Direct sampling of joints pdf
                 \DontPrintSemicolon
                 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
 
-                \Input{Observations $\bm{x}$.}
-                \Output{Estimate of $\EE \left[ h(H(\bm{x})) \right]$.}
+                \Input{A distribution $f$.}
+                \Output{Samples from $f$.}
                 \BlankLine
                 Given the current state $X_t = x$, draw a vector $Y=y$ using sequnetial sampling from the conditional pdfs\;
                 $Y_1 \sim f(y_1 \mid x_2 , x_3 , \ldots , x_p)$\;
